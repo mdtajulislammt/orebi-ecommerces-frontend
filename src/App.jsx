@@ -18,22 +18,27 @@ import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Error from "./pages/Error";
+import Wishlist from "./pages/Wishlist";
 
-let router = createBrowserRouter(
+import OrderSuccess from "./pages/OrderSuccess";
+
+const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/shop" element={<Shop/>}/>
-      <Route path="/about-us" element={<About/>}/>
-      <Route path="/contacts" element={<Contact/>}/>
-      <Route path="/journal" element={<Journal/>}/>
-      <Route path="/product/:id" element={<Products/>}/>
-      <Route path="/my-account" element={<MyAccount/>}/>
-      <Route path="/login" element={<Login/>}/>
-      <Route path="/signup" element={<SignUp/>}/>
-      <Route path="/cart" element={<Cart/>}/>
-      <Route path="/checkout" element={<Checkout/>}/>
-      <Route path="*" element={<Error/>}/>
+      <Route index element={<Home />}></Route>
+      <Route path="/shop" element={<Shop />}></Route>
+      <Route path="/about-us" element={<About />}></Route>
+      <Route path="/contacts" element={<Contact />}></Route>
+      <Route path="/journal" element={<Journal />}></Route>
+      <Route path="/product/:id" element={<Products />}></Route>
+      <Route path="/my-account" element={<MyAccount />}></Route>
+      <Route path="/login" element={<Login />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/cart" element={<Cart />}></Route>
+      <Route path="/checkout" element={<Checkout />}></Route>
+      <Route path="/wishlist" element={<Wishlist />}></Route>
+      <Route path="/order-success" element={<OrderSuccess />}></Route>
+      <Route path="*" element={<Error />}></Route>
     </Route>
   )
 );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 // image
-import bannerImageOne from "../../../public/assets/banner-image.png";
+import bannerImageOne from "../../assets/banner-image.png";
 import Image from "../layout/Image";
 import { Link } from "react-router-dom";
 
@@ -43,13 +43,12 @@ const Banner = () => {
                 borderRight: "3px #262626 solid",
                 padding: "10px 0",
               }
-            : {
-                width: "35px",
-                color: "#262626",
-                borderRight: "3px white solid",
-                padding: "10px 0",
-                color: "transparent",
-              }
+              : {
+                  width: "35px",
+                  borderRight: "3px white solid",
+                  padding: "10px 0",
+                  color: "transparent",
+                }
         }
       >
         0{i + 1}
@@ -84,7 +83,6 @@ const Banner = () => {
                     }
                   : {
                       width: "22px",
-                      color: "#262626",
                       borderRight: "2px white solid",
                       padding: "7px 0",
                       fontSize: "12px",
@@ -125,7 +123,6 @@ const Banner = () => {
                     }
                   : {
                       width: "20px",
-                      color: "#262626",
                       borderRight: "2px white solid",
                       padding: "5px 0",
                       fontSize: "10px",

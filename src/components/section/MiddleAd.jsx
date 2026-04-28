@@ -1,5 +1,5 @@
 import React from 'react'
-import advertiseBanner from '../../../public/assets/Ads_2.png'
+import advertiseBanner from '../../assets/Ads_2.png'
 import Image from '../layout/Image'
 import  Container  from '../layout/Container'
 import { Link } from 'react-router-dom'

@@ -1,8 +1,8 @@
-import productImageOne from "../../public/assets/p6.png";
-import productImageTwo from "../../public/assets/p7.png";
-import productImageThree from "../../public/assets/p8.png";
-import productImageFour from "../../public/assets/p9.png";
-import productImageFive from "../../public/assets/p10.png";
+import productImageOne from "../assets/p6.png";
+import productImageTwo from "../assets/p7.png";
+import productImageThree from "../assets/p8.png";
+import productImageFour from "../assets/p9.png";
+import productImageFive from "../assets/p10.png";
 
 let productInfo = [
   {

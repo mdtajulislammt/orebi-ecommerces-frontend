@@ -3,9 +3,9 @@ import Container from "../layout/Container";
 import Flex from "../layout/Flex";
 import Image from "../layout/Image";
 import { Link } from "react-router-dom";
-import addOne from "../../../public/assets/Ad_1.png";
-import addTwo from "../../../public/assets/Ad_2.png";
-import addThree from "../../../public/assets/Ad_3.png";
+import addOne from "../../assets/Ad_1.png";
+import addTwo from "../../assets/Ad_2.png";
+import addThree from "../../assets/Ad_3.png";
 
 const Addvertise = () => {
   return (

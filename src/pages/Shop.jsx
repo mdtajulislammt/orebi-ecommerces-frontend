@@ -17,6 +17,7 @@ import {
   price,
 } from "../Demo Data/ProductCategoryData";
 import Pagination from "../components/layout/Pagination";
+import optionsIcon from "../assets/optionsicon.gif";
 
 const Shop = () => {
   const [paginationItemShow, setPaginationItemShow] = useState(12);
@@ -81,7 +82,7 @@ const Shop = () => {
             >
               <img
                 className="w-[20px] rotate-90"
-                src="../../public/assets/optionsicon.gif"
+                src={optionsIcon}
                 alt=""
               />
               <span>Filtering</span>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import ProductCard from "../layout/ProductCard";
-import productThree from "../../../public/assets/p10.png";
+import productThree from "../../assets/p10.png";
 import Paragraph from "./Paragraph";
 import { Link } from "react-router-dom";
 

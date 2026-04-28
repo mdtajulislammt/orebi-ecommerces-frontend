@@ -9,10 +9,10 @@ import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import { IoIosStar, IoIosStarHalf } from "react-icons/io";
-import productOne from "../../public/assets/p5.png";
-import productTwo from "../../public/assets/p6.png";
-import productThree from "../../public/assets/p7.png";
-import productFour from "../../public/assets/p8.png";
+import productOne from "../assets/p5.png";
+import productTwo from "../assets/p6.png";
+import productThree from "../assets/p7.png";
+import productFour from "../assets/p8.png";
 import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
 import CusButton from "../components/layout/CusButton";
@@ -23,8 +23,38 @@ import Paragraph from "../components/layout/Paragraph";
 import Textarea from "../components/layout/Textarea";
 import { color } from "../Demo Data/ProductCategoryData";
 
+import { useDispatch } from "react-redux";
+import { addToCart, addToWishlist } from "../features/orebi/orebiSlice";
+
 const Products = () => {
+  const dispatch = useDispatch();
   const [productsQuantity, setProductsQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id: "premium-headphones", // using a static id for this demo page
+        productName: "Premium Wireless Headphones",
+        productPrice: "$44.00",
+        productColor: "selected color",
+        productImageSrc: productOne,
+        quantity: productsQuantity,
+      })
+    );
+  };
+
+  const handleAddToWishlist = () => {
+    dispatch(
+      addToWishlist({
+        id: "premium-headphones",
+        productName: "Premium Wireless Headphones",
+        productPrice: "$44.00",
+        productColor: "selected color",
+        productImageSrc: productOne,
+      })
+    );
+  };
+
   const [descriptionAndReviewToggle, setDescriptionAndReviewToggle] =
     useState("review");
   const [selectedImage, setSelectedImage] = useState(0);
@@ -218,11 +248,17 @@ const Products = () => {
             {/* Action Buttons */}
             <div className="py-6 sm:py-7 border-b border-[#F0F0F0]">
               <Flex className="flex-col sm:flex-row gap-3 sm:gap-4">
-                <button className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-primary-color text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm">
+                <button 
+                  onClick={handleAddToCart}
+                  className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-primary-color text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm"
+                >
                   <FiShoppingCart className="text-base sm:text-lg" />
                   Add to Cart
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 border-2 border-primary-color capitalize text-sm sm:text-base hover:bg-primary-color hover:text-white transition-all duration-300 ease-in-out rounded-sm text-primary-color">
+                <button 
+                  onClick={handleAddToWishlist}
+                  className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 border-2 border-primary-color capitalize text-sm sm:text-base hover:bg-primary-color hover:text-white transition-all duration-300 ease-in-out rounded-sm text-primary-color"
+                >
                   <FiHeart className="text-base sm:text-lg" />
                   Add to Wishlist
                 </button>

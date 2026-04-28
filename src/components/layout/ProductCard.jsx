@@ -8,6 +8,9 @@ import { FaRegHeart } from "react-icons/fa";
 import { TfiReload } from "react-icons/tfi";
 import { FaShoppingCart } from "react-icons/fa";
 
+import { useDispatch } from "react-redux";
+import { addToCart, addToWishlist } from "../../features/orebi/orebiSlice";
+
 const ProductCard = ({
   className,
   tag,
@@ -15,7 +18,39 @@ const ProductCard = ({
   productName,
   productPrice,
   productColor,
+  id, // Accepting optional ID
 }) => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(
+      addToCart({
+        id: id || productName,
+        productName,
+        productPrice,
+        productColor,
+        productImageSrc: productImageLink,
+      })
+    );
+  };
+
+  const handleAddToWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(
+      addToWishlist({
+        id: id || productName,
+        productName,
+        productPrice,
+        productColor,
+        productImageSrc: productImageLink,
+      })
+    );
+  };
+
+
   return (
     <div className={`${className} group`}>
       <div className="relative overflow-y-hidden top-part">
@@ -34,6 +69,7 @@ const ProductCard = ({
         )}
         <Flex className="absolute bottom-0 left-0 flex-col w-full px-8 py-6 transition-all duration-300 ease-in-out translate-y-full bg-white group-hover:translate-y-0 text-end gap-y-5 hover-part">
           <Button
+            onClick={handleAddToWishlist}
             text="add to wish list"
             icon={<FaRegHeart className=" text-primary-color" />}
             iconAlighnment={"right"}
@@ -52,6 +88,7 @@ const ProductCard = ({
             }
           />
           <Button
+            onClick={handleAddToCart}
             text="Add to cart"
             icon={
               <FaShoppingCart className="transition-all duration-300 ease-in-out text-primary-color" />

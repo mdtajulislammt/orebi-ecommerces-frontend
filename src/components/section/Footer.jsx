@@ -3,7 +3,7 @@ import { IoLogoInstagram } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 // Layout components
-import orebiLogo from "../../../public/assets/logo.png";
+import orebiLogo from "../../assets/logo.png";
 import Container from "../layout/Container";
 import Flex from "../layout/Flex";
 import Heading from "../layout/Heading";

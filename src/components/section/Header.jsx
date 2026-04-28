@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, removeFromCart, removeFromWishlist } from "../../features/orebi/orebiSlice";
 // components
 import Container from "../layout/Container";
 import Flex from "../layout/Flex";
@@ -14,11 +16,11 @@ import ListItem from "../layout/ListItem";
 import { RiBarChartHorizontalLine } from "react-icons/ri";
 import { FaSearch, FaUser } from "react-icons/fa";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaCartShopping, FaRegHeart } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 // image
-import headphoneImage from "../../../public/assets/headphone.png";
-import capImage from "../../../public/assets/cap.png";
+import headphoneImage from "../../assets/headphone.png";
+import capImage from "../../assets/cap.png";
 
 const Header = () => {
   let categoryDropDownInfo = [
@@ -39,6 +41,18 @@ const Header = () => {
   const [addToCartShow, setAddToCartShow] = useState(false);
   let addToCartRef = useRef();
 
+  const [wishlistDropDownShow, setWishlistDropDownShow] = useState(false);
+  let wishlistRef = useRef();
+
+  const cart = useSelector((state) => state.orebi?.cart || []);
+  const wishlist = useSelector((state) => state.orebi?.wishlist || []);
+  const dispatch = useDispatch();
+
+  const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
+    const price = parseFloat(item.productPrice.replace("$", ""));
+    return total + price * item.quantity;
+  }, 0) : 0;
+
   useEffect(() => {
     document.body.addEventListener("click", (e) => {
       if (!categoryRef.current.contains(e.target)) {
@@ -51,6 +65,10 @@ const Header = () => {
 
       if (!addToCartRef.current.contains(e.target)) {
         setAddToCartShow(false);
+      }
+
+      if (wishlistRef.current && !wishlistRef.current.contains(e.target)) {
+        setWishlistDropDownShow(false);
       }
     });
   }, []);
@@ -153,70 +171,138 @@ const Header = () => {
                   </ListItem>
                 </List>
               </div>
+              <div ref={wishlistRef} className={"relative z-10"}>
+                <Button
+                  onClick={() => setWishlistDropDownShow(!wishlistDropDownShow)}
+                  className={"flex items-center relative"}
+                  iconAlighnment={"right"}
+                  icon={
+                    <>
+                      <FaRegHeart className="xl:text-xl text-sm md:text-base lg:text-lg" />
+                      {wishlist.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-primary-color text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                          {wishlist.length}
+                        </span>
+                      )}
+                    </>
+                  }
+                />
+                <div
+                  className={`wishlist-box w-[280px] sm:w-[360px] [&>*:nth-last-child(1)]:border-none bg-white border border-white absolute top-[27px] md:top-[32px] lg:top-[37px] right-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] duration-200 ease-linear ${wishlistDropDownShow ? " translate-y-0 xl:translate-x-0 opacity-100 visible" : "-translate-y-5 xl:translate-y-0 xl:translate-x-10 opacity-0 invisible"}`}
+                >
+                  {wishlist.length > 0 ? (
+                    wishlist.map((item) => (
+                      <div key={item.id || item.productName} className="w-full flex justify-between bg-[#f5f5f5] border-b-2 border-white p-5">
+                        <div className="flex items-center w-10/12 item-information gap-x-2 sm:gap-x-5">
+                          <div className="item-images">
+                            <Image
+                              imageLink={item.productImageSrc}
+                              altText={"wishlist-item"}
+                              className={"w-14 sm:w-20"}
+                            />
+                          </div>
+                          <div className="text-sm font-bold font-dm-sans">
+                            <Heading
+                              tagname="h3"
+                              text={item.productName}
+                              className="mb-1 sm:mb-2 text-xs sm:text-[14px] leading-5"
+                            />
+                            <Paragraph
+                              text={item.productPrice}
+                              classname={"text-xs sm:text-[14px] leading-5"}
+                            />
+                            <button
+                              onClick={() => {
+                                dispatch(addToCart(item));
+                                dispatch(removeFromWishlist(item.id || item.productName));
+                              }}
+                              className="text-[10px] sm:text-xs text-primary-color underline mt-1 font-bold"
+                            >
+                              Add to Cart
+                            </button>
+                          </div>
+                        </div>
+                        <Button 
+                          onClick={() => dispatch(removeFromWishlist(item.id || item.productName))}
+                          text={<RxCross2 className="sm:text-2xl" />} 
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-10 text-center font-dm-sans text-secondary-color">
+                      Your wishlist is empty.
+                    </div>
+                  )}
+                  <div className="px-5 pt-4 pb-5">
+                    <Link
+                      onClick={() => setWishlistDropDownShow(false)}
+                      to={"/wishlist"}
+                      className="py-2 sm:py-3 px-5 sm:px-9 mt-3 border border-[#2B2B2B] bg-black text-white font-dm-sans text-sm sm:text-base sm:leading-6 font-bold capitalize block text-center"
+                    >
+                      view wishlist
+                    </Link>
+                  </div>
+                </div>
+              </div>
               <div ref={addToCartRef} className={"relative z-10"}>
                 <Button
                   onClick={() => setAddToCartShow(!addToCartShow)}
-                  className={"flex items-center"}
+                  className={"flex items-center relative"}
                   iconAlighnment={"right"}
                   icon={
-                    <FaCartShopping className="xl:text-xl text-sm md:text-base lg:text-lg" />
+                    <>
+                      <FaCartShopping className="xl:text-xl text-sm md:text-base lg:text-lg" />
+                      {cart.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-primary-color text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                          {cart.length}
+                        </span>
+                      )}
+                    </>
                   }
                 />
                 <div
                   className={`cart-box w-[280px] sm:w-[360px] [&>*:nth-last-child(1)]:border-none bg-white border border-white absolute top-[27px] md:top-[32px] lg:top-[37px] right-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] duration-200 ease-linear ${addToCartShow ? " translate-y-0 xl:translate-x-0 opacity-100 visible" : "-translate-y-5 xl:translate-y-0 xl:translate-x-10 opacity-0 invisible"}`}
                 >
-                  <div className="w-full flex justify-between bg-[#f5f5f5] border-b-2 border-white p-5">
-                    <div className="flex items-center w-10/12 item-information gap-x-2 sm:gap-x-5">
-                      <div className="item-images">
-                        <Image
-                          imageLink={headphoneImage}
-                          altText={"cart-item"}
-                          className={"w-14 sm:w-20"}
+                  {cart.length > 0 ? (
+                    cart.map((item) => (
+                      <div key={item.id || item.productName} className="w-full flex justify-between bg-[#f5f5f5] border-b-2 border-white p-5">
+                        <div className="flex items-center w-10/12 item-information gap-x-2 sm:gap-x-5">
+                          <div className="item-images">
+                            <Image
+                              imageLink={item.productImageSrc}
+                              altText={"cart-item"}
+                              className={"w-14 sm:w-20"}
+                            />
+                          </div>
+                          <div className="text-sm font-bold font-dm-sans">
+                            <Heading
+                              tagname="h3"
+                              text={item.productName}
+                              className="mb-1 sm:mb-2 text-xs sm:text-[14px] leading-5"
+                            />
+                            <Paragraph
+                              text={`${item.productPrice} x ${item.quantity}`}
+                              classname={"text-xs sm:text-[14px] leading-5"}
+                            />
+                          </div>
+                        </div>
+                        <Button 
+                          onClick={() => dispatch(removeFromCart(item.id || item.productName))}
+                          text={<RxCross2 className="sm:text-2xl" />} 
                         />
                       </div>
-                      <div className="text-sm font-bold font-dm-sans">
-                        <Heading
-                          tagname="h3"
-                          text="Apple Headphone"
-                          className="mb-1 sm:mb-2 text-xs sm:text-[14px] leading-5"
-                        />
-                        <Paragraph
-                          text={"$44.00"}
-                          classname={"text-xs sm:text-[14px] leading-5"}
-                        />
-                      </div>
+                    ))
+                  ) : (
+                    <div className="p-10 text-center font-dm-sans text-secondary-color">
+                      Your cart is empty.
                     </div>
-                    <Button text={<RxCross2 className="sm:text-2xl" />} />
-                  </div>
-                  <div className="w-full flex justify-between bg-[#f5f5f5] border-b border-white p-5">
-                    <div className="flex items-center w-10/12 item-information gap-x-5">
-                      <div className="item-images">
-                        <Image
-                          imageLink={capImage}
-                          altText={"cart-item"}
-                          className={"w-14 sm:w-20"}
-                        />
-                      </div>
-                      <div className="text-sm font-bold font-dm-sans">
-                        <Heading
-                          tagname="h3"
-                          text="Primium Cap"
-                          className="mb-1 sm:mb-2 text-xs sm:text-[14px] leading-5"
-                        />
-                        <Paragraph
-                          text={"$30.00"}
-                          classname={"text-xs sm:text-[14px] leading-5"}
-                        />
-                      </div>
-                    </div>
-                    <Button text={<RxCross2 className="sm:text-2xl" />} />
-                  </div>
+                  )}
                   <div className="px-5 pt-4 pb-5 total-price">
                     <Heading
                       tagname="h4"
                       text={[
                         <span className="text-[#767676]">Subtotal:</span>,
-                        " $74.00",
+                        ` $${totalAmount.toFixed(2)}`,
                       ]}
                       className=" font-dm-sans font-bold text-xs sm:text-[16px]"
                     />

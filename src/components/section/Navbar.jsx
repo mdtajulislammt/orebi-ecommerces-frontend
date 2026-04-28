@@ -3,7 +3,7 @@ import Image from "../layout/Image";
 import Container from "../layout/Container";
 import Flex from "../layout/Flex";
 import Button from "../layout/Button";
-import orebiLogo from "../../../public/assets/logo.png";
+import orebiLogo from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import { FaXmark, FaBars } from "react-icons/fa6";
 import Header from "./Header";
