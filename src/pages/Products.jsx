@@ -1,30 +1,27 @@
-import React, { useState } from "react";
-import Container from "../components/layout/Container";
-import BreadCrump from "../components/layout/BreadCrump";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { FaMinus, FaPlus } from "react-icons/fa6";
+import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { IoIosStar, IoIosStarHalf } from "react-icons/io";
 import productOne from "../../public/assets/p5.png";
 import productTwo from "../../public/assets/p6.png";
 import productThree from "../../public/assets/p7.png";
 import productFour from "../../public/assets/p8.png";
-import Flex from "../components/layout/Flex";
-import { Link } from "react-router-dom";
-import Image from "../components/layout/Image";
-import Heading from "../components/layout/Heading";
-import { IoIosStar, IoIosStarHalf } from "react-icons/io";
-import Paragraph from "../components/layout/Paragraph";
-import Button from "../components/layout/Button";
-import { FaMinus, FaPlus } from "react-icons/fa6";
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
-import { color } from "../Demo Data/ProductCategoryData";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-} from "@chakra-ui/react";
-import InputBox from "../components/layout/InputBox";
-import Textarea from "../components/layout/Textarea";
+import BreadCrump from "../components/layout/BreadCrump";
+import Container from "../components/layout/Container";
 import CusButton from "../components/layout/CusButton";
+import Flex from "../components/layout/Flex";
+import Heading from "../components/layout/Heading";
+import InputBox from "../components/layout/InputBox";
+import Paragraph from "../components/layout/Paragraph";
+import Textarea from "../components/layout/Textarea";
+import { color } from "../Demo Data/ProductCategoryData";
 
 const Products = () => {
   const [productsQuantity, setProductsQuantity] = useState(1);
@@ -118,7 +115,7 @@ const Products = () => {
             </div>
 
             {/* Color Selection */}
-            {/* <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
+            <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
               <Flex className={"gap-x-8 sm:gap-x-10 items-center"}>
                 <Paragraph
                   text={"Color"}
@@ -141,7 +138,7 @@ const Products = () => {
                   ))}
                 </Flex>
               </Flex>
-            </div> */}
+            </div>
 
             {/* Size Selection */}
             <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">

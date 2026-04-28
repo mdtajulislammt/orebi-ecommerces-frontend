@@ -11,6 +11,7 @@ import Shop from "./pages/Shop";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
+import Journal from "./pages/Journal";
 import MyAccount from "./pages/MyAccount";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -25,7 +26,8 @@ let router = createBrowserRouter(
       <Route path="/shop" element={<Shop/>}/>
       <Route path="/about-us" element={<About/>}/>
       <Route path="/contacts" element={<Contact/>}/>
-      <Route path="/journal" element={<Products/>}/>
+      <Route path="/journal" element={<Journal/>}/>
+      <Route path="/product/:id" element={<Products/>}/>
       <Route path="/my-account" element={<MyAccount/>}/>
       <Route path="/login" element={<Login/>}/>
       <Route path="/signup" element={<SignUp/>}/>

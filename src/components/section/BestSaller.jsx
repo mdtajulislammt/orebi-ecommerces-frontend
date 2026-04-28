@@ -4,6 +4,7 @@ import Heading from "../layout/Heading";
 import Flex from "../layout/Flex";
 import ProductCard from "../layout/ProductCard";
 import { bestsaller } from "../../Demo Data/ProductCategoryData";
+import { Link } from "react-router-dom";
 
 const BestSaller = () => {
   return (
@@ -16,17 +17,18 @@ const BestSaller = () => {
         />
         <Flex className={"justify-center gap-x-6 md:gap-x-8 flex-wrap"}>
           {bestsaller.map((item, index) => (
-            <div className="mb-4 w-full sm:w-[300px] md:w-[47%] lg:w-[31%] xl:w-[23%]">
-              <ProductCard
-                key={index}
-                className="mx-auto w-[95%] sm:w-full"
-                productImageLink={item.productImageSrc}
-                tag={item.badgeText}
-                tagVisibility={item.badge}
-                productName={item.productName}
-                productPrice={item.productPrice}
-                productColor={item.productColor}
-              />
+            <div key={index} className="mb-4 w-full sm:w-[300px] md:w-[47%] lg:w-[31%] xl:w-[23%]">
+              <Link to={`/product/${index}`}>
+                <ProductCard
+                  className="mx-auto w-[95%] sm:w-full cursor-pointer"
+                  productImageLink={item.productImageSrc}
+                  tag={item.badgeText}
+                  tagVisibility={item.badge}
+                  productName={item.productName}
+                  productPrice={item.productPrice}
+                  productColor={item.productColor}
+                />
+              </Link>
             </div>
           ))}
         </Flex>

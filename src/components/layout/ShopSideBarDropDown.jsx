@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import Heading from "../layout/Heading";
+import { useState } from "react";
 import { GoTriangleDown } from "react-icons/go";
-import ShopSideBarDropDownItem from "./ShopSideBarDropDownItem";
+import Heading from "../layout/Heading";
 import Paragraph from "./Paragraph";
+import ShopSideBarDropDownItem from "./ShopSideBarDropDownItem";
 
 const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
   const [dropDwonOpen, setDropDwonOpen] = useState(dropDownOn);
   const [dropDwonItemShow, setDropDwonItemShow] = useState(dropDownOn);
 
   return (
-    <div className=" mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12">
+    <div className="mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12">
       {dropDwonOpen ? (
         <div
-          className="flex justify-between items-center cursor-pointer"
+          className="flex justify-between items-center cursor-pointer group/header hover:opacity-80 transition-opacity duration-200"
           onClick={() => setDropDwonItemShow(!dropDwonItemShow)}
         >
           <Heading
@@ -44,19 +44,19 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
                 ></span>,
                 item.colorname,
               ]}
-              className="capitalize hover:bg-[#f5f5f3] transition duration-200 px-1 cursor-pointer font-dm-sans text-secondary-color py-2.5 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] flex items-center text-[12px] md:text-[14px] lg:text-[16px]"
+              className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 px-1 cursor-pointer font-dm-sans text-secondary-color py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex items-center text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
             />
           ) : (
             <ShopSideBarDropDownItem
               subDropDownOn={item.subcategory ? true : false}
               title={item.name}
-              className="capitalize hover:bg-[#f5f5f3] transition duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color  py-2 sm:py-3 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] flex justify-between items-center`"
+              className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color py-2 sm:py-3 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex justify-between items-center rounded-sm"
             >
               {item.subcategory &&
                 item.subcategory.map((item) => (
                   <Paragraph
                     text={item.name}
-                    classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] hover:bg-[#f5f5f3] transition duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px]"
+                    classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] hover:bg-[#f0f0ee] hover:pl-8 transition-all duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
                   />
                 ))}
             </ShopSideBarDropDownItem>
@@ -73,19 +73,19 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
                 ></span>,
                 item.colorname,
               ]}
-              className="capitalize hover:bg-[#f5f5f3] transition duration-200 px-1 cursor-pointer font-dm-sans text-secondary-color py-2.5 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] flex items-center text-[12px] md:text-[14px] lg:text-[16px]"
+              className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 px-1 cursor-pointer font-dm-sans text-secondary-color py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex items-center text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
             />
           ) : (
             <ShopSideBarDropDownItem
               subDropDownOn={item.subcategory ? true : false}
               title={item.name}
-              className="capitalize hover:bg-[#f5f5f3] transition duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color  py-2 sm:py-3 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] flex justify-between items-center`"
+              className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color py-2 sm:py-3 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex justify-between items-center rounded-sm"
             >
               {item.subcategory &&
                 item.subcategory.map((item) => (
                   <Paragraph
                     text={item.name}
-                    classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b-[1px] border-[#D8D8D8] hover:bg-[#f5f5f3] transition duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px]"
+                    classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] hover:bg-[#f0f0ee] hover:pl-8 transition-all duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
                   />
                 ))}
             </ShopSideBarDropDownItem>

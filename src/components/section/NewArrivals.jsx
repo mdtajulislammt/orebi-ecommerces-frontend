@@ -5,6 +5,7 @@ import ProductCard from "../layout/ProductCard";
 import Slider from "react-slick";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { newarrivals } from "../../Demo Data/ProductCategoryData";
+import { Link } from "react-router-dom";
 
 const NewArrivals = () => {
   let sliderRef = useRef(null);
@@ -65,16 +66,17 @@ const NewArrivals = () => {
             {...settings}
           >
             {newarrivals.map((item, index) => (
-              <div className="w-full sm:w-[300px] md:w-[47%] lg:w-[31%] xl:w-[23%]">
-                <ProductCard
-                  className={"mx-auto w-[80%] sm:w-[95%]"}
-                  key={index}
-                  productImageLink={item.productImageSrc}
-                  tag={item.badgeText}
-                  productName={item.productName}
-                  productPrice={item.productPrice}
-                  productColor={item.productColor}
-                />
+              <div key={index} className="w-full sm:w-[300px] md:w-[47%] lg:w-[31%] xl:w-[23%]">
+                <Link to={`/product/${index}`}>
+                  <ProductCard
+                    className={"mx-auto w-[80%] sm:w-[95%] cursor-pointer"}
+                    productImageLink={item.productImageSrc}
+                    tag={item.badgeText}
+                    productName={item.productName}
+                    productPrice={item.productPrice}
+                    productColor={item.productColor}
+                  />
+                </Link>
               </div>
             ))}
           </Slider>
