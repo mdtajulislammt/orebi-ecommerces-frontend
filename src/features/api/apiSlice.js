@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.BACKEND_URL || 'http://localhost:5001',
+    baseUrl: import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001',
     prepareHeaders: (headers, { getState }) => {
       // Get token from state if it exists
       const token = getState().auth?.token;
@@ -53,14 +53,22 @@ export const apiSlice = createApi({
       }),
       providesTags: ['Product'],
     }),
-    getProductBySlug: builder.query({
-      query: (slug) => `/api/products/${slug}`,
-      providesTags: (result, error, slug) => [{ type: 'Product', id: slug }],
+    getProduct: builder.query({
+      query: (idOrSlug) => `/api/products/${idOrSlug}`,
+      providesTags: (result, error, idOrSlug) => [{ type: 'Product', id: idOrSlug }],
     }),
     createProduct: builder.mutation({
       query: (data) => ({
         url: '/api/products',
         method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Product'],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/products/${id}`,
+        method: 'PATCH',
         body: data,
       }),
       invalidatesTags: ['Product'],
@@ -167,8 +175,9 @@ export const {
   useGetMeQuery,
   useUpdateUserMutation,
   useGetProductsQuery,
-  useGetProductBySlugQuery,
+  useGetProductQuery,
   useCreateProductMutation,
+  useUpdateProductMutation,
   useDeleteProductMutation,
   useAddReviewMutation,
   useGetProductReviewsQuery,
