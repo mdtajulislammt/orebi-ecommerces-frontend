@@ -7,6 +7,7 @@ const ShopSideBarDropDownItem = ({
   className,
   children,
   subDropDownOn,
+  onClick,
 }) => {
   const [subDropDownOpen, setSubDropDwonOpen] = useState(subDropDownOn);
   const [subDropDownItemShow, setSubDropDwonShow] = useState(false);
@@ -14,12 +15,16 @@ const ShopSideBarDropDownItem = ({
   return (
     <div>
       {subDropDownOpen ? (
-        <div onClick={() => setSubDropDwonShow(!subDropDownItemShow)}>
+        <div onClick={() => {
+          setSubDropDwonShow(!subDropDownItemShow);
+          onClick && onClick();
+        }}>
           <Heading
             tagname={"h5"}
             text={[
               title,
               <HiMiniXMark
+                key="xmark"
                 className={`capitalize font-dm-sans text-secondary-color transition  duration-300 ${subDropDownItemShow ? "rotate-180" : "rotate-45"}`}
               />,
             ]}
@@ -27,7 +32,7 @@ const ShopSideBarDropDownItem = ({
           />
         </div>
       ) : (
-        <Heading tagname={"h5"} text={title} className={className} />
+        <Heading onClick={onClick} tagname={"h5"} text={title} className={className} />
       )}
       {subDropDownItemShow && children}
     </div>

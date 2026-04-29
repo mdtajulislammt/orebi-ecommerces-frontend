@@ -5,508 +5,498 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaMinus, FaPlus } from "react-icons/fa6";
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
-import { IoIosStar, IoIosStarHalf } from "react-icons/io";
-import productOne from "../assets/p5.png";
-import productTwo from "../assets/p6.png";
-import productThree from "../assets/p7.png";
-import productFour from "../assets/p8.png";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaMinus, FaPlus, FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa6";
+import { FiHeart, FiShoppingCart, FiShare2, FiMessageSquare } from "react-icons/fi";
+import { IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
+import { MdVerified, MdLocalShipping, MdHistory } from "react-icons/md";
 import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
 import CusButton from "../components/layout/CusButton";
 import Flex from "../components/layout/Flex";
 import Heading from "../components/layout/Heading";
-import InputBox from "../components/layout/InputBox";
 import Paragraph from "../components/layout/Paragraph";
 import Textarea from "../components/layout/Textarea";
-import { color } from "../Demo Data/ProductCategoryData";
-
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart, addToWishlist } from "../features/orebi/orebiSlice";
+import { useGetProductQuery, useGetProductReviewsQuery, useAddReviewMutation } from "../features/api/apiSlice";
+import { toast } from "react-toastify";
 
 const Products = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [productsQuantity, setProductsQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  
+  // Review Form State
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+
+  const { data: productResponse, isLoading, isError } = useGetProductQuery(id);
+  const product = productResponse?.data;
+  const { data: reviewsResponse, isLoading: isReviewsLoading } = useGetProductReviewsQuery(product?.id, { skip: !product?.id });
+  const [addReview, { isLoading: isSubmittingReview }] = useAddReviewMutation();
+
+  const reviews = reviewsResponse?.data || product?.reviews || [];
+
+  useEffect(() => {
+    if (product) {
+      if (product.colors?.length > 0) setSelectedColor(product.colors[0]);
+      if (product.sizes?.length > 0) setSelectedSize(product.sizes[0]);
+    }
+  }, [product]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fafafa]">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-[3px] border-gray-100 rounded-full"></div>
+          <div className="absolute inset-0 border-[3px] border-t-black rounded-full animate-spin"></div>
+        </div>
+        <p className="mt-6 text-gray-400 font-bold text-xs tracking-widest uppercase animate-pulse">Loading Details</p>
+      </div>
+    );
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fafafa] px-6 text-center">
+        <h2 className="text-2xl font-black text-gray-900 mb-3">Product Not Found</h2>
+        <p className="text-gray-500 mb-8 max-w-sm text-sm">The item you're looking for might have been moved or is no longer available.</p>
+        <button onClick={() => navigate("/shop")} className="bg-black text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:scale-105 transition-transform">
+          Back to Shop
+        </button>
+      </div>
+    );
+  }
 
   const handleAddToCart = () => {
     dispatch(
       addToCart({
-        id: "premium-headphones", // using a static id for this demo page
-        productName: "Premium Wireless Headphones",
-        productPrice: "$44.00",
-        productColor: "selected color",
-        productImageSrc: productOne,
+        id: product.id,
+        productName: product.name,
+        productPrice: product.discount_price > 0 ? product.discount_price : product.price,
+        productColor: selectedColor || "N/A",
+        productSize: selectedSize || "N/A",
+        productImageSrc: product.thumbnail,
         quantity: productsQuantity,
       })
     );
+    toast.success(`${product.name} added to cart!`);
   };
 
   const handleAddToWishlist = () => {
     dispatch(
       addToWishlist({
-        id: "premium-headphones",
-        productName: "Premium Wireless Headphones",
-        productPrice: "$44.00",
-        productColor: "selected color",
-        productImageSrc: productOne,
+        id: product.id,
+        productName: product.name,
+        productPrice: product.discount_price > 0 ? product.discount_price : product.price,
+        productColor: selectedColor || "N/A",
+        productImageSrc: product.thumbnail,
       })
     );
+    toast.success(`${product.name} added to wishlist!`);
   };
 
-  const [descriptionAndReviewToggle, setDescriptionAndReviewToggle] =
-    useState("review");
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const productImages = [productOne, productTwo, productThree, productFour];
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!comment) return toast.error("Please add a comment");
+    if (!product?.id) return toast.error("Product details not fully loaded.");
+    
+    try {
+      await addReview({
+        product_id: product.id,
+        rating,
+        comment
+      }).unwrap();
+      toast.success("Review posted successfully!");
+      setComment("");
+      setRating(5);
+      setShowReviewForm(false);
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to post review. Please ensure you are logged in.");
+    }
+  };
+
+  const productImages = [product.thumbnail, ...(product.images || [])];
+  const discountPercentage = product.discount_price > 0 
+    ? Math.round(((Number(product.price) - Number(product.discount_price)) / Number(product.price)) * 100)
+    : 0;
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) stars.push(<IoIosStar key={i} className="text-[#FFB800]" />);
+      else if (i - 0.5 <= rating) stars.push(<IoIosStarHalf key={i} className="text-[#FFB800]" />);
+      else stars.push(<IoIosStarOutline key={i} className="text-gray-200" />);
+    }
+    return stars;
+  };
 
   return (
-    <section className="pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+    <section className="pb-24 pt-8 bg-[#fafafa] font-poppins text-gray-900">
       <Container>
-        <BreadCrump />
+        <div className="mb-8 opacity-80 scale-90 origin-left">
+          <BreadCrump />
+        </div>
 
-        {/* ===== Product Section: Image Gallery + Info ===== */}
-        <div className="mt-8 sm:mt-10 md:mt-12 lg:mt-14 flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16">
+        <div className="flex flex-col lg:flex-row gap-10 xl:gap-16">
           
           {/* ===== Left: Image Gallery ===== */}
-          <div className="w-full lg:w-[55%] xl:w-[50%]">
-            {/* Main Image */}
-            <div className="w-full overflow-hidden rounded-sm bg-[#F5F5F5] mb-3 sm:mb-4">
-              <img
-                src={productImages[selectedImage]}
-                alt="Product"
-                className="w-full h-auto object-cover transition-transform duration-500 ease-in-out hover:scale-105"
-              />
+          <div className="w-full lg:w-[50%] xl:w-[55%] sticky top-24 h-fit">
+            <div className="relative group">
+              <div className="w-full aspect-[4/5] md:aspect-square overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-gray-200/40 border border-gray-100 flex items-center justify-center">
+                <img
+                  src={productImages[selectedImage]}
+                  alt={product.name}
+                  className="w-full h-full object-contain p-10 transition-all duration-700 ease-out group-hover:scale-105"
+                />
+              </div>
+              {discountPercentage > 0 && (
+                <div className="absolute top-6 left-6 bg-black text-white px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-tighter shadow-xl z-10">
+                  Save {discountPercentage}%
+                </div>
+              )}
+              
+              <button 
+                onClick={() => setSelectedImage(prev => (prev === 0 ? productImages.length - 1 : prev - 1))}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-black hover:text-white"
+              >
+                <FaChevronLeft size={12} />
+              </button>
+              <button 
+                onClick={() => setSelectedImage(prev => (prev === productImages.length - 1 ? 0 : prev + 1))}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-black hover:text-white"
+              >
+                <FaChevronRight size={12} />
+              </button>
             </div>
 
-            {/* Thumbnail Images */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
+            <div className="flex gap-3 mt-6 overflow-x-auto pb-4 no-scrollbar scroll-smooth">
               {productImages.map((img, index) => (
                 <div
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`cursor-pointer overflow-hidden rounded-sm bg-[#F5F5F5] border-2 transition-all duration-300 ease-in-out ${
-                    selectedImage === index
-                      ? "border-primary-color shadow-md"
-                      : "border-transparent hover:border-[#D8D8D8]"
+                  className={`flex-shrink-0 w-20 h-20 cursor-pointer rounded-2xl bg-white border-2 transition-all duration-300 ${
+                    selectedImage === index ? "border-black shadow-md scale-105" : "border-transparent hover:border-gray-200"
                   }`}
                 >
-                  <img
-                    src={img}
-                    alt={`Product thumbnail ${index + 1}`}
-                    className="w-full h-auto object-cover"
-                  />
+                  <img src={img} alt="" className="w-full h-full object-contain p-2" />
                 </div>
               ))}
             </div>
           </div>
 
           {/* ===== Right: Product Information ===== */}
-          <div className="w-full lg:w-[45%] xl:w-[50%]">
-            {/* Product Title */}
-            <Heading
-              tagname="h2"
-              text="Premium Wireless Headphones"
-              className="text-[22px] sm:text-[26px] md:text-[30px] lg:text-[34px] xl:text-[38px] font-bold font-dm-sans text-primary-color leading-tight"
-            />
+          <div className="w-full lg:w-[50%] xl:w-[45%]">
+            <div className="space-y-8">
+              <div>
+                <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
+                  <span className="hover:text-black cursor-pointer transition-colors">{product.category?.name}</span>
+                  <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                  <span className="hover:text-black cursor-pointer transition-colors">{product.brand?.name}</span>
+                </div>
 
-            {/* Rating & Reviews */}
-            <div className="mt-3 sm:mt-4 pb-5 sm:pb-6 ">
-              <Flex className={"gap-3 sm:gap-4 items-center"}>
-                <Flex className="icons gap-[2px]">
-                  <IoIosStar className="text-[#FFD881] text-[18px] sm:text-[20px]" />
-                  <IoIosStar className="text-[#FFD881] text-[18px] sm:text-[20px]" />
-                  <IoIosStar className="text-[#FFD881] text-[18px] sm:text-[20px]" />
-                  <IoIosStar className="text-[#FFD881] text-[18px] sm:text-[20px]" />
-                  <IoIosStarHalf className="text-[#FFD881] text-[18px] sm:text-[20px]" />
-                </Flex>
-                <Paragraph
-                  text={"99 Reviews"}
-                  classname={
-                    "font-dm-sans text-xs sm:text-sm text-secondary-color"
-                  }
-                />
-              </Flex>
-
-              {/* Price */}
-              <Flex className={"gap-3 sm:gap-4 items-baseline mt-4 sm:mt-5"}>
-                <span className="text-secondary-color line-through text-base sm:text-lg font-dm-sans">
-                  $88.00
-                </span>
-                <span className="font-bold text-xl sm:text-2xl md:text-[28px] font-dm-sans text-primary-color">
-                  $44.00
-                </span>
-                <span className="bg-red-50 text-red-500 text-xs sm:text-sm font-semibold font-dm-sans px-2 py-0.5 rounded">
-                  50% OFF
-                </span>
-              </Flex>
-            </div>
-
-            {/* Color Selection */}
-            <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
-              <Flex className={"gap-x-8 sm:gap-x-10 items-center"}>
-                <Paragraph
-                  text={"Color"}
-                  classname={
-                    "font-bold text-sm sm:text-base uppercase font-dm-sans tracking-wide text-primary-color"
-                  }
-                />
-                <Flex className="color-box gap-x-3 sm:gap-x-4 items-center">
-                  {color.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setSelectedColor(index)}
-                      className={`w-5 h-5 sm:w-6 sm:h-6 ${item.colorcode} rounded-full cursor-pointer transition-all duration-200 ease-in-out relative ${
-                        selectedColor === index
-                          ? "ring-2 ring-offset-2 ring-primary-color scale-110"
-                          : "hover:scale-110"
-                      }`}
-                      title={item.colorname}
-                    ></div>
-                  ))}
-                </Flex>
-              </Flex>
-            </div>
-
-            {/* Size Selection */}
-            <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
-              <Flex className={"gap-x-8 sm:gap-x-10 items-center"}>
-                <Paragraph
-                  text={"Size"}
-                  classname={
-                    "font-bold text-sm sm:text-base uppercase font-dm-sans tracking-wide text-primary-color"
-                  }
-                />
-                <select
-                  name="size"
-                  id="product-size"
-                  className="capitalize w-[120px] sm:w-[150px] text-secondary-color border-2 border-[#F0F0F0] px-4 outline-none py-2 sm:py-2.5 font-dm-sans text-sm sm:text-base rounded-sm focus:border-primary-color transition-colors duration-200 cursor-pointer appearance-none bg-white"
-                >
-                  <option value="s" defaultValue>
-                    S
-                  </option>
-                  <option value="m">M</option>
-                  <option value="l">L</option>
-                  <option value="xl">XL</option>
-                  <option value="2xl">2XL</option>
-                </select>
-              </Flex>
-            </div>
-
-            {/* Quantity */}
-            <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
-              <Flex className={"gap-x-8 sm:gap-x-10 items-center"}>
-                <Paragraph
-                  text={"Quantity"}
-                  classname={
-                    "font-bold text-sm sm:text-base uppercase font-dm-sans tracking-wide text-primary-color"
-                  }
-                />
-                <Flex className="justify-between items-center w-[120px] sm:w-[140px] text-secondary-color border-2 border-[#F0F0F0] rounded-sm overflow-hidden">
-                  <button
-                    onClick={() =>
-                      productsQuantity > 1 &&
-                      setProductsQuantity(productsQuantity - 1)
-                    }
-                    className="px-3 sm:px-4 py-2 sm:py-2.5 hover:bg-[#F5F5F5] transition-colors duration-200 text-primary-color"
-                  >
-                    <FaMinus className="text-[10px] sm:text-xs" />
+                <div className="flex justify-between items-start gap-6">
+                  <h1 className="text-2xl md:text-3xl xl:text-4xl font-black text-gray-900 leading-tight font-poppins">
+                    {product.name}
+                  </h1>
+                  <button className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 hover:bg-gray-50 transition-colors group">
+                    <FiShare2 className="text-lg text-gray-400 group-hover:text-black" />
                   </button>
-                  <span className="font-dm-sans text-sm sm:text-base font-semibold text-primary-color select-none">
-                    {productsQuantity}
+                </div>
+
+                <div className="flex items-center gap-5 mt-5">
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex gap-0.5">{renderStars(product.avg_rating || 0)}</div>
+                    <span className="ml-1 text-xs font-bold text-gray-400">({reviews.length} Verified Reviews)</span>
+                  </div>
+                  <div className="h-3 w-[1.5px] bg-gray-200"></div>
+                  <div className="flex items-center gap-1.5 text-green-600 font-bold text-[10px] uppercase tracking-wider">
+                    <MdVerified size={14} />
+                    Original Product
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-7 rounded-[2rem] shadow-xl shadow-gray-200/30 border border-gray-100/50 space-y-8">
+                <div className="flex items-center gap-4">
+                  <span className="text-3xl font-black text-black tracking-tight">
+                    ${product.discount_price > 0 ? product.discount_price : product.price}
                   </span>
-                  <button
-                    onClick={() => setProductsQuantity(productsQuantity + 1)}
-                    className="px-3 sm:px-4 py-2 sm:py-2.5 hover:bg-[#F5F5F5] transition-colors duration-200 text-primary-color"
-                  >
-                    <FaPlus className="text-[10px] sm:text-xs" />
-                  </button>
-                </Flex>
-              </Flex>
-            </div>
+                  {product.discount_price > 0 && (
+                    <span className="text-lg text-gray-300 line-through font-bold">
+                      ${product.price}
+                    </span>
+                  )}
+                </div>
 
-            {/* Status */}
-            <div className="py-5 sm:py-6 border-b border-[#F0F0F0]">
-              <Flex className={"gap-x-8 sm:gap-x-10 items-center"}>
-                <Paragraph
-                  text={"Status"}
-                  classname={
-                    "font-bold text-sm sm:text-base uppercase font-dm-sans tracking-wide text-primary-color"
-                  }
-                />
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  <span className="font-dm-sans text-sm sm:text-base text-green-600 font-medium">
-                    In Stock
-                  </span>
-                </span>
-              </Flex>
-            </div>
+                <div className="space-y-6">
+                  {product.colors?.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Available Colors</p>
+                      <div className="flex flex-wrap gap-2.5">
+                        {product.colors.map((colorName, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedColor(colorName)}
+                            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all border-2 ${
+                              selectedColor === colorName 
+                                ? "bg-black text-white border-black shadow-lg shadow-black/20" 
+                                : "bg-gray-50 text-gray-500 border-transparent hover:border-gray-200"
+                            }`}
+                          >
+                            {colorName}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-            {/* Action Buttons */}
-            <div className="py-6 sm:py-7 border-b border-[#F0F0F0]">
-              <Flex className="flex-col gap-3 sm:gap-4">
-                <Flex className="gap-3 sm:gap-4">
+                  {product.sizes?.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Select Size</p>
+                      <div className="flex flex-wrap gap-2.5">
+                        {product.sizes.map((size, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedSize(size)}
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-xs transition-all border-2 ${
+                              selectedSize === size 
+                                ? "bg-black text-white border-black shadow-lg shadow-black/20" 
+                                : "bg-gray-50 text-gray-500 border-transparent hover:border-gray-200"
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                    <div className="flex items-center bg-gray-50 rounded-xl p-1.5 border border-gray-100 flex-shrink-0">
+                      <button
+                        onClick={() => productsQuantity > 1 && setProductsQuantity(productsQuantity - 1)}
+                        className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                      >
+                        <FaMinus size={10} />
+                      </button>
+                      <span className="w-10 text-center font-black text-sm">{productsQuantity}</span>
+                      <button
+                        onClick={() => setProductsQuantity(productsQuantity + 1)}
+                        className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all"
+                      >
+                        <FaPlus size={10} />
+                      </button>
+                    </div>
+                    <button 
+                      onClick={handleAddToCart}
+                      className="flex-1 bg-primary-color text-white rounded-xl font-black flex items-center justify-center gap-2.5 py-3.5 hover:bg-black active:scale-[0.98] transition-all shadow-lg shadow-primary-color/10 text-sm"
+                    >
+                      <FiShoppingCart size={18} />
+                      Add to Cart
+                    </button>
+                    <button 
+                      onClick={handleAddToWishlist}
+                      className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-gray-100 text-gray-400 hover:text-red-500 hover:border-red-100 transition-all shadow-sm"
+                    >
+                      <FiHeart size={18} />
+                    </button>
+                  </div>
+                  
                   <button 
-                    onClick={handleAddToCart}
-                    className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-primary-color text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm"
+                    onClick={() => {
+                      handleAddToCart();
+                      navigate("/checkout");
+                    }}
+                    className="w-full bg-black text-white rounded-xl font-black py-4 hover:bg-gray-800 transition-all shadow-lg active:scale-[0.98] text-sm"
                   >
-                    <FiShoppingCart className="text-base sm:text-lg" />
-                    Add to Cart
+                    Quick Purchase
                   </button>
-                  <button 
-                    onClick={handleAddToWishlist}
-                    className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 border-2 border-primary-color capitalize text-sm sm:text-base hover:bg-primary-color hover:text-white transition-all duration-300 ease-in-out rounded-sm text-primary-color"
-                  >
-                    <FiHeart className="text-base sm:text-lg" />
-                    Add to Wishlist
-                  </button>
-                </Flex>
-                <button 
-                  onClick={() => {
-                    handleAddToCart();
-                    navigate("/checkout");
-                  }}
-                  className="w-full flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-black text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm border border-black hover:border-black shadow-lg"
-                >
-                  Buy Now & Checkout
-                </button>
-              </Flex>
-            </div>
+                </div>
+              </div>
 
-            {/* Accordion: Features & Details */}
-            <Accordion
-              className="w-full [&>*:last-child]:border-none"
-              allowToggle
-            >
-              <AccordionItem className="bg-white border-b border-[#F0F0F0]">
-                <AccordionButton className="flex justify-between py-4 sm:py-5 md:py-6 hover:bg-[#FAFAFA] transition-colors duration-200 px-0">
-                  <Heading
-                    tagname="h4"
-                    text="FEATURES & DETAILS"
-                    className="font-dm-sans font-semibold text-sm sm:text-base md:text-lg text-primary-color tracking-wide"
-                  />
-                  <AccordionIcon className="text-secondary-color" />
-                </AccordionButton>
-                <AccordionPanel className="px-0">
-                  <Paragraph
-                    text={
-                      "Crafted with premium materials, these wireless headphones deliver crystal-clear audio with deep bass and rich treble. Features include 30-hour battery life, active noise cancellation, and a comfortable over-ear design perfect for long listening sessions."
-                    }
-                    classname={
-                      "font-dm-sans text-secondary-color pb-5 sm:pb-6 text-sm sm:text-base leading-relaxed"
-                    }
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-              <AccordionItem className="bg-white border-b border-[#F0F0F0]">
-                <AccordionButton className="flex justify-between py-4 sm:py-5 md:py-6 hover:bg-[#FAFAFA] transition-colors duration-200 px-0">
-                  <Heading
-                    tagname="h4"
-                    text="SHIPPING & RETURNS"
-                    className="font-dm-sans font-semibold text-sm sm:text-base md:text-lg text-primary-color tracking-wide"
-                  />
-                  <AccordionIcon className="text-secondary-color" />
-                </AccordionButton>
-                <AccordionPanel className="px-0">
-                  <Paragraph
-                    text={
-                      "Free standard shipping on all orders over $50. Express shipping available for $9.99. Easy 30-day returns — if you're not satisfied, return the product in its original packaging for a full refund."
-                    }
-                    classname={
-                      "font-dm-sans text-secondary-color pb-5 sm:pb-6 text-sm sm:text-base leading-relaxed"
-                    }
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-50 shadow-sm">
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+                    <MdLocalShipping size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Free Shipping</p>
+                    <p className="text-xs font-bold">Standard delivery</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-50 shadow-sm">
+                  <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
+                    <MdHistory size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Warranty</p>
+                    <p className="text-xs font-bold">1 Year Official</p>
+                  </div>
+                </div>
+              </div>
+
+              <Accordion className="space-y-4" allowToggle>
+                <AccordionItem className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                  <AccordionButton className="py-5 px-6 hover:bg-gray-50 transition-all">
+                    <span className="flex-1 text-left font-black text-xs uppercase tracking-widest">Product Overview</span>
+                    <AccordionIcon size={12} />
+                  </AccordionButton>
+                  <AccordionPanel className="px-6 pb-6 pt-0 text-gray-500 text-sm leading-relaxed font-medium">
+                    {product.description}
+                  </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                  <AccordionButton className="py-5 px-6 hover:bg-gray-50 transition-all">
+                    <span className="flex-1 text-left font-black text-xs uppercase tracking-widest">Specifications</span>
+                    <AccordionIcon size={12} />
+                  </AccordionButton>
+                  <AccordionPanel className="px-6 pb-6 pt-0">
+                    <div className="space-y-3">
+                      <div className="flex justify-between border-b border-gray-50 pb-2">
+                        <span className="text-gray-400 font-bold text-[10px] uppercase">Availability</span>
+                        <span className="font-black text-xs text-green-600">{product.stock} Units</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-50 pb-2">
+                        <span className="text-gray-400 font-bold text-[10px] uppercase">Condition</span>
+                        <span className="font-black text-xs uppercase">{product.status}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400 font-bold text-[10px] uppercase">Reference</span>
+                        <span className="font-black text-xs text-blue-500 underline cursor-pointer">{product.slug?.slice(0, 8)}</span>
+                      </div>
+                    </div>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </div>
           </div>
         </div>
 
-        {/* ===== Description & Review Section ===== */}
-        <div className="mt-16 sm:mt-20 md:mt-24">
-          {/* Tab Buttons */}
-          <div className="border-b-2 border-[#F0F0F0]">
-            <div className="flex gap-8 sm:gap-12">
-              <button
-                onClick={() => setDescriptionAndReviewToggle("description")}
-                className={`relative pb-3 sm:pb-4 font-dm-sans text-base sm:text-lg font-bold capitalize transition-colors duration-300 ${
-                  descriptionAndReviewToggle === "description"
-                    ? "text-primary-color"
-                    : "text-secondary-color hover:text-primary-color"
-                }`}
-              >
-                Description
-                {descriptionAndReviewToggle === "description" && (
-                  <span className="absolute bottom-[-2px] left-0 w-full h-[2px] bg-primary-color transition-all duration-300"></span>
-                )}
-              </button>
-              <button
-                onClick={() => setDescriptionAndReviewToggle("review")}
-                className={`relative pb-3 sm:pb-4 font-dm-sans text-base sm:text-lg font-bold capitalize transition-colors duration-300 ${
-                  descriptionAndReviewToggle === "review"
-                    ? "text-primary-color"
-                    : "text-secondary-color hover:text-primary-color"
-                }`}
-              >
-                Reviews <span className="font-normal">(1)</span>
-                {descriptionAndReviewToggle === "review" && (
-                  <span className="absolute bottom-[-2px] left-0 w-full h-[2px] bg-primary-color transition-all duration-300"></span>
-                )}
-              </button>
+        {/* ===== Reviews Section ===== */}
+        <div className="mt-28">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <h2 className="text-2xl font-black text-gray-900">What People Are Saying</h2>
+              <div className="flex items-center gap-3 mt-2">
+                <div className="flex">{renderStars(product.avg_rating || 0)}</div>
+                <p className="text-gray-400 font-bold text-sm tracking-tight">{product.avg_rating || 0} Average Score Based on {reviews.length} Ratings</p>
+              </div>
             </div>
+            
+            {userInfo ? (
+              <button 
+                onClick={() => setShowReviewForm(!showReviewForm)}
+                className="bg-black text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-primary-color transition-all shadow-lg flex items-center justify-center gap-3"
+              >
+                <FiMessageSquare size={16} />
+                {showReviewForm ? "Cancel Review" : "Share Experience"}
+              </button>
+            ) : (
+              <button 
+                onClick={() => navigate("/signin")}
+                className="bg-white border-2 border-black px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-all shadow-sm flex items-center justify-center gap-3"
+              >
+                <FiMessageSquare size={16} />
+                Login to Rate
+              </button>
+            )}
           </div>
 
-          {/* Review Content */}
-          {descriptionAndReviewToggle === "review" && (
-            <div className="mt-8 sm:mt-10">
-              <Paragraph
-                text={"1 review for Premium Wireless Headphones"}
-                classname={
-                  "font-dm-sans text-sm sm:text-base text-secondary-color"
-                }
-              />
-
-              {/* Review Card */}
-              <div className="mt-5 sm:mt-6 border border-[#F0F0F0] rounded-sm p-5 sm:p-6 md:p-8 bg-[#FAFAFA]">
-                <Flex
-                  className={
-                    "flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-5"
-                  }
-                >
-                  <Flex className={"items-center gap-x-4 sm:gap-x-6"}>
-                    {/* Avatar */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-color flex items-center justify-center text-white font-bold font-dm-sans text-base sm:text-lg">
-                      JF
+          {/* Review Form */}
+          {showReviewForm && (
+            <div className="mb-16 bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-gray-200/50 animate-[fadeIn_0.4s_ease-out]">
+              <div className="max-w-2xl mx-auto text-center">
+                <h3 className="text-xl font-black mb-2">Write a Review</h3>
+                <p className="text-gray-400 text-sm font-medium mb-10">Your feedback helps others make better choices.</p>
+                
+                <form onSubmit={handleSubmitReview} className="space-y-10 text-left">
+                  <div className="flex flex-col items-center gap-4 p-8 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Assign a Rating</p>
+                    <div className="flex gap-3">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onMouseEnter={() => setRating(star)}
+                          onClick={() => setRating(star)}
+                          className={`text-4xl transition-all duration-300 ${star <= rating ? "text-[#FFB800] scale-110 drop-shadow-sm" : "text-gray-200 hover:text-gray-300"}`}
+                        >
+                          <FaStar />
+                        </button>
+                      ))}
                     </div>
-                    <div>
-                      <Heading
-                        tagname={"h4"}
-                        text={"John Ford"}
-                        className="capitalize text-base sm:text-lg md:text-[20px] font-bold font-dm-sans text-primary-color"
-                      />
-                      <Flex className="icons gap-[2px] mt-1">
-                        <IoIosStar className="text-[#FFD881] text-[14px] sm:text-[16px]" />
-                        <IoIosStar className="text-[#FFD881] text-[14px] sm:text-[16px]" />
-                        <IoIosStar className="text-[#FFD881] text-[14px] sm:text-[16px]" />
-                        <IoIosStar className="text-[#FFD881] text-[14px] sm:text-[16px]" />
-                        <IoIosStarHalf className="text-[#FFD881] text-[14px] sm:text-[16px]" />
-                      </Flex>
-                    </div>
-                  </Flex>
-                  <Paragraph
-                    text="6 months ago"
-                    classname={
-                      "text-xs sm:text-sm text-secondary-color font-dm-sans"
-                    }
-                  />
-                </Flex>
-                <Paragraph
-                  text="Absolutely love these headphones! The sound quality is incredible with deep bass and crystal-clear highs. The noise cancellation works perfectly whether I'm on a flight or in a busy café. Battery life easily lasts through my entire work week. The over-ear design is super comfortable even for extended wear. Highly recommend for anyone looking for premium audio experience."
-                  classname={
-                    "text-secondary-color text-sm sm:text-base font-dm-sans leading-relaxed"
-                  }
-                />
-              </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Describe Your Experience</p>
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Was the quality good? Did it meet your expectations?"
+                      className="w-full h-40 p-7 rounded-[2rem] bg-gray-50 border border-transparent focus:border-black focus:bg-white outline-none transition-all font-medium text-gray-700 text-sm resize-none placeholder:text-gray-300"
+                    />
+                  </div>
 
-              {/* Add a Review Form */}
-              <div
-                id="add-a-review"
-                className="mt-10 sm:mt-12 md:mt-14 w-full sm:w-3/4 lg:w-2/4"
-              >
-                <Heading
-                  tagname="h5"
-                  text="Add a Review"
-                  className="capitalize text-primary-color font-bold text-lg sm:text-xl font-dm-sans mb-8 sm:mb-10"
-                />
-                <InputBox
-                  id={"name"}
-                  labelText={"Name"}
-                  placeholder={"Your name here"}
-                  className={"mb-5 sm:mb-6"}
-                />
-                <InputBox
-                  id={"email"}
-                  labelText={"Email"}
-                  placeholder={"Your email here"}
-                  className={"mb-8 sm:mb-10"}
-                />
-                <Textarea
-                  id={"review"}
-                  labelText={"Review"}
-                  placeholder={"Your review here"}
-                  className={"mb-6 sm:mb-8"}
-                />
-                <CusButton text="Post Review" />
+                  <div className="flex justify-center pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSubmittingReview}
+                      className="bg-black text-white px-12 py-4 rounded-2xl font-black hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 shadow-xl shadow-black/20 text-xs uppercase tracking-widest"
+                    >
+                      {isSubmittingReview ? "Submitting..." : "Post Review Now"}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           )}
 
-          {/* Description Content */}
-          {descriptionAndReviewToggle === "description" && (
-            <div className="mt-8 sm:mt-10">
-              <Heading
-                tagname="h5"
-                text="Product Information"
-                className="font-bold text-lg sm:text-xl font-dm-sans text-primary-color"
-              />
-              <div className="mt-5 sm:mt-6 space-y-4 sm:space-y-5">
-                <Paragraph
-                  text="Experience audio like never before with our Premium Wireless Headphones. Engineered with cutting-edge Bluetooth 5.3 technology, these headphones deliver an uninterrupted, high-fidelity audio experience with an impressive range of up to 15 meters."
-                  classname={
-                    "text-secondary-color text-sm sm:text-base font-dm-sans leading-relaxed"
-                  }
-                />
-                <Paragraph
-                  text="Featuring advanced Active Noise Cancellation (ANC), you can immerse yourself fully in your music, podcasts, or calls without any distractions. The 40mm custom-tuned drivers produce rich, detailed sound with powerful bass and crisp highs, ensuring every note is heard with precision."
-                  classname={
-                    "text-secondary-color text-sm sm:text-base font-dm-sans leading-relaxed"
-                  }
-                />
-                <Paragraph
-                  text="Designed for all-day comfort, the memory foam ear cushions and adjustable headband provide a secure yet gentle fit. With a marathon 30-hour battery life on a single charge, and quick-charge capability giving you 5 hours of playback from just 10 minutes of charging, these headphones are built for your lifestyle."
-                  classname={
-                    "text-secondary-color text-sm sm:text-base font-dm-sans leading-relaxed"
-                  }
-                />
-              </div>
-
-              {/* Specifications Table */}
-              <div className="mt-8 sm:mt-10">
-                <Heading
-                  tagname="h5"
-                  text="Specifications"
-                  className="font-bold text-base sm:text-lg font-dm-sans text-primary-color mb-4 sm:mb-5"
-                />
-                <div className="border border-[#F0F0F0] rounded-sm overflow-hidden">
-                  {[
-                    { label: "Driver Size", value: "40mm Custom-Tuned" },
-                    { label: "Bluetooth", value: "5.3" },
-                    { label: "Battery Life", value: "Up to 30 Hours" },
-                    { label: "Noise Cancellation", value: "Active (ANC)" },
-                    { label: "Weight", value: "250g" },
-                    { label: "Charging", value: "USB-C Fast Charge" },
-                  ].map((spec, index) => (
-                    <div
-                      key={index}
-                      className={`flex ${
-                        index % 2 === 0 ? "bg-[#FAFAFA]" : "bg-white"
-                      }`}
-                    >
-                      <span className="w-2/5 sm:w-1/3 py-3 sm:py-3.5 px-4 sm:px-6 font-dm-sans font-semibold text-sm sm:text-base text-primary-color border-r border-[#F0F0F0]">
-                        {spec.label}
-                      </span>
-                      <span className="w-3/5 sm:w-2/3 py-3 sm:py-3.5 px-4 sm:px-6 font-dm-sans text-sm sm:text-base text-secondary-color">
-                        {spec.value}
-                      </span>
+          {reviews.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reviews.map((review, index) => (
+                <div key={review.id || index} className="bg-white p-7 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 bg-gray-50 border border-gray-100 text-black rounded-xl flex items-center justify-center font-black text-sm group-hover:bg-black group-hover:text-white transition-colors">
+                        {review.user?.name?.[0] || review.user_name?.[0] || "U"}
+                      </div>
+                      <div>
+                        <p className="font-black text-[13px] tracking-tight">{review.user?.name || review.user_name || "Anonymous"}</p>
+                        <div className="flex gap-0.5 mt-0.5">
+                          {renderStars(review.rating)}
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                    <span className="text-[10px] font-bold text-gray-300 bg-gray-50 px-2 py-1 rounded-md">
+                      {new Date(review.created_at).toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute -top-2 -left-2 text-4xl text-gray-50 font-serif opacity-50 select-none">“</span>
+                    <p className="text-gray-500 text-[13px] leading-relaxed font-medium line-clamp-4 relative z-10">
+                      {review.comment}
+                    </p>
+                  </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white py-24 rounded-[3rem] border border-dashed border-gray-200 flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
+              <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-gray-300">
+                <FiMessageSquare size={32} />
               </div>
+              <h3 className="text-lg font-black text-gray-900 mb-2">No Reviews Yet</h3>
+              <p className="text-gray-400 font-medium text-sm max-w-xs">Be the first to share your experience with this product.</p>
             </div>
           )}
         </div>
@@ -516,3 +506,5 @@ const Products = () => {
 };
 
 export default Products;
+
+

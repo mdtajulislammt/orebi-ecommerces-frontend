@@ -1,81 +1,90 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactPaginate from "react-paginate";
 import ProductCard from "../layout/ProductCard";
-import productThree from "../../assets/p10.png";
 import Paragraph from "./Paragraph";
 import { Link } from "react-router-dom";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 
-import { productInfo } from "../../Demo Data/ProductCategoryData";
-
-const items = [...productInfo];
-
-function Items({ currentItems, startIndex }) {
+function Items({ currentItems }) {
+  if (!currentItems || currentItems.length === 0) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-gray-100 animate-[fadeIn_0.5s_ease-out]">
+        <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+          <MdOutlineProductionQuantityLimits size={40} className="text-gray-300" />
+        </div>
+        <h3 className="text-xl font-black text-gray-900 mb-2 font-poppins">No matches found</h3>
+        <p className="text-gray-400 font-medium font-poppins">Try adjusting your filters or search terms</p>
+      </div>
+    );
+  }
   return (
-    <>
-      {currentItems &&
-        currentItems.map((item, index) => (
-          <div
-            key={index}
-            className="sm:w-[49%] lg:w-[32%] mb-4 md:mb-5 lg:mb-6 animate-[fadeIn_0.4s_ease-out]"
-            style={{ animationDelay: `${index * 0.05}s`, animationFillMode: "both" }}
-          >
-            <Link to={`/product/${startIndex + index}`}>
-              <ProductCard
-                className="w-full mb-3 hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden cursor-pointer"
-                productImageLink={item.productImageSrc}
-                tag={item.badgeText}
-                tagVisibility={item.badge}
-                productName={item.productName}
-                productPrice={item.productPrice}
-                productColor={item.productColor}
-              />
-            </Link>
-          </div>
-        ))}
-    </>
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+      {currentItems.map((item, index) => (
+        <div
+          key={item.id || index}
+          className="animate-[fadeIn_0.4s_ease-out]"
+          style={{ animationDelay: `${index * 0.1}s`, animationFillMode: "both" }}
+        >
+          <Link to={`/product/${item.slug || item.id}`}>
+            <ProductCard
+              className="w-full"
+              productImageLink={item.thumbnail || item.productImageSrc}
+              tag={item.discount_price > 0 ? `${Math.round(((Number(item.price) - Number(item.discount_price)) / Number(item.price)) * 100)}% OFF` : null}
+              productName={item.name || item.productName}
+              productPrice={`$${item.discount_price > 0 ? item.discount_price : item.price}`}
+              productColor={item.colors?.[0] || item.productColor}
+              id={item.id}
+            />
+          </Link>
+        </div>
+      ))}
+    </div>
   );
 }
 
-function Pagination({ itemsPerPage }) {
-  const [itemOffset, setItemOffset] = useState(5);
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = items.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
+function Pagination({ itemsPerPage, products, totalItems, onPageChange, currentPage }) {
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+  
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
-
-    setItemOffset(newOffset);
+    onPageChange(event.selected + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const startIdx = (currentPage - 1) * itemsPerPage + 1;
+  const endIdx = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
     <>
-      <div className="flex justify-between flex-wrap">
-        <Items currentItems={currentItems} startIndex={itemOffset} className={"kaj-kortace"} />
-      </div>
-      <div className="mt-8 md:mt-10 lg:mt-12 lg:flex justify-between items-center">
-        <ReactPaginate
-          onPageChange={handlePageClick}
-          containerClassName="flex gap-x-1.5 sm:gap-x-2 md:gap-x-3"
-          activeLinkClassName="!bg-primary-color !text-white !border-primary-color shadow-md"
-          previousLinkClassName="hidden"
-          pageRangeDisplayed={4}
-          breakLabel="..."
-          breakLinkClassName="px-4 text-secondary-color"
-          marginPagesDisplayed={2}
-          nextLinkClassName="hidden"
-          pageCount={pageCount}
-          renderOnZeroPageCount={null}
-          pageLinkClassName="px-2.5 md:px-4 py-1.5 md:py-2.5 text-[#767676] border border-[#e0e0e0] rounded-md font-dm-sans text-sm md:text-base hover:bg-[#f5f5f5] hover:border-[#ccc] transition-all duration-200 cursor-pointer"
-        />
-        <Paragraph
-          text={`Products from ${itemOffset + 1} to ${Math.min(endOffset, items.length)} of ${items.length}`}
-          classname={
-            "pt-4 md:pt-5 lg:pt-0 font-dm-sans text-secondary-color text-sm md:text-base"
-          }
-        />
-      </div>
+      <Items currentItems={products} />
+      
+      {totalItems > itemsPerPage && (
+        <div className="mt-16 flex flex-col md:flex-row justify-between items-center gap-8 bg-white p-6 rounded-[2rem] shadow-sm border border-gray-50">
+          <ReactPaginate
+            nextLabel="Next"
+            previousLabel="Prev"
+            onPageChange={handlePageClick}
+            forcePage={currentPage - 1}
+            containerClassName="flex items-center gap-2"
+            activeLinkClassName="!bg-black !text-white !border-black shadow-lg"
+            pageRangeDisplayed={3}
+            breakLabel="..."
+            breakLinkClassName="w-10 h-10 flex items-center justify-center text-gray-400 font-bold"
+            marginPagesDisplayed={1}
+            pageCount={pageCount}
+            renderOnZeroPageCount={null}
+            pageLinkClassName="w-10 h-10 flex items-center justify-center rounded-xl border-2 border-transparent text-gray-500 font-bold hover:bg-gray-50 hover:border-gray-100 transition-all duration-300"
+            previousLinkClassName="px-4 py-2 rounded-xl font-bold text-sm text-gray-400 hover:text-black transition-colors"
+            nextLinkClassName="px-4 py-2 rounded-xl font-bold text-sm text-gray-400 hover:text-black transition-colors"
+          />
+          <p className="font-poppins font-bold text-gray-400 text-sm tracking-wide">
+            Showing <span className="text-black">{startIdx}-{endIdx}</span> of <span className="text-black">{totalItems}</span> amazing products
+          </p>
+        </div>
+      )}
     </>
   );
 }
 
 export default Pagination;
+
+

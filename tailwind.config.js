@@ -11,6 +11,7 @@ export default {
       },
       fontFamily: {
         "dm-sans": ["DM Sans", "sans-serif"],
+        "poppins": ["Poppins", "sans-serif"],
       },
       colors: {
         "primary-color": "#262626",

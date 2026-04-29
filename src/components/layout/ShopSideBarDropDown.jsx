@@ -4,7 +4,7 @@ import Heading from "../layout/Heading";
 import Paragraph from "./Paragraph";
 import ShopSideBarDropDownItem from "./ShopSideBarDropDownItem";
 
-const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
+const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data, onSelect }) => {
   const [dropDwonOpen, setDropDwonOpen] = useState(dropDownOn);
   const [dropDwonItemShow, setDropDwonItemShow] = useState(dropDownOn);
 
@@ -38,8 +38,11 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
         data.map((item) =>
           item.colorname ? (
             <ShopSideBarDropDownItem
+              key={item.colorname}
+              onClick={() => onSelect && onSelect(item)}
               title={[
                 <span
+                  key={item.colorcode}
                   className={`${item.colorcode} w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 inline-block rounded-full mr-2`}
                 ></span>,
                 item.colorname,
@@ -48,14 +51,21 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
             />
           ) : (
             <ShopSideBarDropDownItem
+              key={item.name}
+              onClick={() => onSelect && !item.subcategory && onSelect(item)}
               subDropDownOn={item.subcategory ? true : false}
               title={item.name}
               className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color py-2 sm:py-3 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex justify-between items-center rounded-sm"
             >
               {item.subcategory &&
-                item.subcategory.map((item) => (
+                item.subcategory.map((sub) => (
                   <Paragraph
-                    text={item.name}
+                    key={sub.name}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelect && onSelect(sub, item);
+                    }}
+                    text={sub.name}
                     classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] hover:bg-[#f0f0ee] hover:pl-8 transition-all duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
                   />
                 ))}
@@ -67,8 +77,11 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
         data.map((item) =>
           item.colorname ? (
             <ShopSideBarDropDownItem
+              key={item.colorname}
+              onClick={() => onSelect && onSelect(item)}
               title={[
                 <span
+                  key={item.colorcode}
                   className={`${item.colorcode} w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 inline-block rounded-full mr-2`}
                 ></span>,
                 item.colorname,
@@ -77,14 +90,21 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data }) => {
             />
           ) : (
             <ShopSideBarDropDownItem
+              key={item.name}
+              onClick={() => onSelect && !item.subcategory && onSelect(item)}
               subDropDownOn={item.subcategory ? true : false}
               title={item.name}
               className="capitalize hover:bg-[#f0f0ee] hover:pl-2 transition-all duration-200 text-[12px] md:text-[14px] lg:text-[16px] px-1 cursor-pointer font-dm-sans text-secondary-color py-2 sm:py-3 md:py-4 xl:py-5 border-b border-[#e8e8e8] flex justify-between items-center rounded-sm"
             >
               {item.subcategory &&
-                item.subcategory.map((item) => (
+                item.subcategory.map((sub) => (
                   <Paragraph
-                    text={item.name}
+                    key={sub.name}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelect && onSelect(sub, item);
+                    }}
+                    text={sub.name}
                     classname="capitalize font-dm-sans text-secondary-color pl-7 py-2.5 md:py-4 xl:py-5 border-b border-[#e8e8e8] hover:bg-[#f0f0ee] hover:pl-8 transition-all duration-200 px-1 cursor-pointer text-[12px] md:text-[14px] lg:text-[16px] rounded-sm"
                   />
                 ))}
