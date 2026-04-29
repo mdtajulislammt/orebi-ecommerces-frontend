@@ -30,6 +30,8 @@ const Checkout = () => {
   const cart = useSelector((state) => state.orebi?.cart || []);
   const { userInfo, token } = useSelector((state) => state.auth);
   
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  
   const [buyProduct, { isLoading }] = useBuyProductMutation();
 
   const [formData, setFormData] = useState({
@@ -75,17 +77,20 @@ const Checkout = () => {
       return;
     }
 
+    // Simulate payment processing for digital methods
+    if (paymentMethod !== "cod") {
+      try {
+        // Small artificial delay to mimic payment processing
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (err) {
+        console.error("Payment simulation failed");
+      }
+    }
+
     try {
       const orderData = {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        email: formData.email,
-        phone_number: formData.phone_number,
-        address: formData.address,
-        city: formData.city,
-        post_code: formData.post_code,
-        country: formData.country,
-        notes: formData.notes,
+        ...formData,
+        payment_method: paymentMethod,
         items: cart.map(item => ({
           product_id: item.id,
           quantity: item.quantity
@@ -268,16 +273,138 @@ const Checkout = () => {
                   <span className="font-black text-2xl">${totalAmount.toFixed(2)}</span>
                 </Flex>
               </div>
+              {/* Payment Methods Selection */}
+              <div className="mt-8 pt-8 border-t border-gray-100">
+                <Heading
+                  tagname={"h4"}
+                  text={"Payment Method"}
+                  className="font-dm-sans font-bold text-primary-color text-lg mb-6"
+                />
+                
+                <div className="space-y-3">
+                  {/* Stripe Option */}
+                  <label 
+                    onClick={() => setPaymentMethod("stripe")}
+                    className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${paymentMethod === 'stripe' ? 'border-black bg-gray-50' : 'border-gray-100'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'stripe' ? 'border-black' : 'border-gray-300'}`}>
+                        {paymentMethod === 'stripe' && <div className="w-2 h-2 bg-black rounded-full" />}
+                      </div>
+                      <span className="font-bold text-sm">Credit / Debit Card</span>
+                    </div>
+                    <div className="flex gap-1">
+                      <div className="w-8 h-5 bg-white rounded border border-gray-100 flex items-center justify-center text-[8px] font-bold text-blue-800 italic">VISA</div>
+                      <div className="w-8 h-5 bg-white rounded border border-gray-200 flex items-center justify-center text-[8px] font-bold text-red-600 italic">MC</div>
+                    </div>
+                  </label>
+
+                  {/* Stripe Card Mockup (Only visible if stripe selected) */}
+                  {paymentMethod === 'stripe' && (
+                    <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">Cardholder Name</label>
+                          <input 
+                            type="text" 
+                            placeholder="Full Name on Card" 
+                            defaultValue={userInfo?.name || ""}
+                            className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-black transition-colors"
+                          />
+                        </div>
+                        <div className="relative">
+                          <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">Card Number</label>
+                          <input 
+                            type="text" 
+                            placeholder="4242 4242 4242 4242" 
+                            defaultValue="4242 4242 4242 4242"
+                            className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-black transition-colors font-mono"
+                          />
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="w-1/2">
+                            <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">Expiration</label>
+                            <input type="text" placeholder="MM/YY" defaultValue="12/26" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-black transition-colors" />
+                          </div>
+                          <div className="w-1/2">
+                            <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">CVC</label>
+                            <input type="text" placeholder="***" defaultValue="123" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-black transition-colors" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* PayPal Option */}
+                  <label 
+                    onClick={() => setPaymentMethod("paypal")}
+                    className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${paymentMethod === 'paypal' ? 'border-black bg-gray-50' : 'border-gray-100'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'paypal' ? 'border-black' : 'border-gray-300'}`}>
+                        {paymentMethod === 'paypal' && <div className="w-2 h-2 bg-black rounded-full" />}
+                      </div>
+                      <span className="font-bold text-sm">PayPal</span>
+                    </div>
+                    <div className="w-12 h-6 bg-[#003087] rounded flex items-center justify-center text-[10px] font-black text-white italic">Pay<span className="text-[#009cde]">Pal</span></div>
+                  </label>
+
+                  {/* PayPal Email Mockup (Only visible if paypal selected) */}
+                  {paymentMethod === 'paypal' && (
+                    <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">💳</span>
+                        <p className="text-xs font-bold text-blue-800 uppercase tracking-wider">Fast & Secure PayPal Checkout</p>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">PayPal Email</label>
+                          <input 
+                            type="email" 
+                            placeholder="PayPal Email Address" 
+                            defaultValue={userInfo?.email || "user@example.com"}
+                            className="w-full bg-white border border-blue-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500 transition-colors"
+                          />
+                        </div>
+                        <div className="relative">
+                          <label className="text-[10px] font-black uppercase text-gray-400 mb-1 block">PayPal Password</label>
+                          <input 
+                            type="password" 
+                            placeholder="Password" 
+                            defaultValue="••••••••"
+                            className="w-full bg-white border border-blue-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500 transition-colors"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-blue-600 font-medium italic">You will be redirected to PayPal to complete your purchase securely.</p>
+                    </div>
+                  )}
+
+                  {/* Cash on Delivery Option */}
+                  <label 
+                    onClick={() => setPaymentMethod("cod")}
+                    className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-black bg-gray-50' : 'border-gray-100'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'cod' ? 'border-black' : 'border-gray-300'}`}>
+                        {paymentMethod === 'cod' && <div className="w-2 h-2 bg-black rounded-full" />}
+                      </div>
+                      <span className="font-bold text-sm">Cash on Delivery</span>
+                    </div>
+                    <span className="text-xl">💵</span>
+                  </label>
+                </div>
+              </div>
 
               <CusButton 
                 onClick={handlePlaceOrder}
-                text={isLoading ? "Processing..." : "Place Order"} 
+                text={isLoading ? "Processing Payment..." : "Place Order"} 
                 className="w-full mt-10 py-5 bg-black text-white rounded-2xl hover:bg-primary-color transition-all active:scale-[0.98]" 
                 disabled={isLoading}
               />
               
               <p className="text-[10px] text-center text-gray-400 mt-6 font-medium">
-                By placing this order, you agree to our Terms and Conditions and Privacy Policy.
+                Your payment is secured with 256-bit SSL encryption.
               </p>
             </div>
           </div>
