@@ -38,7 +38,12 @@ const Login = () => {
         }));
         
         toast.success(response.message || "Logged in successfully!");
-        navigate("/");
+        
+        if (response.type === 'ADMIN') {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
         toast.error(response.message || "Login failed");
       }
@@ -62,18 +67,14 @@ const Login = () => {
             }
           />
         </div>
-        <div className="input-area mt-6 sm:mt-8 md:mt-10 lg:mt-12 border-b-[1px] border-[#f0f0f0]">
+        <div className="input-area mt-6 sm:mt-8 md:mt-10 lg:mt-12">
           <Heading
             tagname="h4"
-            text="returning customer"
+            text="Login to your account"
             className="mb-10 font-dm-sans font-bold capitalize text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[42px] 2xl:text-[49px]"
           />
-          <form onSubmit={handleLogin}>
-            <Flex
-              className={
-                "justify-between items-center w-full sm:w-3/4 xl:w-2/4 gap-x-3 sm:gap-x-10"
-              }
-            >
+          <form onSubmit={handleLogin} className="w-full sm:w-3/4 xl:w-2/4">
+            <Flex className="justify-between items-center gap-x-3 sm:gap-x-10 mb-6">
               <InputBox
                 id="email"
                 labelText="email address"
@@ -81,8 +82,10 @@ const Login = () => {
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-2/4"
+                className="w-full"
               />
+            </Flex>
+            <Flex className="justify-between items-center gap-x-3 sm:gap-x-10">
               <InputBox
                 id="password"
                 labelText="password"
@@ -90,38 +93,24 @@ const Login = () => {
                 placeholder="password123"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-2/4"
+                className="w-full"
               />
             </Flex>
-            <CusButton
-              text={isLoading ? "Logging in..." : "log in"}
-              type="submit"
-              disabled={isLoading}
-              className="mt-7 mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14 2xl:mb-16 bg-white border !border-primary-color !text-primary-color capitalize hover:!text-white hover:bg-primary-color"
-            />
+            <div className="flex flex-col sm:flex-row items-center gap-6 mt-10">
+              <CusButton
+                text={isLoading ? "Logging in..." : "log in"}
+                type="submit"
+                disabled={isLoading}
+                className="bg-black text-white px-12 py-4 hover:bg-white hover:text-black border border-black transition-all duration-300"
+              />
+              <p className="text-secondary-color text-sm">
+                Don't have an account?{" "}
+                <Link to="/signup" className="text-primary-color font-bold hover:underline">
+                  Sign Up
+                </Link>
+              </p>
+            </div>
           </form>
-        </div>
-        <div>
-          <Heading
-            tagname="h4"
-            text="new customer"
-            className="mb-5 md:mb-7 xl:mb-10 mt-6 sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 2xl:mt-16  font-dm-sans font-bold capitalize text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[42px] 2xl:text-[49px] "
-          />
-          <Paragraph
-            text={
-              "Don't have an account yet? Sign up now to enjoy faster checkout and track your orders."
-            }
-            classname={
-              "text-secondary-color mb-12 w-full sm:w-[644px] text-xs sm:text-sm md:text-base"
-            }
-          />
-
-          <Link
-            to="/signup"
-            className="inline-block font-dm-sans text-white bg-black py-2 sm:py-3 md:py-4 px-12 sm:px-15 md:px-[72px] lg:px-[84px] xl:px-24 capitalize hover:bg-white hover:text-primary-color border border-primary-color transition duration-300 ease-in-out"
-          >
-            Continue
-          </Link>
         </div>
       </Container>
     </section>

@@ -6,6 +6,7 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import { IoIosStar, IoIosStarHalf } from "react-icons/io";
@@ -28,6 +29,7 @@ import { addToCart, addToWishlist } from "../features/orebi/orebiSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [productsQuantity, setProductsQuantity] = useState(1);
 
   const handleAddToCart = () => {
@@ -247,20 +249,31 @@ const Products = () => {
 
             {/* Action Buttons */}
             <div className="py-6 sm:py-7 border-b border-[#F0F0F0]">
-              <Flex className="flex-col sm:flex-row gap-3 sm:gap-4">
+              <Flex className="flex-col gap-3 sm:gap-4">
+                <Flex className="gap-3 sm:gap-4">
+                  <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-primary-color text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm"
+                  >
+                    <FiShoppingCart className="text-base sm:text-lg" />
+                    Add to Cart
+                  </button>
+                  <button 
+                    onClick={handleAddToWishlist}
+                    className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 border-2 border-primary-color capitalize text-sm sm:text-base hover:bg-primary-color hover:text-white transition-all duration-300 ease-in-out rounded-sm text-primary-color"
+                  >
+                    <FiHeart className="text-base sm:text-lg" />
+                    Add to Wishlist
+                  </button>
+                </Flex>
                 <button 
-                  onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-primary-color text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm"
+                  onClick={() => {
+                    handleAddToCart();
+                    navigate("/checkout");
+                  }}
+                  className="w-full flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 bg-black text-white capitalize text-sm sm:text-base hover:bg-[#3a3a3a] transition-all duration-300 ease-in-out rounded-sm border border-black hover:border-black shadow-lg"
                 >
-                  <FiShoppingCart className="text-base sm:text-lg" />
-                  Add to Cart
-                </button>
-                <button 
-                  onClick={handleAddToWishlist}
-                  className="flex-1 flex items-center justify-center gap-2 font-dm-sans font-bold py-3 sm:py-3.5 md:py-4 px-6 border-2 border-primary-color capitalize text-sm sm:text-base hover:bg-primary-color hover:text-white transition-all duration-300 ease-in-out rounded-sm text-primary-color"
-                >
-                  <FiHeart className="text-base sm:text-lg" />
-                  Add to Wishlist
+                  Buy Now & Checkout
                 </button>
               </Flex>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Container from "../components/layout/Container";
 import BreadCrump from "../components/layout/BreadCrump";
 import Heading from "../components/layout/Heading";
@@ -94,13 +94,19 @@ const SignUp = () => {
             />
           </Flex>
 
-          <div className="mt-10">
+          <div className="flex flex-col sm:flex-row items-center gap-6 mt-10">
             <CusButton
               text={isLoading ? "Creating..." : "Sign Up"}
               onClick={handleSignUp}
-              className="capitalize active:scale-[1.05]"
+              className="capitalize active:scale-[1.05] bg-black text-white px-12 py-4"
               disabled={isLoading}
             />
+            <p className="text-secondary-color text-sm">
+              Already have an account?{" "}
+              <Link to="/login" className="text-primary-color font-bold hover:underline">
+                Login
+              </Link>
+            </p>
           </div>
         </div>
       </Container>

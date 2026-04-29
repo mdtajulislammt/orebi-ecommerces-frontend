@@ -24,24 +24,51 @@ import Wishlist from "./pages/Wishlist";
 
 import OrderSuccess from "./pages/OrderSuccess";
 
+// Admin Imports
+import AdminProtectedRoute from "./components/auth/AdminProtectedRoute";
+import AdminLayout from "./components/layout/AdminLayout";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ProductList from "./pages/Admin/Products/ProductList";
+import CreateProduct from "./pages/Admin/Products/CreateProduct";
+import EditProduct from "./pages/Admin/Products/EditProduct";
+import ViewProduct from "./pages/Admin/Products/ViewProduct";
+import CategoryList from "./pages/Admin/Categories/CategoryList";
+import BrandList from "./pages/Admin/Brands/BrandList";
+import OrderList from "./pages/Admin/Orders/OrderList";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<Home />}></Route>
-      <Route path="/shop" element={<Shop />}></Route>
-      <Route path="/about-us" element={<About />}></Route>
-      <Route path="/contacts" element={<Contact />}></Route>
-      <Route path="/journal" element={<Journal />}></Route>
-      <Route path="/product/:id" element={<Products />}></Route>
-      <Route path="/my-account" element={<MyAccount />}></Route>
-      <Route path="/login" element={<Login />}></Route>
-      <Route path="/signup" element={<SignUp />}></Route>
-      <Route path="/cart" element={<Cart />}></Route>
-      <Route path="/checkout" element={<Checkout />}></Route>
-      <Route path="/wishlist" element={<Wishlist />}></Route>
-      <Route path="/order-success" element={<OrderSuccess />}></Route>
+    <>
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<Home />}></Route>
+        <Route path="/shop" element={<Shop />}></Route>
+        <Route path="/about-us" element={<About />}></Route>
+        <Route path="/contacts" element={<Contact />}></Route>
+        <Route path="/journal" element={<Journal />}></Route>
+        <Route path="/product/:id" element={<Products />}></Route>
+        <Route path="/my-account" element={<MyAccount />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/checkout" element={<Checkout />}></Route>
+        <Route path="/wishlist" element={<Wishlist />}></Route>
+        <Route path="/order-success" element={<OrderSuccess />}></Route>
+      </Route>
+      /* Admin Routes */
+      <Route element={<AdminProtectedRoute />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<ProductList />} />
+          <Route path="products/create" element={<CreateProduct />} />
+          <Route path="products/edit/:id" element={<EditProduct />} />
+          <Route path="products/view/:id" element={<ViewProduct />} />
+          <Route path="categories" element={<CategoryList />} />
+          <Route path="brands" element={<BrandList />} />
+          <Route path="orders" element={<OrderList />} />
+        </Route>
+      </Route>
       <Route path="*" element={<Error />}></Route>
-    </Route>
+    </>
   )
 );
 
