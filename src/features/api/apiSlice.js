@@ -14,7 +14,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Product', 'Order'],
+  tagTypes: ['User', 'Product', 'Order', 'Review', 'Brand', 'Category'],
   endpoints: (builder) => ({
     // Auth Endpoints
     register: builder.mutation({
@@ -73,6 +73,78 @@ export const apiSlice = createApi({
       invalidatesTags: ['Product'],
     }),
 
+    // Reviews Endpoints
+    addReview: builder.mutation({
+      query: (data) => ({
+        url: '/api/reviews',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Review', 'Product'],
+    }),
+    getProductReviews: builder.query({
+      query: (productId) => `/api/reviews/product/${productId}`,
+      providesTags: (result, error, productId) => [{ type: 'Review', id: productId }],
+    }),
+
+    // Brand Endpoints
+    getBrands: builder.query({
+      query: () => '/api/brand/brands',
+      providesTags: ['Brand'],
+    }),
+    createBrand: builder.mutation({
+      query: (data) => ({
+        url: '/api/brand/brands',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Brand'],
+    }),
+    updateBrand: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/api/brand/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Brand'],
+    }),
+    deleteBrand: builder.mutation({
+      query: (id) => ({
+        url: `/api/brand/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Brand'],
+    }),
+
+    // Categories Endpoints
+    getCategories: builder.query({
+      query: () => '/api/categories',
+      providesTags: ['Category'],
+    }),
+    createCategory: builder.mutation({
+      query: (data) => ({
+        url: '/api/categories',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category'],
+    }),
+    updateCategory: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/api/categories/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Category'],
+    }),
+    deleteCategory: builder.mutation({
+      query: (id) => ({
+        url: `/api/categories/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Category'],
+    }),
+
     // Orders Endpoints
     buyProduct: builder.mutation({
       query: (data) => ({
@@ -98,6 +170,16 @@ export const {
   useGetProductBySlugQuery,
   useCreateProductMutation,
   useDeleteProductMutation,
+  useAddReviewMutation,
+  useGetProductReviewsQuery,
+  useGetBrandsQuery,
+  useCreateBrandMutation,
+  useUpdateBrandMutation,
+  useDeleteBrandMutation,
+  useGetCategoriesQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
   useBuyProductMutation,
   useGetMyOrdersQuery,
 } = apiSlice;
