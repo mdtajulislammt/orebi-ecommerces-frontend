@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { MdEdit, MdDelete, MdAdd, MdClose, MdCheck } from 'react-icons/md';
-import { 
-  useGetBrandsQuery, 
-  useCreateBrandMutation, 
-  useUpdateBrandMutation, 
-  useDeleteBrandMutation 
-} from '../../../features/api/apiSlice';
+import { useState } from 'react';
+import { MdAdd, MdCheck, MdClose, MdDelete, MdEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import {
+  useCreateBrandMutation,
+  useDeleteBrandMutation,
+  useGetBrandsQuery,
+  useUpdateBrandMutation
+} from '../../../features/api/apiSlice';
 
 const BrandList = () => {
   const { data: brands, isLoading, isError } = useGetBrandsQuery();

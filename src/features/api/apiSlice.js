@@ -160,7 +160,14 @@ export const apiSlice = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['User', 'Order'],
+      invalidatesTags: ['Order', 'User', 'Product'],
+    }),
+    getAllOrders: builder.query({
+      query: (params) => ({
+        url: '/api/orders/all-order',
+        params,
+      }),
+      providesTags: ['Order'],
     }),
     getMyOrders: builder.query({
       query: () => '/api/orders/my-orders',
@@ -190,5 +197,6 @@ export const {
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useBuyProductMutation,
+  useGetAllOrdersQuery,
   useGetMyOrdersQuery,
 } = apiSlice;
