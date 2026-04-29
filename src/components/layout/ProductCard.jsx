@@ -77,12 +77,12 @@ const ProductCard = ({
               <FaRegHeart className="group-hover/btn:scale-125 transition-transform" />
             </button>
             <div className="h-[1px] bg-gray-100 w-full" />
-            <button
+            {/* <button
               className="w-full flex items-center justify-between text-gray-500 hover:text-black transition-colors font-dm-sans text-sm font-bold group/btn"
             >
               Compare
               <FaExchangeAlt className="group-hover/btn:scale-125 transition-transform" />
-            </button>
+            </button> */}
             <div className="h-[1px] bg-gray-100 w-full" />
             <button
               onClick={handleAddToCart}

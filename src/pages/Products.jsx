@@ -36,6 +36,7 @@ const Products = () => {
   // Review Form State
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const { userInfo } = useSelector((state) => state.auth);
 
   const { data: productResponse, isLoading, isError } = useGetProductQuery(id);
   const product = productResponse?.data;
@@ -103,7 +104,7 @@ const Products = () => {
     toast.success(`${product.name} added to wishlist!`);
   };
 
-  const { userInfo } = useSelector((state) => state.auth);
+
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();

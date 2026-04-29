@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../components/layout/Container";
 import BreadCrump from "../components/layout/BreadCrump";
 import Heading from "../components/layout/Heading";
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../features/orebi/orebiSlice";
 import { toast } from "react-toastify";
+import { useBuyProductMutation } from "../features/api/apiSlice";
 
 const country = [
   { id: 0, name: "please select" },
@@ -21,22 +22,41 @@ const country = [
   { id: 6, name: "Rajshahi" },
   { id: 7, name: "Rangpur" },
   { id: 8, name: "Sylhet" },
-  
 ];
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.orebi?.cart || []);
+  const { userInfo, token } = useSelector((state) => state.auth);
+  
+  const [buyProduct, { isLoading }] = useBuyProductMutation();
+
+  const [formData, setFormData] = useState({
+    first_name: userInfo?.name?.split(" ")[0] || "",
+    last_name: userInfo?.name?.split(" ").slice(1).join(" ") || "",
+    email: userInfo?.email || "",
+    phone_number: userInfo?.phone_number || "",
+    address: "",
+    city: "",
+    post_code: "",
+    country: "Dhaka",
+    notes: ""
+  });
+
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
-    const price = parseFloat(item.productPrice.replace("$", ""));
+    const price = typeof item.productPrice === 'string' 
+      ? parseFloat(item.productPrice.replace("$", "")) 
+      : item.productPrice;
     return total + price * item.quantity;
   }, 0) : 0;
 
-  const { token } = useSelector((state) => state.auth);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
-  const handlePlaceOrder = (e) => {
-    e.preventDefault();
+  const handlePlaceOrder = async (e) => {
+    if (e) e.preventDefault();
     
     if (!token) {
       toast.warn("Please login to proceed with your order.");
@@ -48,171 +68,220 @@ const Checkout = () => {
       toast.error("Your cart is empty!");
       return;
     }
-    
-    dispatch(clearCart());
-    toast.success("Order placed successfully!");
-    navigate("/order-success");
+
+    // Basic validation
+    if (!formData.first_name || !formData.last_name || !formData.address || !formData.city || !formData.phone_number) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      const orderData = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        address: formData.address,
+        city: formData.city,
+        post_code: formData.post_code,
+        country: formData.country,
+        notes: formData.notes,
+        items: cart.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }))
+      };
+
+      const response = await buyProduct(orderData).unwrap();
+      
+      if (response.success) {
+        dispatch(clearCart());
+        toast.success("Order placed successfully!");
+        navigate("/order-success");
+      } else {
+        toast.error(response.message || "Failed to place order");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message || "An error occurred while placing your order.");
+      console.error("Order error:", err);
+    }
   };
 
   return (
-    <section>
+    <section className="py-10 bg-[#fafafa]">
       <Container>
-        <BreadCrump />
-        <form
-          action=""
-          className=" mt-4 sm:mt-7 md:mt-10 lg:mt-13 xl:mt-16 w-full sm:w-3/4 mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-        >
-          <Heading
-            tagname={"h3"}
-            text={"Billing Details"}
-            className=" font-dm-sans font-bold text-primary-color text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] xl:text-[36px] 2xl:text-[40px] mb-7"
-          />
-          <Flex className={"gap-x-10"}>
-            <InputBox
-              className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-2/4"}
-              labelText="First Name *"
-              id={"firstname"}
-              type="text"
-              placeholder="first name"
-            />
-            <InputBox
-              className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-2/4"}
-              labelText="last name *"
-              id={"lastname"}
-              type="text"
-              placeholder="last name"
-            />
-          </Flex>
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="Company Name (optional)"
-            id={"comapny"}
-            type="text"
-            placeholder="Company Name"
-          />
-          <Flex
-            className={
-              "flex-col mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full border-b-[1px] text-secondary-color border-[#D8D8D8]"
-            }
-          >
-            <label
-              htmlFor="country"
-              className="font-bold text-secondary-color font-dm-sans text-sm sm:text-[15px] md:text-base capitalize"
-            >
-              country*
-            </label>
-            <select
-              name="country"
-              id="country"
-              className="py-2.5 outline-none text-sm sm:text-[15px] md:text-base"
-            >
-              {country.map((item) => (
-                <option value={item.name}>{item.name}</option>
-              ))}
-            </select>
-          </Flex>
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="street address *"
-            id={"street"}
-            type="text"
-            placeholder="House number and street name"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="Town/City *"
-            id={"city"}
-            type="text"
-            placeholder="Town/City"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="Post Code *"
-            id={"postcode"}
-            type="text"
-            placeholder="Post Code"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="Phone"
-            id={"Phone"}
-            type="text"
-            placeholder="Phone"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8 w-full"}
-            labelText="Email Address"
-            id={"email"}
-            type="text"
-            placeholder="Email"
-          />
-        </form>
-        <form
-          action=""
-          className=" mt-4 sm:mt-7 md:mt-10 lg:mt-13 xl:mt-16 w-full sm:w-3/4 mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-        >
-          <Heading
-            tagname={"h3"}
-            text={"Additional Information"}
-            className=" font-dm-sans font-bold text-primary-color text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] xl:text-[36px] 2xl:text-[40px] mb-7"
-          />
-          <Textarea
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8"}
-            labelText="Other Notes (optional)"
-            id={"messege"}
-            placeholder={
-              "Notes about your order, e.g. special notes for delivery."
-            }
-          />
+        <div className="mb-10">
+          <BreadCrump />
+        </div>
+        
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Billing Form */}
+          <div className="w-full lg:w-2/3">
+            <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-gray-100">
+              <Heading
+                tagname={"h3"}
+                text={"Billing Details"}
+                className="font-dm-sans font-bold text-primary-color text-2xl mb-10 border-b pb-4"
+              />
+              
+              <div className="space-y-6">
+                <Flex className="gap-6 flex-col sm:flex-row">
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="First Name *"
+                    id="first_name"
+                    type="text"
+                    placeholder="first name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                  />
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="Last Name *"
+                    id="last_name"
+                    type="text"
+                    placeholder="last name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                  />
+                </Flex>
 
-          <Heading
-            tagname={"h3"}
-            text={"Your Order"}
-            className="font-dm-sans font-bold text-primary-color text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] xl:text-[36px] 2xl:text-[40px] mb-7 mt-10"
-          />
-          <div className="w-full sm:w-2/3">
-            <table className="w-full border-[2px] border-[#f0f0f0] text-start mb-8">
-              <thead>
-                <tr>
-                  <th className="text-start border-[2px] border-[#f0f0f0] py-4 px-5 font-bold uppercase">Image</th>
-                  <th className="text-start border-[2px] border-[#f0f0f0] py-4 px-5 font-bold uppercase">Product</th>
-                  <th className="text-start border-[2px] border-[#f0f0f0] py-4 px-5 font-bold uppercase">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cart.map((item) => (
-                  <tr key={item.id || item.productName}>
-                    <td className="border-[2px] border-[#f0f0f0] py-4 px-5">
-                      <div className="w-16 sm:w-20 bg-[#F5F5F3]">
-                        <img src={item.productImageSrc} alt={item.productName} className="w-full h-auto" />
-                      </div>
-                    </td>
-                    <td className="border-[2px] border-[#f0f0f0] py-4 px-5 font-dm-sans">
-                      <p className="font-bold">{item.productName}</p>
-                      <span className="text-secondary-color text-xs">Qty: {item.quantity}</span>
-                    </td>
-                    <td className="border-[2px] border-[#f0f0f0] py-4 px-5 font-dm-sans font-bold">
-                      ${(parseFloat(item.productPrice.replace("$", "")) * item.quantity).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td colSpan="2" className="border-[2px] border-[#f0f0f0] py-4 px-5 font-bold uppercase bg-[#F5F5F3]">Subtotal</td>
-                  <td className="border-[2px] border-[#f0f0f0] py-4 px-5 font-bold">${totalAmount.toFixed(2)}</td>
-                </tr>
-                <tr>
-                  <td colSpan="2" className="border-[2px] border-[#f0f0f0] py-4 px-5 font-bold uppercase bg-[#F5F5F3]">Total</td>
-                  <td className="border-[2px] border-[#f0f0f0] py-4 px-5 font-bold text-xl">${totalAmount.toFixed(2)}</td>
-                </tr>
-              </tbody>
-            </table>
-            <CusButton 
-                onClick={handlePlaceOrder}
-                text={"Proceed to order"} 
-                className="w-full" 
-            />
+                <Flex className="gap-6 flex-col sm:flex-row">
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="Email Address *"
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="Phone Number *"
+                    id="phone_number"
+                    type="text"
+                    placeholder="Phone"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                  />
+                </Flex>
+
+                <div className="flex flex-col border-b-[1px] text-secondary-color border-[#D8D8D8]">
+                  <label htmlFor="country" className="font-bold font-dm-sans text-sm md:text-base capitalize">
+                    Country *
+                  </label>
+                  <select
+                    id="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className="py-2.5 outline-none text-sm md:text-base bg-transparent"
+                  >
+                    {country.map((item) => (
+                      <option key={item.id} value={item.name}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <InputBox
+                  className="w-full"
+                  labelText="Street Address *"
+                  id="address"
+                  type="text"
+                  placeholder="House number and street name"
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+
+                <Flex className="gap-6 flex-col sm:flex-row">
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="Town/City *"
+                    id="city"
+                    type="text"
+                    placeholder="Town/City"
+                    value={formData.city}
+                    onChange={handleChange}
+                  />
+                  <InputBox
+                    className="w-full sm:w-1/2"
+                    labelText="Post Code *"
+                    id="post_code"
+                    type="text"
+                    placeholder="Post Code"
+                    value={formData.post_code}
+                    onChange={handleChange}
+                  />
+                </Flex>
+
+                <Textarea
+                  labelText="Order Notes (optional)"
+                  id="notes"
+                  placeholder="Notes about your order, e.g. special notes for delivery."
+                  value={formData.notes}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
           </div>
-        </form>
+
+          {/* Order Summary */}
+          <div className="w-full lg:w-1/3">
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 sticky top-24">
+              <Heading
+                tagname={"h3"}
+                text={"Your Order"}
+                className="font-dm-sans font-bold text-primary-color text-2xl mb-8 border-b pb-4"
+              />
+              
+              <div className="space-y-4 mb-8 max-h-[400px] overflow-y-auto pr-2 no-scrollbar">
+                {cart.map((item) => (
+                  <Flex key={item.id || item.productName} className="justify-between items-center gap-4 py-3 border-b border-gray-50 last:border-0">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 bg-gray-50 rounded-xl overflow-hidden p-2 flex-shrink-0">
+                        <img src={item.productImageSrc} alt={item.productName} className="w-full h-full object-contain" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm line-clamp-1">{item.productName}</p>
+                        <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
+                      </div>
+                    </div>
+                    <p className="font-bold text-sm">
+                      ${(parseFloat(typeof item.productPrice === 'string' ? item.productPrice.replace("$", "") : item.productPrice) * item.quantity).toFixed(2)}
+                    </p>
+                  </Flex>
+                ))}
+              </div>
+
+              <div className="space-y-4 border-t pt-6">
+                <Flex className="justify-between items-center text-gray-500">
+                  <span className="font-medium">Subtotal</span>
+                  <span className="font-bold">${totalAmount.toFixed(2)}</span>
+                </Flex>
+                <Flex className="justify-between items-center text-gray-500">
+                  <span className="font-medium">Shipping</span>
+                  <span className="font-bold text-green-600">Free</span>
+                </Flex>
+                <div className="h-[1px] bg-gray-100 w-full my-2"></div>
+                <Flex className="justify-between items-center text-primary-color">
+                  <span className="font-black text-lg uppercase">Total</span>
+                  <span className="font-black text-2xl">${totalAmount.toFixed(2)}</span>
+                </Flex>
+              </div>
+
+              <CusButton 
+                onClick={handlePlaceOrder}
+                text={isLoading ? "Processing..." : "Place Order"} 
+                className="w-full mt-10 py-5 bg-black text-white rounded-2xl hover:bg-primary-color transition-all active:scale-[0.98]" 
+                disabled={isLoading}
+              />
+              
+              <p className="text-[10px] text-center text-gray-400 mt-6 font-medium">
+                By placing this order, you agree to our Terms and Conditions and Privacy Policy.
+              </p>
+            </div>
+          </div>
+        </div>
       </Container>
     </section>
   );
