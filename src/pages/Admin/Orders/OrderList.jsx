@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { MdVisibility, MdPrint, MdSearch, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { useState } from 'react';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdPrint, MdSearch, MdVisibility } from 'react-icons/md';
 import { useGetAllOrdersQuery } from '../../../features/api/apiSlice';
-import moment from 'moment';
 
 const OrderList = () => {
   const [page, setPage] = useState(1);
@@ -78,7 +77,11 @@ const OrderList = () => {
                   </div>
                 </td>
                 <td className="px-8 py-5 text-gray-600 text-sm font-medium">
-                  {moment(order.created_at).format('MMM DD, YYYY')}
+                  {new Date(order.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: '2-digit',
+                    year: 'numeric'
+                  })}
                 </td>
                 <td className="px-8 py-5">
                   <span className="font-black text-gray-900">${order.total_amount.toFixed(2)}</span>
