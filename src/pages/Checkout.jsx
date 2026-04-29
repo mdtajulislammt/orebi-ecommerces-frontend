@@ -9,6 +9,7 @@ import Flex from "../components/layout/Flex";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../features/orebi/orebiSlice";
+import { toast } from "react-toastify";
 
 const country = [
   { id: 0, name: "please select" },
@@ -32,13 +33,24 @@ const Checkout = () => {
     return total + price * item.quantity;
   }, 0) : 0;
 
+  const { token } = useSelector((state) => state.auth);
+
   const handlePlaceOrder = (e) => {
     e.preventDefault();
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
+    
+    if (!token) {
+      toast.warn("Please login to proceed with your order.");
+      navigate("/login", { state: { from: "/checkout" } });
       return;
     }
+
+    if (cart.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+    
     dispatch(clearCart());
+    toast.success("Order placed successfully!");
     navigate("/order-success");
   };
 

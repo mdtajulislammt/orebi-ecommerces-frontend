@@ -22,7 +22,10 @@ import { RxCross2 } from "react-icons/rx";
 import headphoneImage from "../../assets/headphone.png";
 import capImage from "../../assets/cap.png";
 
+import { logout } from "../../features/auth/authSlice";
+
 const Header = () => {
+  // ... (categoryDropDownInfo remains the same)
   let categoryDropDownInfo = [
     { name: "accesories", path: "" },
     { name: "furniture", path: "" },
@@ -46,6 +49,7 @@ const Header = () => {
 
   const cart = useSelector((state) => state.orebi?.cart || []);
   const wishlist = useSelector((state) => state.orebi?.wishlist || []);
+  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
@@ -55,15 +59,15 @@ const Header = () => {
 
   useEffect(() => {
     document.body.addEventListener("click", (e) => {
-      if (!categoryRef.current.contains(e.target)) {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
         setCategoryMenuOpen(false);
       }
 
-      if (!accountRef.current.contains(e.target)) {
+      if (accountRef.current && !accountRef.current.contains(e.target)) {
         setAccountDropDownShow(false);
       }
 
-      if (!addToCartRef.current.contains(e.target)) {
+      if (addToCartRef.current && !addToCartRef.current.contains(e.target)) {
         setAddToCartShow(false);
       }
 
@@ -72,6 +76,11 @@ const Header = () => {
       }
     });
   }, []);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setAccountDropDownShow(false);
+  };
 
   return (
     <section className="bg-[#f5f5f3] py-2 sm:py-3 lg:py-4 ">
@@ -138,38 +147,49 @@ const Header = () => {
               className={"flex items-center gap-x-3 md:gap-x-4 lg:gap-x-10"}
             >
               <div ref={accountRef} className={"relative z-10"}>
-                <Button
-                  onClick={() => setAccountDropDownShow(!accountDropDownShow)}
-                  className={"flex justify-center gap-x-[2px] sm:gap-x-1"}
-                  text={<FaUser className="text-sm md:text-base lg:text-lg" />}
-                  icon={
-                    <GoTriangleDown
-                      className={`xl:text-xl text-sm md:text-base  lg:text-lg transition duration-[.4s] ${accountDropDownShow ? "-rotate-180" : "rotate-0"}`}
+                {token ? (
+                  <>
+                    <Button
+                      onClick={() => setAccountDropDownShow(!accountDropDownShow)}
+                      className={"flex justify-center gap-x-[2px] sm:gap-x-1"}
+                      text={<FaUser className="text-sm md:text-base lg:text-lg" />}
+                      icon={
+                        <GoTriangleDown
+                          className={`xl:text-xl text-sm md:text-base  lg:text-lg transition duration-[.4s] ${accountDropDownShow ? "-rotate-180" : "rotate-0"}`}
+                        />
+                      }
+                      iconAlighnment={"right"}
                     />
-                  }
-                  iconAlighnment={"right"}
-                />
 
-                <List
-                  className={`w-[100px] sm:w-[130px] md:w-[160px] lg:w-[200px] group font-dm-sans capitalize text-center bg-white border text-[#ada8a8] absolute top-[27px] md:top-[32px] lg:top-[37px] right-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] [&>*:last-child]:border-none duration-200 ease-linear ${accountDropDownShow ? " translate-y-0 opacity-100 visible" : " -translate-y-3 opacity-0 invisible"}`}
-                >
-                  <ListItem
-                    onClick={() => setAccountDropDownShow(false)}
-                    className={
-                      " py-2.5 md:py-4 text-xs sm:text-sm lg:text-base md:px-5 border-b-[1px] ease-in duration-200 text-primary-color hover:bg-primary-color hover:text-white"
-                    }
+                    <List
+                      className={`w-[100px] sm:w-[130px] md:w-[160px] lg:w-[200px] group font-dm-sans capitalize text-center bg-white border text-[#ada8a8] absolute top-[27px] md:top-[32px] lg:top-[37px] right-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] [&>*:last-child]:border-none duration-200 ease-linear ${accountDropDownShow ? " translate-y-0 opacity-100 visible" : " -translate-y-3 opacity-0 invisible"}`}
+                    >
+                      <ListItem
+                        onClick={() => setAccountDropDownShow(false)}
+                        className={
+                          " py-2.5 md:py-4 text-xs sm:text-sm lg:text-base md:px-5 border-b-[1px] ease-in duration-200 text-primary-color hover:bg-primary-color hover:text-white"
+                        }
+                      >
+                        <Link to={"/my-account"}>my account</Link>
+                      </ListItem>
+                      <ListItem
+                        onClick={handleLogout}
+                        className={
+                          " py-2.5 md:py-4 text-xs sm:text-sm lg:text-base md:px-5 border-b-[1px] ease-in duration-200 text-primary-color hover:bg-primary-color hover:text-white cursor-pointer"
+                        }
+                      >
+                        log out
+                      </ListItem>
+                    </List>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="font-dm-sans font-bold text-sm md:text-base lg:text-lg text-primary-color hover:text-secondary-color transition duration-300"
                   >
-                    <Link to={"/my-account"}>my account</Link>
-                  </ListItem>
-                  <ListItem
-                    onClick={() => setAccountDropDownShow(false)}
-                    className={
-                      " py-2.5 md:py-4 text-xs sm:text-sm lg:text-base md:px-5 border-b-[1px] ease-in duration-200 text-primary-color hover:bg-primary-color hover:text-white"
-                    }
-                  >
-                    <Link to={"/login"}>log out</Link>
-                  </ListItem>
-                </List>
+                    Login
+                  </Link>
+                )}
               </div>
               <div ref={wishlistRef} className={"relative z-10"}>
                 <Button

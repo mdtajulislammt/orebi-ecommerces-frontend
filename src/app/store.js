@@ -3,11 +3,13 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { apiSlice } from '../features/api/apiSlice';
 import orebiReducer from '../features/orebi/orebiSlice';
+import authReducer from '../features/auth/authSlice';
 
 // Combine reducers (useful if you add more slices later)
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   orebi: orebiReducer,
+  auth: authReducer,
 });
 
 // Configure redux-persist

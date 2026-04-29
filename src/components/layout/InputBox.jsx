@@ -9,6 +9,7 @@ const InputBox = ({
   type,
   placeholder,
   onChange,
+  value,
   className,
 }) => {
   return (
@@ -23,6 +24,7 @@ const InputBox = ({
       </label>
       <Input
         onChange={onChange}
+        value={value}
         type={type}
         id={id}
         placeholder={placeholder}
