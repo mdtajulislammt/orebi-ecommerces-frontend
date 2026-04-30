@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart, removeFromWishlist } from "../../features/orebi/orebiSlice";
+import { useGetCategoriesQuery } from "../../features/api/apiSlice";
 // components
 import Container from "../layout/Container";
 import Flex from "../layout/Flex";
@@ -25,16 +26,8 @@ import capImage from "../../assets/cap.png";
 import { logout } from "../../features/auth/authSlice";
 
 const Header = () => {
-  // ... (categoryDropDownInfo remains the same)
-  let categoryDropDownInfo = [
-    { name: "accesories", path: "" },
-    { name: "furniture", path: "" },
-    { name: "electronics", path: "" },
-    { name: "clothes", path: "" },
-    { name: "bags", path: "" },
-    { name: "home appliances", path: "" },
-  ];
-
+  const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   let categoryRef = useRef();
 
@@ -53,7 +46,9 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
-    const price = parseFloat(item.productPrice.replace("$", ""));
+    const price = typeof item.productPrice === 'string' 
+      ? parseFloat(item.productPrice.replace("$", "")) 
+      : item.productPrice;
     return total + price * item.quantity;
   }, 0) : 0;
 
@@ -91,41 +86,40 @@ const Header = () => {
               onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
               className="flex items-center gap-x-1 md:gap-x-2.5 font-dm-sans text-sm capitalize"
               text={
-                <span className="hidden sm:inline-block text-sm md:text-[15px] lg:text-lg">
-                  shop by category
+                <span className="hidden sm:inline-block text-sm md:text-[15px] lg:text-lg font-bold">
+                  Shop by Category
                 </span>
               }
               iconAlighnment={"left"}
               icon={
                 <RiBarChartHorizontalLine className="sm:text-sm md:text-base lg:text-lg" />
               }
-              // icon={
-              //   categoryMenuOpen ? (
-              //     <RxCross2 className="sm:text-sm md:text-base lg:text-lg" />
-              //   ) : (
-              //     <RiBarChartHorizontalLine className="sm:text-sm md:text-base lg:text-lg" />
-              //   )
-              // }
             />
             <List
-              className={`[&>*:nth-last-child(1)]:border-none w-[150px] sm:w-[200px] md:w-[240px] lg:w-[260px] font-dm-sans capitalize bg-primary-color text-white !z-20 absolute left-0 top-[27px] md:top-[32px] lg:top-[37px] duration-200 ease-linear ${categoryMenuOpen ? " translate-x-0 opacity-100 visible" : " -translate-x-5 opacity-0 invisible"}`}
+              className={`[&>*:nth-last-child(1)]:border-none w-[150px] sm:w-[200px] md:w-[240px] lg:w-[260px] font-dm-sans capitalize bg-primary-color text-white !z-20 absolute left-0 top-[27px] md:top-[32px] lg:top-[42px] duration-200 ease-linear shadow-xl rounded-b-md ${categoryMenuOpen ? " translate-y-0 opacity-100 visible" : " translate-y-5 opacity-0 invisible"}`}
             >
-              {categoryDropDownInfo.map((item) => (
-                <ListItem
-                  onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
-                >
-                  <Link
-                    to={item.path}
-                    className={
-                      " py-3 md:py-4 px-5 text-[15px] border-b-[1px] border-gray-500 ease-in duration-200 opacity-75 hover:opacity-100 hover:text-white hover:pl-[25px] capitalize block text-xs sm:text-sm md:base lg:text-lg"
-                    }
+              {categoriesLoading ? (
+                <ListItem className="py-4 px-5 text-sm text-gray-400">Loading...</ListItem>
+              ) : (
+                categoriesData?.data?.map((item) => (
+                  <ListItem
+                    key={item._id}
+                    onClick={() => setCategoryMenuOpen(false)}
                   >
-                    {item.name}
-                  </Link>
-                </ListItem>
-              ))}
+                    <Link
+                      to={`/category/${item.slug}`}
+                      className={
+                        " py-3 md:py-4 px-5 text-[15px] border-b-[1px] border-gray-600/50 ease-in duration-200 opacity-80 hover:opacity-100 hover:text-white hover:pl-8 capitalize block text-xs sm:text-sm md:base lg:text-base font-medium"
+                      }
+                    >
+                      {item.name}
+                    </Link>
+                  </ListItem>
+                ))
+              )}
             </List>
           </div>
+
           <div className="search-box w-[180px] sm:w-[320px] md:w-[400px] lg:w-[500px] xl:w-[600px] bg-white rounded relative">
             <Input
               type={"text"}

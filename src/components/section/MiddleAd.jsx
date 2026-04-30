@@ -1,17 +1,23 @@
 import React from 'react'
-import advertiseBanner from '../../assets/Ads_2.png'
+import advertiseBanner from '../../assets/middle_ad.png'
 import Image from '../layout/Image'
-import  Container  from '../layout/Container'
+import Container from '../layout/Container'
 import { Link } from 'react-router-dom'
 
 const MiddleAd = () => {
   return (
-    <section className=' mt-10 sm:mt-14 md:mt-18 lg:mt-23 xl:mt-28 2xl:mt-32'>
-        <Container>
-            <Link to={""}>
-                <Image className={"w-full"} imageLink={advertiseBanner} altText={"kjlsd"}/>
-            </Link>
-        </Container>
+    <section className='mt-12 sm:mt-16 md:mt-24 lg:mt-32'>
+      <Container>
+        <div className="overflow-hidden group cursor-pointer">
+          <Link to={"/shop"}>
+            <Image 
+              className={"w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"} 
+              imageLink={advertiseBanner} 
+              altText={"Special Promotion"}
+            />
+          </Link>
+        </div>
+      </Container>
     </section>
   )
 }

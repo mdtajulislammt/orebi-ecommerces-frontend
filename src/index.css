@@ -40,3 +40,15 @@ select {
   background-position: right 8px center;
   padding-right: 28px !important;
 }
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}

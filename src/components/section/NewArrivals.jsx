@@ -3,7 +3,7 @@ import Container from "../layout/Container";
 import Heading from "../layout/Heading";
 import ProductCard from "../layout/ProductCard";
 import Slider from "react-slick";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { newarrivals } from "../../Demo Data/ProductCategoryData";
 import { Link } from "react-router-dom";
 
@@ -21,9 +21,9 @@ const NewArrivals = () => {
     arrows: false,
     infinite: true,
     slidesToShow: 4,
-    slidesToScroll: 2,
-    autoplay: false,
-    autoplaySpeed: 2000,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
     pauseOnHover: true,
     responsive: [
       {
@@ -51,14 +51,19 @@ const NewArrivals = () => {
   };
 
   return (
-    <section className="pt-10 sm:pt-14 md:pt-18 lg:pt-22 xl:pt-28 2xl:pt-32">
-      <Container className={"relative"}>
-        <Heading
-          tagname="h1"
-          text="New Arrivals"
-          className="font-bold font-dm-sans text-[18px] sm:text-[22px] md:text-[26px] lg:text-[30px] xl:text-[35px] 2xl:text-[40px] capitalize pb-3 sm:pb-5 md:pb-8 lg:pb-10 2xl:pb-12"
-        />
-        <div className="slider-container">
+    <section className="pt-16 sm:pt-20 md:pt-28">
+      <Container className={"relative group/newarrivals"}>
+        <div className="flex justify-between items-center mb-6 md:mb-10 lg:mb-14">
+          <Heading
+            tagname="h1"
+            text="New Arrivals"
+            className="font-bold font-dm-sans text-[20px] sm:text-[24px] md:text-[28px] lg:text-[34px] xl:text-[38px] capitalize text-[#262626]"
+          />
+          <Link to="/shop" className="text-[#6D6D6D] hover:text-[#262626] transition-colors duration-300 text-sm md:text-base font-medium border-b border-transparent hover:border-[#262626]">
+            View All
+          </Link>
+        </div>
+        <div className="slider-container relative">
           <Slider
             ref={(slider) => {
               sliderRef = slider;
@@ -66,10 +71,10 @@ const NewArrivals = () => {
             {...settings}
           >
             {newarrivals.map((item, index) => (
-              <div key={index} className="w-full sm:w-[300px] md:w-[47%] lg:w-[31%] xl:w-[23%]">
+              <div key={index} className="px-2">
                 <Link to={`/product/${index}`}>
                   <ProductCard
-                    className={"mx-auto w-[80%] sm:w-[95%] cursor-pointer"}
+                    className={"cursor-pointer"}
                     productImageLink={item.productImageSrc}
                     tag={item.badgeText}
                     productName={item.productName}
@@ -80,17 +85,18 @@ const NewArrivals = () => {
               </div>
             ))}
           </Slider>
+          
           <button
-            className="absolute py-2 px-2 md:px-3 md:py-3 lg:py-3 lg:px-3 xl:py-5  xl:px-5 rounded-full left-2 bg-[#979797] button top-2/4"
+            className="absolute w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full left-[-15px] md:left-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
             onClick={previous}
           >
-            <FaArrowLeft className="text-white text-[12px] lg:text-[16px]" />
+            <FaChevronLeft className="text-white text-lg md:text-xl" />
           </button>
           <button
-            className="absolute py-2 px-2 md:px-3 md:py-3 lg:py-3 lg:px-3 xl:py-5  xl:px-5 rounded-full right-2.5 lg:right-2 bg-[#979797] button top-2/4 "
+            className="absolute w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full right-[-15px] md:right-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
             onClick={next}
           >
-            <FaArrowRight className="text-white text-[12px] lg:text-[16px]" />
+            <FaChevronRight className="text-white text-lg md:text-xl" />
           </button>
         </div>
       </Container>
@@ -98,4 +104,6 @@ const NewArrivals = () => {
   );
 };
 
+
 export default NewArrivals;
+

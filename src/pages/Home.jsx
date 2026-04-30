@@ -4,7 +4,7 @@ import Additionalinfo from "../components/section/Additionalinfo";
 import Addvertise from "../components/section/Addvertise";
 import NewArrivals from "../components/section/NewArrivals";
 import BestSaller from "../components/section/BestSaller";
-import MiddleAd from "../components/section/MiddleAd";
+import Gallery from "../components/section/Gallery";
 import SpecialOffer from "../components/section/SpecialOffer";
 
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
       <Additionalinfo />
       <Addvertise />
       <NewArrivals/>
-      <MiddleAd />
+      <Gallery />
       <BestSaller />
       <SpecialOffer />
     </div>
@@ -22,3 +22,4 @@ const Home = () => {
 };
 
 export default Home;
+
