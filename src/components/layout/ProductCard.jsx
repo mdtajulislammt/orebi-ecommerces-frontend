@@ -47,16 +47,19 @@ const ProductCard = ({
     );
   };
 
+  const noImage = "https://via.placeholder.com/400x500?text=No+Image+Available";
+
   return (
     <div className={`${className} group relative bg-white rounded-xl transition-all duration-500 hover:shadow-2xl border border-transparent hover:border-gray-100 overflow-hidden`}>
       <div className="relative overflow-hidden aspect-[4/5] bg-gray-50 flex items-center justify-center">
         <div className="w-full h-full transition-transform duration-700 group-hover:scale-110">
           <Image
-            imageLink={productImageLink}
+            imageLink={productImageLink || noImage}
             altText={productName}
             className="w-full h-full object-cover"
           />
         </div>
+
         
         {tag && (
           <div className="absolute top-4 left-4 z-10">

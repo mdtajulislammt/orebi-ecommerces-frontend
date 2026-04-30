@@ -4,11 +4,22 @@ import Heading from "../layout/Heading";
 import ProductCard from "../layout/ProductCard";
 import Slider from "react-slick";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { newarrivals } from "../../Demo Data/ProductCategoryData";
+import { useGetProductsQuery } from "../../features/api/apiSlice";
 import { Link } from "react-router-dom";
+import { newarrivals } from "../../Demo Data/ProductCategoryData";
 
 const NewArrivals = () => {
+  const { data: productsData, isLoading, isError } = useGetProductsQuery();
+  
+  // Use API data if available, otherwise fallback to demo data
+  const products = productsData?.data?.length > 0 
+    ? productsData.data 
+    : (isError || (!isLoading && productsData?.data?.length === 0)) 
+      ? newarrivals 
+      : [];
+
   let sliderRef = useRef(null);
+
   const next = () => {
     sliderRef.slickNext();
   };
@@ -19,7 +30,7 @@ const NewArrivals = () => {
   var settings = {
     dots: false,
     arrows: false,
-    infinite: true,
+    infinite: products.length > 4,
     slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
@@ -50,6 +61,14 @@ const NewArrivals = () => {
     ],
   };
 
+  if (isLoading) {
+    return <div className="py-20 text-center">Loading New Arrivals...</div>;
+  }
+
+  if (isError || products.length === 0) {
+    return null; // Or show a fallback
+  }
+
   return (
     <section className="pt-16 sm:pt-20 md:pt-28">
       <Container className={"relative group/newarrivals"}>
@@ -70,20 +89,33 @@ const NewArrivals = () => {
             }}
             {...settings}
           >
-            {newarrivals.map((item, index) => (
-              <div key={index} className="px-2">
-                <Link to={`/product/${index}`}>
-                  <ProductCard
-                    className={"cursor-pointer"}
-                    productImageLink={item.productImageSrc}
-                    tag={item.badgeText}
-                    productName={item.productName}
-                    productPrice={item.productPrice}
-                    productColor={item.productColor}
-                  />
-                </Link>
-              </div>
-            ))}
+            {products.map((item, index) => {
+              const imageSrc = item.thumbnail || (item.images && item.images[0]) || item.productImageSrc;
+              const productName = item.name || item.productName;
+              const productPrice = item.price 
+                ? (typeof item.price === 'string' && item.price.startsWith('$') ? item.price : `$${item.price}`) 
+                : item.productPrice;
+              const productColor = (item.colors && item.colors[0]) || item.color || item.productColor;
+
+              return (
+                <div key={item.id || item._id || index} className="px-2">
+                  <Link to={item.slug ? `/product/${item.slug}` : `/product/${index}`}>
+                    <ProductCard
+                      className={"cursor-pointer"}
+                      productImageLink={imageSrc}
+                      tag={item.tag || item.badgeText || "New"}
+                      productName={productName}
+                      productPrice={productPrice}
+                      productColor={productColor}
+                      id={item.id || item._id}
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+
+
+
           </Slider>
           
           <button
@@ -104,6 +136,6 @@ const NewArrivals = () => {
   );
 };
 
-
 export default NewArrivals;
+
 

@@ -1,11 +1,30 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { specialoffer } from "../../Demo Data/ProductCategoryData";
 import Container from "../layout/Container";
 import Flex from "../layout/Flex";
 import Heading from "../layout/Heading";
 import ProductCard from "../layout/ProductCard";
+import { useGetProductsQuery } from "../../features/api/apiSlice";
+import { specialoffer } from "../../Demo Data/ProductCategoryData";
 
 const SpecialOffer = () => {
+  const { data: productsData, isLoading, isError } = useGetProductsQuery({ status: 'special' });
+  
+  // Use API data if available, otherwise fallback to demo data
+  const products = productsData?.data?.length > 0 
+    ? productsData.data.slice(0, 4) 
+    : (isError || (!isLoading && productsData?.data?.length === 0)) 
+      ? specialoffer 
+      : [];
+
+  if (isLoading) {
+    return <div className="py-20 text-center">Loading Special Offers...</div>;
+  }
+
+  if (products.length === 0) {
+    return null;
+  }
+
   return (
     <section className="pt-16 sm:pt-20 md:pt-28 pb-16 sm:pb-20 md:pb-28">
       <Container>
@@ -20,26 +39,39 @@ const SpecialOffer = () => {
           </Link>
         </div>
         <Flex className={"justify-between gap-y-8 flex-wrap"}>
-          {specialoffer.map((item, index) => (
-            <div key={index} className="w-full sm:w-[48%] lg:w-[24%]">
-              <Link to={`/product/${index}`}>
-                <ProductCard
-                  className="w-full cursor-pointer"
-                  productImageLink={item.productImageSrc}
-                  tag={item.badgeText}
-                  tagVisibility={item.badge}
-                  productName={item.productName}
-                  productPrice={item.productPrice}
-                  productColor={item.productColor}
-                />
-              </Link>
-            </div>
-          ))}
+          {products.map((item, index) => {
+            const imageSrc = item.thumbnail || (item.images && item.images[0]) || item.productImageSrc;
+            const productName = item.name || item.productName;
+            const productPrice = item.price 
+              ? (typeof item.price === 'string' && item.price.startsWith('$') ? item.price : `$${item.price}`) 
+              : item.productPrice;
+            const productColor = (item.colors && item.colors[0]) || item.color || item.productColor;
+
+            return (
+              <div key={item.id || item._id || index} className="w-full sm:w-[48%] lg:w-[24%]">
+                <Link to={item.slug ? `/product/${item.slug}` : `/product/${index}`}>
+                  <ProductCard
+                    className="w-full cursor-pointer"
+                    productImageLink={imageSrc}
+                    tag={item.tag || item.badgeText || "Sale"}
+                    productName={productName}
+                    productPrice={productPrice}
+                    productColor={productColor}
+                    id={item.id || item._id}
+                  />
+                </Link>
+              </div>
+            );
+          })}
         </Flex>
+
+
       </Container>
     </section>
   );
 };
 
 export default SpecialOffer;
+
+
 
