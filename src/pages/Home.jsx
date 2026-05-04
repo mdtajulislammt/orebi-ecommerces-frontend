@@ -1,7 +1,7 @@
 import React from "react";
 import Banner from "../components/section/Banner";
 import Additionalinfo from "../components/section/Additionalinfo";
-import Addvertise from "../components/section/Addvertise";
+import AboutHome from "../components/section/AboutHome";
 import NewArrivals from "../components/section/NewArrivals";
 import BestSaller from "../components/section/BestSaller";
 import Gallery from "../components/section/Gallery";
@@ -12,7 +12,7 @@ const Home = () => {
     <div>
       <Banner />
       <Additionalinfo />
-      <Addvertise />
+      <AboutHome />
       <NewArrivals/>
       <Gallery />
       <BestSaller />

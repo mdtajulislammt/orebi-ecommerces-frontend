@@ -1,16 +1,13 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
+  HiOutlineArrowRight,
   HiOutlineCalendarDays,
   HiOutlineChatBubbleLeft,
-  HiOutlineArrowRight,
   HiOutlineTag,
   HiOutlineUser,
 } from "react-icons/hi2";
-import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
-import Heading from "../components/layout/Heading";
-import Paragraph from "../components/layout/Paragraph";
 
 // Animation variants
 const fadeUp = {
@@ -127,32 +124,44 @@ const Journal = () => {
 
   const featuredPost = blogPosts.find((post) => post.featured);
 
+  const bannerImage = "/journal_banner.png";
+
   return (
     <section className="pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+      {/* ── Cinematic Hero Banner ── */}
+      <div className="relative h-[300px] md:h-[400px] lg:h-[450px] w-full overflow-hidden mb-16 sm:mb-20 md:mb-24 lg:mb-32">
+        <img
+          src={bannerImage}
+          alt="Journal Orebi Hero"
+          className="w-full h-full object-cover grayscale-[40%] brightness-50"
+        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <Container>
+            <div className="text-center px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+              >
+                <div className="flex items-center justify-center gap-2 text-white/50 text-[10px] uppercase tracking-[6px] mb-6">
+                  <span>Home</span>
+                  <span className="w-1 h-1 bg-white/30 rounded-full"></span>
+                  <span className="text-white/80">Journal</span>
+                </div>
+                <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-light tracking-[10px] uppercase">
+                  Journal
+                </h1>
+                <div className="h-[1px] w-20 bg-white/20 mx-auto mt-8"></div>
+                <p className="text-white/40 text-[10px] md:text-xs mt-10 max-w-lg mx-auto leading-relaxed font-dm-sans uppercase tracking-[3px]">
+                  Stories, insights, and inspirations from the heart of Orebi.
+                </p>
+              </motion.div>
+            </div>
+          </Container>
+        </div>
+      </div>
+
       <Container>
-        <BreadCrump title={"Journal"} />
-
-        {/* ── Page Intro ── */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          className="text-center max-w-3xl mx-auto mt-8 sm:mt-10 md:mt-12 mb-10 sm:mb-14 md:mb-16"
-        >
-          <p className="text-secondary-color uppercase tracking-[3px] text-xs sm:text-sm font-dm-sans mb-2">
-            Our Blog
-          </p>
-          <Heading
-            text="Stories, Insights & Inspiration"
-            className="font-dm-sans font-bold text-[22px] sm:text-[26px] md:text-[30px] lg:text-[36px] text-primary-color"
-          />
-          <Paragraph
-            text="Stay updated with the latest trends, tips, and stories from the Orebi community. Your source for style inspiration and product insights."
-            classname="text-secondary-color text-sm sm:text-base md:text-lg mt-3 sm:mt-4 leading-relaxed max-w-2xl mx-auto"
-          />
-        </motion.div>
-
         {/* ── Featured Post ── */}
         {featuredPost && (
           <motion.div
@@ -290,10 +299,10 @@ const Journal = () => {
                         {post.comments}
                       </span>
                     </div>
-                    <span className="flex items-center gap-1 font-dm-sans font-bold text-xs sm:text-sm text-primary-color group-hover:gap-2 transition-all duration-300">
+                    {/* <span className="flex items-center gap-1 font-dm-sans font-bold text-xs sm:text-sm text-primary-color group-hover:gap-2 transition-all duration-300">
                       Read
                       <HiOutlineArrowRight className="text-xs" />
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </div>

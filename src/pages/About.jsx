@@ -68,97 +68,162 @@ const features = [
   {
     icon: <HiOutlineTruck className="text-2xl" />,
     title: "Free Shipping",
-    description: "Complimentary shipping on all orders over $50, delivered right to your doorstep.",
+    description:
+      "Complimentary shipping on all orders over $50, delivered right to your doorstep.",
   },
   {
     icon: <HiOutlineShieldCheck className="text-2xl" />,
     title: "Secure Payments",
-    description: "Your transactions are protected with 256-bit SSL encryption and trusted gateways.",
+    description:
+      "Your transactions are protected with 256-bit SSL encryption and trusted gateways.",
   },
   {
     icon: <HiOutlineChatBubbleLeftRight className="text-2xl" />,
     title: "24/7 Support",
-    description: "Our dedicated team is always here to help — via chat, email, or phone, anytime.",
+    description:
+      "Our dedicated team is always here to help — via chat, email, or phone, anytime.",
   },
   {
     icon: <HiOutlineArrowPath className="text-2xl" />,
     title: "Easy Returns",
-    description: "Not satisfied? Enjoy hassle-free returns within 30 days, no questions asked.",
+    description:
+      "Not satisfied? Enjoy hassle-free returns within 30 days, no questions asked.",
   },
 ];
 
 const About = () => {
+  const bannerImage = "/about_banner.png";
+
+  const corePillars = [
+    {
+      title: "Our Vision",
+      tagline: "Democratizing Premium Design",
+      description:
+        "We believe that high-end aesthetics shouldn't be a luxury reserved for the few. Our vision is to bridge the gap between architectural precision and everyday accessibility, creating a world where every individual can curate their space with items that reflect a standard of uncompromising excellence.",
+    },
+    {
+      title: "Our Story",
+      tagline: "A Decade of Digital Craft",
+      description:
+        "What started in 2012 as a digital-first boutique has evolved into a global benchmark for modern ecommerce. Driven by a collective of designers and technologists, we've spent the last decade perfecting the balance between timeless materials and cutting-edge logistics, ensuring that quality reaches every corner of the world.",
+    },
+    {
+      title: "Our Brand",
+      tagline: "The Intersection of Form and Function",
+      description:
+        "Orebi is more than an ecommerce platform; it is a philosophy of intentional living. Every piece in our collection is selected for its ability to serve a purpose without sacrificing its soul. We partner with ethical artisans to bring you sustainable, heritage-grade products that are built to last a lifetime, not just a season.",
+    },
+  ];
+
   return (
     <section className="pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+      {/* ── Cinematic Hero Banner ── */}
+      <div className="relative h-[300px] md:h-[400px] lg:h-[450px] w-full overflow-hidden mb-16 sm:mb-20 md:mb-24 lg:mb-32">
+        <img
+          src={bannerImage}
+          alt="About Orebi Hero"
+          className="w-full h-full object-cover grayscale-[40%] brightness-50"
+        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <Container>
+            <div className="text-center px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+              >
+                <div className="flex items-center justify-center gap-2 text-white/50 text-[10px] uppercase tracking-[6px] mb-6">
+                  <span>Home</span>
+                  <span className="w-1 h-1 bg-white/30 rounded-full"></span>
+                  <span className="text-white/80">About Us</span>
+                </div>
+                <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-light tracking-[10px] uppercase">
+                  About Us
+                </h1>
+                <div className="h-[1px] w-20 bg-white/20 mx-auto mt-8"></div>
+                <p className="text-white/40 text-[10px] md:text-xs mt-10 max-w-lg mx-auto leading-relaxed font-dm-sans uppercase tracking-[3px]">
+                  Redefining modern lifestyle through architectural rigor and sustainable soul.
+                </p>
+              </motion.div>
+            </div>
+          </Container>
+        </div>
+      </div>
+
       <Container>
-        <BreadCrump title={"About"} />
-
-        {/* ── Hero Images ── */}
-        {/* <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeUp}
-        >
-          <Flex
-            className={
-              "justify-between gap-x-3 sm:gap-x-5 md:gap-x-6 lg:gap-x-7 xl:gap-x-10 mt-6 sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 2xl:mt-16 mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"
-            }
-          >
-            <div className="w-1/2 overflow-hidden rounded-sm">
-              <Image
-                imageLink={aboutUsOne}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                altText="Orebi workspace and creative process"
-              />
-            </div>
-            <div className="w-1/2 overflow-hidden rounded-sm">
-              <Image
-                imageLink={aboutUsTwo}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                altText="Orebi product showcase"
-              />
-            </div>
-          </Flex>
-        </motion.div> */}
-
-        {/* ── Tagline ── */}
+        {/* ── Intro Section ── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="text-center max-w-4xl mx-auto mb-10 sm:mb-14 md:mb-16 lg:mb-20 mt-10"
+          className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 mb-24 lg:mb-48"
         >
-          <Heading
-            text="Orebi is one of the world's leading ecommerce brands, internationally recognized for celebrating the essence of classic, modern style."
-            className="font-dm-sans text-[20px] sm:text-[23px] md:text-[26px] lg:text-[29px] xl:text-[32px] 2xl:text-[35px] leading-snug"
-          />
-          <Paragraph
-            text="Since 2012, we've been curating premium products that blend timeless design with contemporary trends — making luxury accessible to everyone, everywhere."
-            classname="text-secondary-color text-sm sm:text-base md:text-lg mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto leading-relaxed"
-          />
+          <div className="w-full lg:w-3/5">
+            <Heading
+              text="Internationally recognized for celebrating the harmony of classic minimalism and modern innovation."
+              className="font-dm-sans text-[28px] sm:text-[34px] md:text-[44px] lg:text-[52px] font-black leading-[1] text-primary-color tracking-tighter"
+            />
+          </div>
+          <div className="w-full lg:w-2/5">
+            <div className="h-[2px] w-20 bg-black mb-8"></div>
+            <Paragraph
+              text="We operate at the delicate intersection of heritage and progress. Our curation process is rigorous, selecting only items that honor the past while fearlessly embracing the future. We are a global community of tastemakers dedicated to the lasting power of intentional design."
+              classname="text-secondary-color text-sm md:text-lg leading-relaxed lg:leading-[1.7] font-medium"
+            />
+          </div>
         </motion.div>
 
-        {/* ── Stats Section ── */}
+        {/* ── Narrative Core Pillars (Text Only) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-24 mb-32 lg:mb-56">
+          {corePillars.map((pillar, index) => (
+            <motion.div
+              key={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              className="relative group"
+            >
+              <div className="absolute -left-4 top-0 w-[1px] h-0 bg-black group-hover:h-full transition-all duration-700 hidden lg:block"></div>
+              <span className="text-secondary-color uppercase tracking-[5px] text-[10px] font-black mb-4 block">
+                {pillar.title}
+              </span>
+              <Heading
+                text={pillar.tagline}
+                className="font-dm-sans font-bold text-2xl md:text-3xl text-primary-color mb-4 tracking-tight leading-tight"
+              />
+              <Paragraph
+                text={pillar.description}
+                classname="text-secondary-color text-xs md:text-sm leading-relaxed opacity-80"
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ── Stats Section (Refined) ── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="bg-[#F5F5F3] rounded-md py-8 sm:py-10 md:py-12 lg:py-14 px-4 sm:px-6 md:px-8 mb-12 sm:mb-14 md:mb-16 lg:mb-20"
+          className="bg-black text-white rounded-[3rem] py-20 sm:py-32 px-10 mb-24 lg:mb-48 relative overflow-hidden shadow-2xl"
         >
-          <Flex className="justify-around flex-wrap gap-y-6">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -mr-64 -mt-64 blur-[120px]"></div>
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-[80px]"></div>
+          
+          <Flex className="justify-around flex-wrap gap-y-12 relative z-10">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
                 custom={index}
                 variants={scaleIn}
-                className="text-center w-1/2 sm:w-auto"
+                className="text-center w-1/2 lg:w-1/4"
               >
-                <h3 className="font-dm-sans text-3xl sm:text-4xl md:text-5xl font-bold text-primary-color">
+                <h3 className="font-dm-sans text-4xl sm:text-5xl md:text-6xl font-black mb-3 tracking-tighter">
                   {stat.value}
                 </h3>
-                <p className="font-dm-sans text-secondary-color text-xs sm:text-sm md:text-base mt-1.5 tracking-wide">
+                <div className="h-[1px] w-6 bg-white/20 mx-auto mb-3"></div>
+                <p className="font-dm-sans text-white/40 text-[9px] sm:text-[10px] uppercase tracking-[4px] font-bold">
                   {stat.label}
                 </p>
               </motion.div>
@@ -166,97 +231,44 @@ const About = () => {
           </Flex>
         </motion.div>
 
-        {/* ── Core Values (Vision, Story, Brand) ── */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mb-12 sm:mb-14 md:mb-16 lg:mb-20"
-        >
-          <motion.div variants={fadeUp} className="text-center mb-8 sm:mb-10 md:mb-12">
-            <p className="text-secondary-color uppercase tracking-[3px] text-xs sm:text-sm font-dm-sans mb-2">
-              What Drives Us
-            </p>
-            <Heading
-              text="Built on Purpose, Driven by Passion"
-              className="font-dm-sans font-bold text-[22px] sm:text-[26px] md:text-[30px] lg:text-[34px] text-primary-color"
-            />
-          </motion.div>
-
-          <Flex className="justify-between flex-wrap gap-y-8">
-            {coreValues.map((item, index) => (
-              <motion.div
-                key={index}
-                custom={index}
-                variants={fadeUp}
-                className="w-full lg:w-[31%] group"
-              >
-                <div className="border border-[#E8E8E8] rounded-md p-6 sm:p-7 md:p-8 h-full transition-all duration-500 hover:border-primary-color hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#F5F5F3] flex items-center justify-center text-primary-color mb-5 transition-colors duration-500 group-hover:bg-primary-color group-hover:text-white">
-                    {item.icon}
-                  </div>
-                  <Heading
-                    text={item.title}
-                    tagname="h3"
-                    className="font-dm-sans font-bold text-lg sm:text-xl capitalize mb-3 text-primary-color"
-                  />
-                  <Paragraph
-                    text={item.description}
-                    classname="text-secondary-color text-sm sm:text-[15px] leading-relaxed"
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </Flex>
-        </motion.div>
-
-        {/* ── Divider Quote ── */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="text-center py-10 sm:py-12 md:py-14 lg:py-16 border-t border-b border-[#E8E8E8] mb-12 sm:mb-14 md:mb-16 lg:mb-20"
-        >
-          <p className="font-dm-sans italic text-lg sm:text-xl md:text-2xl lg:text-[26px] text-primary-color max-w-3xl mx-auto leading-relaxed">
-            "We don't just sell products — we craft experiences. Every item in our collection tells a story of quality, care, and a commitment to making your life a little more beautiful."
-          </p>
-          <p className="font-dm-sans text-secondary-color text-sm sm:text-base mt-4 tracking-wide">
-            — The Orebi Team
-          </p>
-        </motion.div>
-
-        {/* ── Why Choose Us ── */}
+        {/* ── Why Choose Us (Grid Refined) ── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <motion.div variants={fadeUp} className="text-center mb-8 sm:mb-10 md:mb-12">
-            <p className="text-secondary-color uppercase tracking-[3px] text-xs sm:text-sm font-dm-sans mb-2">
-              The Orebi Promise
-            </p>
-            <Heading
-              text="Why Thousands Trust Orebi"
-              className="font-dm-sans font-bold text-[22px] sm:text-[26px] md:text-[30px] lg:text-[34px] text-primary-color"
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8 px-2">
+            <div>
+              <p className="text-secondary-color uppercase tracking-[4px] text-[10px] font-black mb-3">
+                The Orebi Ecosystem
+              </p>
+              <Heading
+                text="Engineering Value"
+                className="font-dm-sans font-black text-3xl md:text-5xl lg:text-[68px] text-primary-color tracking-tighter leading-[0.9]"
+              />
+            </div>
+            <Paragraph
+              text="Our commitment to excellence is woven into every logistical thread."
+              classname="text-secondary-color max-w-[240px] text-right hidden md:block italic text-base font-medium opacity-60"
             />
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 custom={index}
                 variants={fadeUp}
-                className="bg-[#F5F5F3] rounded-md p-5 sm:p-6 md:p-7 text-center transition-all duration-500 hover:bg-primary-color hover:text-white group cursor-default"
+                className="bg-white border border-gray-100 p-10 md:p-12 rounded-[2.5rem] transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] hover:-translate-y-3 group relative overflow-hidden"
               >
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center mx-auto mb-4 text-primary-color transition-colors duration-500 group-hover:bg-white/20 group-hover:text-white">
+                <div className="absolute top-0 left-0 w-1 h-0 bg-black group-hover:h-full transition-all duration-500"></div>
+                <div className="w-14 h-14 rounded-xl bg-[#F5F5F3] flex items-center justify-center mb-6 text-primary-color group-hover:bg-black group-hover:text-white transition-all duration-700 scale-110">
                   {feature.icon}
                 </div>
-                <h4 className="font-dm-sans font-bold text-[15px] sm:text-base mb-2 transition-colors duration-500">
+                <h4 className="font-dm-sans font-black text-lg mb-3 tracking-tight">
                   {feature.title}
                 </h4>
-                <p className="font-dm-sans text-secondary-color text-xs sm:text-sm leading-relaxed transition-colors duration-500 group-hover:text-white/80">
+                <p className="font-dm-sans text-secondary-color text-xs md:text-sm leading-relaxed font-medium">
                   {feature.description}
                 </p>
               </motion.div>

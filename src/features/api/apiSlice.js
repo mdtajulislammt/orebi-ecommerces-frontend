@@ -15,7 +15,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Product', 'Order', 'Review', 'Brand', 'Category'],
+  tagTypes: ['User', 'Product', 'Order', 'Review', 'Brand', 'Category', 'Contact', 'Newsletter'],
   endpoints: (builder) => ({
     // Auth Endpoints
     register: builder.mutation({
@@ -183,6 +183,52 @@ export const apiSlice = createApi({
       query: () => '/api/orders/my-orders',
       providesTags: ['Order'],
     }),
+
+    // Contact Endpoints
+    submitContact: builder.mutation({
+      query: (data) => ({
+        url: '/api/admin/contact',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Contact'],
+    }),
+    getContacts: builder.query({
+      query: (params) => ({
+        url: '/api/admin/contact',
+        params,
+      }),
+      providesTags: ['Contact'],
+    }),
+    getContact: builder.query({
+      query: (id) => `/api/admin/contact/${id}`,
+      providesTags: (result, error, id) => [{ type: 'Contact', id }],
+    }),
+    updateContact: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/api/admin/contact/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => ['Contact', { type: 'Contact', id }],
+    }),
+    deleteContact: builder.mutation({
+      query: (id) => ({
+        url: `/api/admin/contact/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Contact'],
+    }),
+
+    // Newsletter Endpoints
+    subscribeNewsletter: builder.mutation({
+      query: (data) => ({
+        url: '/api/newsletter/subscribe',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Newsletter'],
+    }),
   }),
 });
 
@@ -209,4 +255,10 @@ export const {
   useBuyProductMutation,
   useGetAllOrdersQuery,
   useGetMyOrdersQuery,
+  useSubmitContactMutation,
+  useGetContactsQuery,
+  useGetContactQuery,
+  useUpdateContactMutation,
+  useDeleteContactMutation,
+  useSubscribeNewsletterMutation,
 } = apiSlice;

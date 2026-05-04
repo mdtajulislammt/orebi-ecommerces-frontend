@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useGetCategoriesQuery, useGetMeQuery } from "../../features/api/apiSlice";
+import { useGetCategoriesQuery, useGetMeQuery, useGetProductsQuery } from "../../features/api/apiSlice";
 import { addToCart, removeFromCart, removeFromWishlist } from "../../features/orebi/orebiSlice";
 // components
 import Container from "../layout/Container";
@@ -49,6 +49,15 @@ const Header = () => {
   const [wishlistDropDownShow, setWishlistDropDownShow] = useState(false);
   let wishlistRef = useRef();
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchShow, setSearchShow] = useState(false);
+  let searchRef = useRef();
+
+  const { data: searchResults, isFetching: searchLoading } = useGetProductsQuery(
+    { search: searchQuery, limit: 5 },
+    { skip: searchQuery.length < 2 }
+  );
+
   const cart = useSelector((state) => state.orebi?.cart || []);
   const wishlist = useSelector((state) => state.orebi?.wishlist || []);
   const dispatch = useDispatch();
@@ -66,6 +75,7 @@ const Header = () => {
       if (accountRef.current && !accountRef.current.contains(e.target)) setAccountDropDownShow(false);
       if (addToCartRef.current && !addToCartRef.current.contains(e.target)) setAddToCartShow(false);
       if (wishlistRef.current && !wishlistRef.current.contains(e.target)) setWishlistDropDownShow(false);
+      if (searchRef.current && !searchRef.current.contains(e.target)) setSearchShow(false);
     };
     document.body.addEventListener("click", handleClickOutside);
     return () => document.body.removeEventListener("click", handleClickOutside);
@@ -366,9 +376,14 @@ const Header = () => {
           </div>
 
           {/* Search Box - Hidden on very small screens or flexible */}
-          <div className="hidden sm:block flex-1 max-w-[500px] relative group order-2 lg:order-3">
+          <div ref={searchRef} className="hidden sm:block flex-1 max-w-[500px] relative group order-2 lg:order-3">
             <div className="relative overflow-hidden rounded-full bg-gray-50 border border-gray-200 focus-within:border-[#262626] focus-within:bg-white focus-within:shadow-md transition-all duration-300">
               <input
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSearchShow(true);
+                }}
+                value={searchQuery}
                 type="text"
                 placeholder="Search products..."
                 className="w-full py-2 md:py-2.5 pl-5 pr-12 bg-transparent outline-none text-sm text-[#262626] placeholder:text-gray-400 font-dm-sans"
@@ -377,6 +392,56 @@ const Header = () => {
                 <FaSearch className="text-sm md:text-base" />
               </button>
             </div>
+
+            {/* Desktop Search Results Dropdown */}
+            {searchShow && searchQuery.length >= 2 && (
+              <div className="absolute top-[110%] left-0 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="max-h-[400px] overflow-y-auto">
+                  {searchLoading ? (
+                    <div className="p-10 text-center text-gray-400 text-sm italic">Searching for "{searchQuery}"...</div>
+                  ) : searchResults?.data?.length > 0 ? (
+                    <>
+                      <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Found {searchResults.meta.total} Results</span>
+                      </div>
+                      {searchResults.data.map((product) => (
+                        <Link
+                          key={product.id}
+                          to={`/product/${product.slug}`}
+                          onClick={() => {
+                            setSearchShow(false);
+                            setSearchQuery("");
+                          }}
+                          className="flex items-center gap-x-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group"
+                        >
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                            <img src={product.thumbnail} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-[#262626] line-clamp-1">{product.name}</h4>
+                            <p className="text-xs text-gray-500 mt-1">${product.price}</p>
+                          </div>
+                        </Link>
+                      ))}
+                      <Link 
+                        to={`/shop?search=${searchQuery}`}
+                        onClick={() => {
+                          setSearchShow(false);
+                          setSearchQuery("");
+                        }}
+                        className="block w-full p-4 bg-gray-50 text-center text-xs font-bold text-[#262626] hover:bg-gray-100 transition-colors underline"
+                      >
+                        View all results
+                      </Link>
+                    </>
+                  ) : (
+                    <div className="p-10 text-center">
+                      <p className="text-gray-400 text-sm font-medium">No results found for "{searchQuery}"</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Icons Section */}
@@ -386,9 +451,14 @@ const Header = () => {
         </Flex>
 
         {/* Mobile Only Search Bar (Row 2 for very small screens) */}
-        <div className="sm:hidden mt-4">
+        <div className="sm:hidden mt-4 relative">
            <div className="relative overflow-hidden rounded-full bg-gray-50 border border-gray-200">
               <input
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSearchShow(true);
+                }}
+                value={searchQuery}
                 type="text"
                 placeholder="Search products..."
                 className="w-full py-2.5 pl-6 pr-14 bg-transparent outline-none text-sm text-[#262626]"
@@ -397,6 +467,53 @@ const Header = () => {
                 <FaSearch className="text-sm" />
               </button>
             </div>
+
+            {/* Mobile Search Results Dropdown */}
+            {searchShow && searchQuery.length >= 2 && (
+              <div className="absolute top-[110%] left-0 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="max-h-[300px] overflow-y-auto">
+                  {searchLoading ? (
+                    <div className="p-8 text-center text-gray-400 text-sm italic">Searching...</div>
+                  ) : searchResults?.data?.length > 0 ? (
+                    <>
+                      {searchResults.data.map((product) => (
+                        <Link
+                          key={product.id}
+                          to={`/product/${product.slug}`}
+                          onClick={() => {
+                            setSearchShow(false);
+                            setSearchQuery("");
+                          }}
+                          className="flex items-center gap-x-4 p-4 hover:bg-gray-50 border-b border-gray-50 last:border-0"
+                        >
+                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                            <img src={product.thumbnail} alt={product.name} className="w-full h-full object-cover" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-[#262626] line-clamp-1">{product.name}</h4>
+                            <p className="text-xs text-gray-500 mt-1">${product.price}</p>
+                          </div>
+                        </Link>
+                      ))}
+                      <Link 
+                        to={`/shop?search=${searchQuery}`}
+                        onClick={() => {
+                          setSearchShow(false);
+                          setSearchQuery("");
+                        }}
+                        className="block w-full p-4 bg-gray-50 text-center text-xs font-bold text-[#262626] underline"
+                      >
+                        See all results
+                      </Link>
+                    </>
+                  ) : (
+                    <div className="p-8 text-center">
+                      <p className="text-gray-400 text-sm">No results found</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
         </div>
       </Container>
     </section>

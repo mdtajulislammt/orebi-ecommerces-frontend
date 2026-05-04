@@ -4,9 +4,15 @@ import Heading from "../layout/Heading";
 import Paragraph from "./Paragraph";
 import ShopSideBarDropDownItem from "./ShopSideBarDropDownItem";
 
-const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data, onSelect }) => {
+const ShopSideBarDropDown = ({
+  dropDownOn,
+  dropDownTitle,
+  data,
+  onSelect,
+  defaultOpen = false,
+}) => {
   const [dropDwonOpen, setDropDwonOpen] = useState(dropDownOn);
-  const [dropDwonItemShow, setDropDwonItemShow] = useState(dropDownOn);
+  const [dropDwonItemShow, setDropDwonItemShow] = useState(defaultOpen);
 
   return (
     <div className="mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12">
@@ -70,7 +76,7 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data, onSelect }) => {
                   />
                 ))}
             </ShopSideBarDropDownItem>
-          )
+          ),
         )}
 
       {!dropDwonOpen &&
@@ -109,7 +115,7 @@ const ShopSideBarDropDown = ({ dropDownOn, dropDownTitle, data, onSelect }) => {
                   />
                 ))}
             </ShopSideBarDropDownItem>
-          )
+          ),
         )}
     </div>
   );

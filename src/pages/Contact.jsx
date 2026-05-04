@@ -1,159 +1,300 @@
-import React, { useState } from "react";
-import Container from "../components/layout/Container";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import BreadCrump from "../components/layout/BreadCrump";
+import Container from "../components/layout/Container";
 import Heading from "../components/layout/Heading";
-import InputBox from "../components/layout/InputBox";
-import Textarea from "../components/layout/Textarea";
-import CusButton from "../components/layout/CusButton";
-import List from "../components/layout/List";
-import ListItem from "../components/layout/ListItem";
+import Paragraph from "../components/layout/Paragraph";
+import { useSubmitContactMutation } from "../features/api/apiSlice";
 
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-} from "@chakra-ui/react";
-
-let officeAddress = [
-  {
-    name: "Germany Office",
-    address: "575 Crescent Ave. Quakertown, PA 18951",
-    officeLocation:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1031.9511191698007!2d90.42514918160967!3d23.78305362310217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7292b9ea7fd%3A0x723922bd5147b52c!2sGermany%20Visa%20Application%20Center!5e0!3m2!1sen!2sbd!4v1708744912062!5m2!1sen!2sbd",
-    number: "+432 533 12 523",
-    mail: "info@domain.com",
-    officeTime: "Mon - Fri: 9am - 6pm",
-  },
-  {
-    name: "Slovakia Office",
-    address: "575 Crescent Ave. Quakertown, PA 18951",
-    officeLocation:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2668.7587310046433!2d17.53198807615311!3d48.01837097123046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476b799c8a158591%3A0xac2abd05c1a08cfd!2zU2xvdmFraWEgcmluZyBvcmVjaG92w6EgcG90dsO0xYg!5e0!3m2!1sen!2sbd!4v1708745287418!5m2!1sen!2sbd",
-    number: "+432 533 12 523",
-    mail: "info@domain.com",
-    officeTime: "Mon - Fri: 9am - 6pm",
-  },
-  {
-    name: "Lithuania Office",
-    address: "575 Crescent Ave. Quakertown, PA 18951",
-    officeLocation:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2306.121463355251!2d25.266385076587312!3d54.68989017270932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dd9408c683b0ef%3A0x72428a2b34b41d8e!2sLithuanian%20Ministry%20of%20Foreign%20Affairs!5e0!3m2!1sen!2sbd!4v1708745613620!5m2!1sen!2sbd",
-    number: "+432 533 12 523",
-    mail: "info@domain.com",
-    officeTime: "Mon - Fri: 9am - 6pm",
-  },
-];
+// Animation variants
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.15, ease: "easeOut" },
+  }),
+};
 
 const Contact = () => {
-  const [itemOpen, setItemOpen] = useState(officeAddress.at(2).name);
+  const bannerImage = "/contact_banner.png";
+  const [submitContact, { isLoading }] = useSubmitContactMutation();
+
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    message: "",
+  });
+
+  const [status, setStatus] = useState({ type: "", message: "" });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ type: "", message: "" });
+
+    try {
+      await submitContact(formData).unwrap();
+      setStatus({
+        type: "success",
+        message: "Message sent successfully! We will get back to you soon.",
+      });
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_number: "",
+        message: "",
+      });
+    } catch (err) {
+      setStatus({
+        type: "error",
+        message:
+          err.data?.message ||
+          "Failed to send message. Please try again later.",
+      });
+    }
+  };
 
   return (
-    <section>
+    <section className="pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+      {/* ── Cinematic Hero Banner ── */}
+      <div className="relative h-[300px] md:h-[400px] lg:h-[450px] w-full overflow-hidden mb-16 sm:mb-20 md:mb-24 lg:mb-32">
+        <img
+          src={bannerImage}
+          alt="Contact Orebi Hero"
+          className="w-full h-full object-cover grayscale-[40%] brightness-50"
+        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <Container>
+            <div className="text-center px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+              >
+                <div className="flex items-center justify-center gap-2 text-white/50 text-[10px] uppercase tracking-[6px] mb-6">
+                  <span>Home</span>
+                  <span className="w-1 h-1 bg-white/30 rounded-full"></span>
+                  <span className="text-white/80">Contacts</span>
+                </div>
+                <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-light tracking-[10px] uppercase">
+                  Contact Us
+                </h1>
+                <div className="h-[1px] w-20 bg-white/20 mx-auto mt-8"></div>
+              </motion.div>
+            </div>
+          </Container>
+        </div>
+      </div>
+
       <Container>
-        <BreadCrump />
-        <form
-          action=""
-          className=" mt-4 sm:mt-7 md:mt-10 lg:mt-13 xl:mt-16 w-full sm:w-3/4 md:w-4/6 lg:w-2/4 mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-        >
-          <Heading
-            tagname={"h3"}
-            text={"Fill up a Form"}
-            className=" font-dm-sans font-bold text-primary-color text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] xl:text-[36px] 2xl:text-[40px] mb-7"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8"}
-            labelText="name"
-            id={"name"}
-            type="text"
-            placeholder="Your name here"
-          />
-          <InputBox
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8"}
-            labelText="email"
-            id={"email"}
-            type="text"
-            placeholder="Your email here"
-          />
-          <Textarea
-            className={"mb-5 sm:mb-6 md:mb-7 lg:mb-8"}
-            labelText="messege"
-            id={"messege"}
-            placeholder={"Your mesege here"}
-          />
-          <CusButton text={"Post"} />
-        </form>
-        <div className="map relative">
-          {officeAddress.map(
-            (item) =>
-              itemOpen == item.name && (
-                <iframe
-                  src={item.officeLocation}
-                  frameborder="0"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  className="w-full h-[300px] md:h-[450px] lg:h-[550px] 2x:h-[600px] rounded-[10px] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
-                ></iframe>
-              )
-          )}
-          <div className="office-information mt-5 md:mt-0 md:w-[250px] lg:w-[350px] xl:w-[450px] md:absolute md:top-2/4 md:left-10 lg:left-20 md:-translate-y-2/4">
-            <Accordion
-              defaultIndex={2}
-              className="w-full shadow-[0_3px_10px_rgb(0,0,0,0.2)] [&>*:last-child]:border-none"
-              allowToggle
-            >
-              {officeAddress.map((item, index) => (
-                <AccordionItem
-                  key={index}
-                  className="bg-white border-b-[1px] border-[#F0F0F0]"
-                  onClick={() => setItemOpen(item.name)}
+        <div className="flex flex-col lg:flex-row gap-20 lg:gap-32">
+          {/* ── Contact Form (Left) ── */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="w-full lg:w-3/5"
+          >
+            <div className="mb-12">
+              <span className="text-secondary-color uppercase tracking-[5px] text-[10px] font-black mb-4 block">
+                Communication
+              </span>
+              <Heading
+                text="Fill up a Form"
+                className="font-dm-sans font-black text-3xl md:text-5xl text-primary-color tracking-tighter mb-4"
+              />
+              <Paragraph
+                text="We typically respond within 24 business hours. Please provide as much detail as possible."
+                classname="text-secondary-color text-sm"
+              />
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {status.message && (
+                <div
+                  className={`p-4 text-xs uppercase tracking-widest font-bold ${status.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
                 >
-                  <AccordionButton className="flex justify-between px-5 py-2.5 sm:py-3 lg:py-5">
-                    <Heading
-                      tagname="h4"
-                      text={item.name}
-                      className=" font-dm-sans font-semibold text-base sm:text-lg lg:text-[20px]"
-                    />
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel>
-                    <List className={"mb-2.5"}>
-                      <ListItem
-                        className={
-                          "font-dm-sans text-secondary-color text-xs sm:text-[14px] md:text-xs lg:text-[16px]  lg:leading-[24px] pb-2 sm:pb-3 md:pb-2 lg:pb-5 px-5"
-                        }
-                      >
-                        {item.address}
-                      </ListItem>
-                      <ListItem
-                        className={
-                          "font-dm-sans text-secondary-color text-xs sm:text-[14px] md:text-xs lg:text-[16px]  lg:leading-[24px] pb-2 sm:pb-3 md:pb-2 lg:pb-5 px-5"
-                        }
-                      >
-                        {item.number}
-                      </ListItem>
-                      <ListItem
-                        className={
-                          "font-dm-sans text-secondary-color text-xs sm:text-[14px] md:text-xs lg:text-[16px]  lg:leading-[24px] pb-2 sm:pb-3 md:pb-2 lg:pb-5 px-5"
-                        }
-                      >
-                        {item.number}
-                      </ListItem>
-                      <ListItem
-                        className={
-                          "font-dm-sans text-secondary-color text-xs sm:text-[14px] md:text-xs lg:text-[16px]  lg:leading-[24px] pb-2 sm:pb-3 md:pb-2 lg:pb-5 px-5"
-                        }
-                      >
-                        {item.officeTime}
-                      </ListItem>
-                    </List>
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+                  {status.message}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-black text-primary-color">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    placeholder="John"
+                    required
+                    className="w-full border-b border-gray-200 py-3 focus:border-black outline-none transition-colors text-sm font-dm-sans"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-black text-primary-color">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    placeholder="Doe"
+                    required
+                    className="w-full border-b border-gray-200 py-3 focus:border-black outline-none transition-colors text-sm font-dm-sans"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-black text-primary-color">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="john@example.com"
+                    required
+                    className="w-full border-b border-gray-200 py-3 focus:border-black outline-none transition-colors text-sm font-dm-sans"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-black text-primary-color">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                    placeholder="+880 1XXX XXXXXX"
+                    className="w-full border-b border-gray-200 py-3 focus:border-black outline-none transition-colors text-sm font-dm-sans"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest font-black text-primary-color">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows="4"
+                  placeholder="How can we assist you today?"
+                  required
+                  className="w-full border-b border-gray-200 py-3 focus:border-black outline-none transition-colors text-sm font-dm-sans resize-none"
+                ></textarea>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                disabled={isLoading}
+                type="submit"
+                className={`bg-black text-white px-12 py-4 text-xs uppercase tracking-[4px] font-black hover:bg-gray-900 transition-colors ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {isLoading ? "Sending..." : "Send Message"}
+              </motion.button>
+            </form>
+          </motion.div>
+
+          {/* ── Info & Map (Right) ── */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="w-full lg:w-2/5 space-y-16"
+          >
+            {/* Office Info */}
+            <div className="space-y-8">
+              <div>
+                <span className="text-secondary-color uppercase tracking-[5px] text-[10px] font-black mb-4 block">
+                  Our Presence
+                </span>
+                <Heading
+                  text="Headquarters"
+                  className="font-dm-sans font-black text-2xl md:text-3xl text-primary-color tracking-tight mb-4"
+                />
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 bg-[#F5F5F3] flex items-center justify-center shrink-0">
+                    <span className="text-[10px] font-black">AD</span>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase tracking-widest font-black mb-1">
+                      Address
+                    </h4>
+                    <p className="text-secondary-color text-sm leading-relaxed">
+                      Level 4, Venture Tower, Gulshan-2, Dhaka 1212, Bangladesh
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 bg-[#F5F5F3] flex items-center justify-center shrink-0">
+                    <span className="text-[10px] font-black">PH</span>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase tracking-widest font-black mb-1">
+                      Phone
+                    </h4>
+                    <p className="text-secondary-color text-sm leading-relaxed">
+                      +880 1234 567890
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 bg-[#F5F5F3] flex items-center justify-center shrink-0">
+                    <span className="text-[10px] font-black">EM</span>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase tracking-widest font-black mb-1">
+                      Email
+                    </h4>
+                    <p className="text-secondary-color text-sm leading-relaxed">
+                      hello@orebi.com
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Map */}
+            <div className="relative group overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14604.423984605928!2d90.41256247953252!3d23.779244017637385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a0f70deb73%3A0x30c3640fa237c308!2sGulshan%202%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1708744912062!5m2!1sen!2sbd"
+                width="100%"
+                height="300"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="shadow-2xl"
+              ></iframe>
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-black translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700"></div>
+            </div>
+          </motion.div>
         </div>
       </Container>
     </section>

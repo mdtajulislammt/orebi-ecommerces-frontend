@@ -4,9 +4,9 @@ import Heading from "../layout/Heading";
 import Paragraph from "../layout/Paragraph";
 import Flex from "../layout/Flex";
 import Button from "../layout/Button";
-import { FaRegHeart, FaShoppingCart, FaExchangeAlt } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { addToCart, addToWishlist } from "../../features/orebi/orebiSlice";
+import { FaRegHeart, FaHeart, FaShoppingCart, FaExchangeAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, addToWishlist, removeFromWishlist } from "../../features/orebi/orebiSlice";
 
 const ProductCard = ({
   className,
@@ -18,6 +18,8 @@ const ProductCard = ({
   id,
 }) => {
   const dispatch = useDispatch();
+  const wishlist = useSelector((state) => state.orebi.wishlist);
+  const isWishlisted = wishlist.some((item) => (item.id || item.productName) === (id || productName));
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -36,15 +38,19 @@ const ProductCard = ({
   const handleAddToWishlist = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(
-      addToWishlist({
-        id: id || productName,
-        productName,
-        productPrice,
-        productColor,
-        productImageSrc: productImageLink,
-      })
-    );
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(id || productName));
+    } else {
+      dispatch(
+        addToWishlist({
+          id: id || productName,
+          productName,
+          productPrice,
+          productColor,
+          productImageSrc: productImageLink,
+        })
+      );
+    }
   };
 
   const noImage = "https://via.placeholder.com/400x500?text=No+Image+Available";
@@ -70,14 +76,20 @@ const ProductCard = ({
         )}
 
         {/* Hover Actions */}
-        <div className="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-20">
-          <div className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl space-y-3">
+        <div className="absolute bottom-0 left-0 w-full p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-20">
+          <div className="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-xl space-y-1.5">
             <button
               onClick={handleAddToWishlist}
-              className="w-full flex items-center justify-between text-gray-500 hover:text-black transition-colors font-dm-sans text-sm font-bold group/btn"
+              className={`w-full flex items-center justify-between transition-colors font-dm-sans text-xs font-bold group/btn ${
+                isWishlisted ? "text-red-500" : "text-gray-500 hover:text-black"
+              }`}
             >
-              Add to Wishlist
-              <FaRegHeart className="group-hover/btn:scale-125 transition-transform" />
+              {isWishlisted ? "In Wishlist" : "Add to Wishlist"}
+              {isWishlisted ? (
+                <FaHeart className="scale-110 text-red-500 transition-transform" />
+              ) : (
+                <FaRegHeart className="group-hover/btn:scale-110 transition-transform" />
+              )}
             </button>
             <div className="h-[1px] bg-gray-100 w-full" />
             {/* <button
@@ -86,13 +98,13 @@ const ProductCard = ({
               Compare
               <FaExchangeAlt className="group-hover/btn:scale-125 transition-transform" />
             </button> */}
-            <div className="h-[1px] bg-gray-100 w-full" />
+            <div className="h-[1px] bg-gray-50 w-full" />
             <button
               onClick={handleAddToCart}
-              className="w-full flex items-center justify-between text-black hover:text-primary-color transition-colors font-dm-sans text-sm font-black group/btn"
+              className="w-full flex items-center justify-between text-[#262626] hover:text-primary-color transition-colors font-dm-sans text-xs font-black group/btn"
             >
               Add to Cart
-              <FaShoppingCart className="group-hover/btn:scale-125 transition-transform text-primary-color" />
+              <FaShoppingCart className="group-hover/btn:scale-110 transition-transform text-primary-color" />
             </button>
           </div>
         </div>
