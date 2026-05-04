@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useGetCategoriesQuery } from "../../features/api/apiSlice";
+import { useGetCategoriesQuery, useGetMeQuery } from "../../features/api/apiSlice";
 import { addToCart, removeFromCart, removeFromWishlist } from "../../features/orebi/orebiSlice";
 // components
 import Container from "../layout/Container";
@@ -13,10 +13,29 @@ import { GoTriangleDown } from "react-icons/go";
 import { RiBarChartHorizontalLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 
+import { NavLink } from "react-router-dom";
+import orebiLogo from "../../assets/logo.png";
 import { logout } from "../../features/auth/authSlice";
+import Image from "../layout/Image";
+
+const navigation = [
+  { name: "home", href: "/" },
+  { name: "shop", href: "/shop" },
+  { name: "about-us", href: "/about-us" },
+  { name: "contacts", href: "/contacts" },
+  { name: "journal", href: "/journal" },
+];
+
 
 const Header = () => {
   const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  const { token, userInfo } = useSelector((state) => state.auth);
+  
+  // Fetch user info if we have a token
+  const { data: userData } = useGetMeQuery(undefined, { skip: !token });
+
+  // console.log('userData from query', userData.data.name);
+  
   
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   let categoryRef = useRef();
@@ -32,7 +51,6 @@ const Header = () => {
 
   const cart = useSelector((state) => state.orebi?.cart || []);
   const wishlist = useSelector((state) => state.orebi?.wishlist || []);
-  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
@@ -58,6 +76,9 @@ const Header = () => {
     setAccountDropDownShow(false);
   };
 
+  // console.log('userInfo', userInfo);
+  
+
   const iconsJSX = (
     <div className="flex items-center gap-x-5 md:gap-x-8">
       {/* Account */}
@@ -65,14 +86,32 @@ const Header = () => {
         {token ? (
           <button
             onClick={() => setAccountDropDownShow(!accountDropDownShow)}
-            className="flex items-center gap-x-1 text-[#262626] hover:text-black transition-all"
+            className="flex items-center gap-x-2 text-[#262626] hover:text-black transition-all group"
           >
-            <FaUser className="text-lg md:text-xl" />
+            <div className="flex flex-col items-start hidden sm:flex">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight leading-none">Account</span>
+              <span className="text-sm font-bold truncate max-w-[120px]">{userData?.data?.name || userData?.data?.email?.split('@')[0] || "User"}</span>
+            </div>
+            {userData?.data?.avatar ? (
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
+                <img 
+                  src={userData.data.avatar_url} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <FaUser className="text-lg md:text-xl" />
+            )}
             <GoTriangleDown className={`text-xs transition-transform duration-300 ${accountDropDownShow ? "rotate-180" : ""}`} />
           </button>
         ) : (
-          <Link to="/login" className="text-[#262626] hover:opacity-70 transition-opacity">
-             <FaRegUser className="text-lg md:text-xl" />
+          <Link to="/login" className="flex items-center gap-x-2 text-[#262626] hover:text-black transition-all group">
+            <div className="flex flex-col items-start hidden sm:flex">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight leading-none">Welcome</span>
+              <span className="text-sm font-bold">Login</span>
+            </div>
+            <FaRegUser className="text-lg md:text-xl" />
           </Link>
         )}
         
@@ -214,7 +253,7 @@ const Header = () => {
   );
 
   return (
-    <section className="bg-white border-b border-gray-100 py-4 sm:py-6 relative z-50 shadow-sm">
+    <section className="bg-white border-b border-gray-100 py-3 sm:py-4 relative z-50 shadow-sm">
       {/* Side Drawer & Overlay (Global Level) */}
       <div className="lg:hidden">
         {/* Side Drawer Overlay */}
@@ -240,18 +279,12 @@ const Header = () => {
             <div className="mb-8 border-b border-gray-100 pb-4">
               <h3 className="px-6 text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Navigation</h3>
               <ul className="space-y-1">
-                {[
-                  { name: "Home", href: "/" },
-                  { name: "Shop", href: "/shop" },
-                  { name: "About Us", href: "/about-us" },
-                  { name: "Contacts", href: "/contacts" },
-                  { name: "Journal", href: "/journal" },
-                ].map((item) => (
+                {navigation.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.href}
                       onClick={() => setCategoryMenuOpen(false)}
-                      className="block px-6 py-3.5 text-base font-dm-sans font-bold text-[#262626] hover:bg-gray-50 rounded-xl transition-all"
+                      className="block px-6 py-3.5 text-base font-dm-sans font-bold text-[#262626] hover:bg-gray-50 rounded-xl transition-all capitalize"
                     >
                       {item.name}
                     </Link>
@@ -293,53 +326,81 @@ const Header = () => {
       </div>
 
       <Container>
-        <Flex className="items-center justify-between flex-wrap lg:flex-nowrap gap-y-4 gap-x-2 md:gap-x-10">
-          {/* Row 1 for Mobile: Category & Icons */}
-          <div className="flex items-center justify-between w-full lg:w-auto order-1">
-            {/* Shop By Category Button (Mobile Only) */}
-            <div ref={categoryRef} className="relative lg:hidden">
-              <button
+        <Flex className="items-center justify-between gap-x-4 md:gap-x-8 lg:gap-x-12">
+          {/* Logo & Mobile Menu */}
+          <div className="flex items-center gap-x-4 lg:gap-x-0 order-1">
+             {/* Hamburger for Mobile */}
+             <button
                 onClick={() => setCategoryMenuOpen(true)}
-                className="flex items-center gap-x-2 text-[#262626] hover:text-black transition-colors duration-300 group"
+                className="lg:hidden p-1 text-[#262626] hover:text-black transition-colors"
               >
-                <RiBarChartHorizontalLine className="text-xl md:text-2xl" />
+                <RiBarChartHorizontalLine className="text-2xl" />
               </button>
-            </div>
 
-
-            {/* Desktop Only Category Text (if needed) */}
-            <div className="hidden lg:block relative group">
-              {/* ... category button for desktop ... */}
-            </div>
-
-            {/* Mobile Icons (moved here to stay on Row 1) */}
-            <div className="flex lg:hidden items-center gap-x-4">
-              {iconsJSX}
-            </div>
+              <Link to="/" className="shrink-0">
+                <Image
+                  imageLink={orebiLogo}
+                  altText="company-logo"
+                  className="w-12 sm:w-16 md:w-20 lg:w-28"
+                />
+              </Link>
           </div>
 
-          {/* Row 2 for Mobile / Row 1 for Desktop: Search Box */}
-          <div className="w-full lg:flex-1 lg:max-w-[600px] relative group order-3 lg:order-2">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center gap-x-8 xl:gap-x-10 order-2">
+            {navigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className={({ isActive }) => 
+                  `text-sm xl:text-base font-dm-sans capitalize transition-all duration-300 relative py-1
+                  ${isActive 
+                    ? "font-bold text-black after:w-full" 
+                    : "font-medium text-gray-500 hover:text-black after:w-0 hover:after:w-full"}
+                  after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-black after:transition-all after:duration-300`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Search Box - Hidden on very small screens or flexible */}
+          <div className="hidden sm:block flex-1 max-w-[500px] relative group order-2 lg:order-3">
             <div className="relative overflow-hidden rounded-full bg-gray-50 border border-gray-200 focus-within:border-[#262626] focus-within:bg-white focus-within:shadow-md transition-all duration-300">
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-full py-2.5 md:py-3.5 pl-6 pr-14 bg-transparent outline-none text-sm md:text-base text-[#262626] placeholder:text-gray-400 font-dm-sans"
+                className="w-full py-2 md:py-2.5 pl-5 pr-12 bg-transparent outline-none text-sm text-[#262626] placeholder:text-gray-400 font-dm-sans"
               />
-              <button className="absolute right-0 top-0 h-full px-6 text-gray-400 hover:text-[#262626] transition-colors">
-                <FaSearch className="text-sm md:text-lg" />
+              <button className="absolute right-0 top-0 h-full px-4 text-gray-400 hover:text-[#262626] transition-colors">
+                <FaSearch className="text-sm md:text-base" />
               </button>
             </div>
           </div>
 
-          {/* Desktop Only Icons Section */}
-          <div className="hidden lg:flex items-center gap-x-8 order-3">
+          {/* Icons Section */}
+          <div className="flex items-center gap-x-4 md:gap-x-6 order-3 lg:order-4">
              {iconsJSX}
           </div>
         </Flex>
 
+        {/* Mobile Only Search Bar (Row 2 for very small screens) */}
+        <div className="sm:hidden mt-4">
+           <div className="relative overflow-hidden rounded-full bg-gray-50 border border-gray-200">
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="w-full py-2.5 pl-6 pr-14 bg-transparent outline-none text-sm text-[#262626]"
+              />
+              <button className="absolute right-0 top-0 h-full px-6 text-gray-400">
+                <FaSearch className="text-sm" />
+              </button>
+            </div>
+        </div>
       </Container>
     </section>
+
   );
 };
 

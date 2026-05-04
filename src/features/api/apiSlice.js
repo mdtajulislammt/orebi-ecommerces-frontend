@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { setCredentials } from '../auth/authSlice';
 
 // Create a generic API slice
 export const apiSlice = createApi({
@@ -35,6 +36,15 @@ export const apiSlice = createApi({
     getMe: builder.query({
       query: () => '/api/auth/me',
       providesTags: ['User'],
+      async onQueryStarted(arg, { dispatch, getState, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const currentToken = getState().auth?.token;
+          dispatch(setCredentials({ user: data.data || data, token: currentToken }));
+        } catch (err) {
+          console.error('Failed to fetch user profile:', err);
+        }
+      },
     }),
     updateUser: builder.mutation({
       query: (data) => ({
