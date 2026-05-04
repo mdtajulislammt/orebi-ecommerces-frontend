@@ -143,9 +143,9 @@ const Shop = () => {
   return (
     <section className="pb-16 sm:pb-20 md:pb-24 lg:pb-28 bg-[#fafafa] min-h-screen font-poppins">
       {/* ── Cinematic Hero Banner ── */}
-      <div className="relative h-[300px] md:h-[400px] lg:h-[450px] w-full overflow-hidden mb-10 sm:mb-16 md:mb-20 lg:mb-24">
+      <div className="relative h-[150px] md:h-[200px] lg:h-[250px] w-full overflow-hidden mb-10 sm:mb-16 md:mb-20 lg:mb-24">
         <img
-          src="/about_banner.png"
+          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1920&auto=format&fit=crop"
           alt="Shop Hero"
           className="w-full h-full object-cover grayscale-[40%] brightness-50"
         />

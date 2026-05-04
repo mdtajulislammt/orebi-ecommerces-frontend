@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { MdAdd, MdCheck, MdClose, MdDelete, MdEdit } from 'react-icons/md';
-import { toast } from 'react-toastify';
-import {
-  useCreateBrandMutation,
-  useDeleteBrandMutation,
-  useGetBrandsQuery,
-  useUpdateBrandMutation
+import React, { useState } from 'react';
+import { MdEdit, MdDelete, MdAdd, MdClose, MdCheck } from 'react-icons/md';
+import { 
+  useGetBrandsQuery, 
+  useCreateBrandMutation, 
+  useUpdateBrandMutation, 
+  useDeleteBrandMutation 
 } from '../../../features/api/apiSlice';
+import { toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const BrandList = () => {
   const { data: brands, isLoading, isError } = useGetBrandsQuery();
@@ -56,123 +57,141 @@ const BrandList = () => {
     }
   };
 
-  if (isLoading) return <div className="p-10 text-center">Loading brands...</div>;
-  if (isError) return <div className="p-10 text-center text-red-500">Error loading brands.</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-[400px]">
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <div>
-          <h2 className="text-2xl font-black text-gray-900">Brands</h2>
-          <p className="text-sm text-gray-500 mt-1">Manage your product brands</p>
+    <div className="space-y-8 font-['Plus_Jakarta_Sans'] animate-fadeIn">
+      <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+        <div className="p-8 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-gray-50/50">
+          <div>
+            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Brands</h2>
+            <p className="text-sm text-gray-500 font-medium mt-1">Manage your product brand partners</p>
+          </div>
+          <button 
+            onClick={() => handleOpenModal()}
+            className="bg-indigo-600 text-white px-8 py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 active:scale-95 font-bold"
+          >
+            <MdAdd size={24} /> Add New Brand
+          </button>
         </div>
-        <button 
-          onClick={() => handleOpenModal()}
-          className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-800 transition-all shadow-lg active:scale-95"
-        >
-          <MdAdd size={20} /> Add New Brand
-        </button>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="text-gray-400 text-[10px] uppercase font-black tracking-[0.2em] border-b border-gray-50">
+                <th className="px-10 py-6">Brand Identity</th>
+                <th className="px-10 py-6">Statistics</th>
+                <th className="px-10 py-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              <AnimatePresence>
+                {brands?.map((brand, idx) => (
+                  <motion.tr 
+                    key={brand.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="group hover:bg-gray-50/50 transition-all duration-300"
+                  >
+                    <td className="px-10 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-black text-xl shadow-inner border border-indigo-100/50">
+                          {brand.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-gray-900 group-hover:text-indigo-600 transition-colors">{brand.name}</p>
+                          <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Brand Partner</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-10 py-6">
+                      <span className="px-4 py-1.5 bg-emerald-50 text-emerald-600 text-[11px] font-black rounded-full border border-emerald-100 uppercase tracking-wide">
+                        {brand._count?.products || 0} Products
+                      </span>
+                    </td>
+                    <td className="px-10 py-6 text-right">
+                      <div className="flex justify-end gap-3">
+                        <button 
+                          onClick={() => handleOpenModal(brand)}
+                          className="p-3 text-indigo-600 bg-indigo-50/50 hover:bg-indigo-600 hover:text-white rounded-2xl transition-all border border-indigo-100 shadow-sm"
+                          title="Edit Brand"
+                        >
+                          <MdEdit size={20} />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(brand.id)}
+                          className="p-3 text-rose-600 bg-rose-50/50 hover:bg-rose-600 hover:text-white rounded-2xl transition-all border border-rose-100 shadow-sm"
+                          title="Delete Brand"
+                        >
+                          <MdDelete size={20} />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+              {(!brands || brands.length === 0) && (
+                <tr>
+                  <td colSpan="3" className="px-10 py-24 text-center">
+                    <div className="w-20 h-20 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-gray-200">
+                        <MdInventory size={40} className="opacity-20" />
+                    </div>
+                    <h3 className="text-xl font-black text-gray-900">No Brands Found</h3>
+                    <p className="text-gray-400 font-bold mt-1">Start by adding your first brand partner</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-gray-400 text-xs uppercase tracking-widest border-b border-gray-100">
-              <th className="px-8 py-5 font-bold">Brand Logo</th>
-              <th className="px-8 py-5 font-bold">Brand Name</th>
-              <th className="px-8 py-5 font-bold">Products</th>
-              <th className="px-8 py-5 font-bold text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {brands?.map((brand) => (
-              <tr key={brand.id} className="group hover:bg-gray-50 transition-all duration-300">
-                <td className="px-8 py-5">
-                  <div className="w-12 h-12 bg-gray-100 text-gray-400 rounded-xl flex items-center justify-center font-black text-xl border border-gray-200 group-hover:bg-white transition-all">
-                    {brand.name.charAt(0)}
-                  </div>
-                </td>
-                <td className="px-8 py-5">
-                   <div className="flex flex-col">
-                      <span className="font-bold text-gray-800 group-hover:text-black transition-colors">{brand.name}</span>
-                      <span className="text-[10px] text-gray-400 font-mono">ID: {brand.id}</span>
-                   </div>
-                </td>
-                <td className="px-8 py-5">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full border border-blue-100">
-                    {brand._count?.products || 0} Products
-                  </span>
-                </td>
-                <td className="px-8 py-5 text-right">
-                  <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                    <button 
-                      onClick={() => handleOpenModal(brand)}
-                      className="p-2.5 text-yellow-600 hover:bg-yellow-50 rounded-xl transition-all border border-transparent hover:border-yellow-100"
-                      title="Edit Brand"
-                    >
-                      <MdEdit size={18} />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(brand.id)}
-                      className="p-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
-                      title="Delete Brand"
-                    >
-                      <MdDelete size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {(!brands || brands.length === 0) && (
-              <tr>
-                <td colSpan="4" className="px-8 py-20 text-center text-gray-400 font-medium">
-                  No brands found. Add one to get started!
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modern Modal */}
+      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all">
-          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-gray-100">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="text-xl font-black text-gray-900">
-                {editingBrand ? 'Edit Brand' : 'Create New Brand'}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <h3 className="text-2xl font-black text-gray-900 tracking-tight">
+                {editingBrand ? 'Edit Brand' : 'Create Brand'}
               </h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-gray-200 rounded-full transition-all text-gray-500"
+                className="p-3 hover:bg-gray-200 rounded-2xl transition-all text-gray-500"
               >
                 <MdClose size={24} />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Brand Name</label>
+            <form onSubmit={handleSubmit} className="p-10 space-y-8">
+              <div className="space-y-3">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Brand Name</label>
                 <input 
                   type="text" 
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Apple, Samsung, Nike..."
+                  placeholder="e.g. Samsung, Apple, Sony..."
                   required
                   autoFocus
-                  className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-black focus:outline-none transition-all bg-gray-50/50 focus:bg-white text-lg font-medium shadow-inner"
+                  className="w-full px-6 py-5 rounded-[1.25rem] border-none bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-600 transition-all text-lg font-bold shadow-inner"
                 />
               </div>
               <div className="pt-4 flex gap-4">
                 <button 
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-6 py-4 rounded-2xl font-bold text-gray-500 hover:bg-gray-100 transition-all"
+                  className="flex-1 px-6 py-5 rounded-[1.25rem] font-black text-gray-400 hover:bg-gray-100 transition-all uppercase tracking-widest text-xs"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 bg-black text-white px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition-all shadow-xl active:scale-95"
+                  className="flex-1 bg-indigo-600 text-white px-6 py-5 rounded-[1.25rem] font-black flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 active:scale-95 uppercase tracking-widest text-xs"
                 >
                   <MdCheck size={20} /> {editingBrand ? 'Update' : 'Create'}
                 </button>

@@ -1,23 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { HiOutlineLockClosed, HiOutlineMail } from "react-icons/hi";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import loginBanner from "../assets/tech_banner_2.png";
 import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
-import Paragraph from "../components/layout/Paragraph";
-import Heading from "../components/layout/Heading";
-import Flex from "../components/layout/Flex";
-import InputBox from "../components/layout/InputBox";
 import CusButton from "../components/layout/CusButton";
 import { useLoginMutation } from "../features/api/apiSlice";
 import { setCredentials } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  
+
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,16 +29,18 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login(formData).unwrap();
-      
+
       if (response.success) {
-        dispatch(setCredentials({
-          user: response, // storing entire response as user info for now
-          token: response.authorization?.access_token,
-        }));
-        
-        toast.success(response.message || "Logged in successfully!");
-        
-        if (response.type === 'ADMIN') {
+        dispatch(
+          setCredentials({
+            user: response,
+            token: response.authorization?.access_token,
+          }),
+        );
+
+        toast.success(response.message || "Welcome back to Orebi!");
+
+        if (response.type === "ADMIN") {
           navigate("/admin");
         } else {
           navigate("/");
@@ -49,69 +50,173 @@ const Login = () => {
       }
     } catch (err) {
       toast.error(err?.data?.message || "Invalid email or password");
-      console.error("Login error:", err);
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
   return (
-    <section className="py-10">
-      <Container>
-        <BreadCrump />
-        <div className="border-b-[1px] border-[#f0f0f0]">
-          <Paragraph
-            text={
-              "Welcome back! Please enter your details to access your account."
-            }
-            classname={
-              "text-secondary-color mt-6 sm:mt-8 md:mt-10 lg:mt-12 x:14 2xl:mt-16 lg:mb-14 mb-5 sm:mb-7 md:mb-9 w-full sm:w-[644px] text-xs sm:text-sm md:text-base"
-            }
-          />
-        </div>
-        <div className="input-area mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-          <Heading
-            tagname="h4"
-            text="Login to your account"
-            className="mb-10 font-dm-sans font-bold capitalize text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[42px] 2xl:text-[49px]"
-          />
-          <form onSubmit={handleLogin} className="w-full sm:w-3/4 xl:w-2/4">
-            <Flex className="justify-between items-center gap-x-3 sm:gap-x-10 mb-6">
-              <InputBox
-                id="email"
-                labelText="email address"
-                type="email"
-                placeholder="john@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </Flex>
-            <Flex className="justify-between items-center gap-x-3 sm:gap-x-10">
-              <InputBox
-                id="password"
-                labelText="password"
-                type="password"
-                placeholder="password123"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </Flex>
-            <div className="flex flex-col sm:flex-row items-center gap-6 mt-10">
-              <CusButton
-                text={isLoading ? "Logging in..." : "log in"}
-                type="submit"
-                disabled={isLoading}
-                className="bg-black text-white px-12 py-4 hover:bg-white hover:text-black border border-black transition-all duration-300"
-              />
-              <p className="text-secondary-color text-sm">
-                Don't have an account?{" "}
-                <Link to="/signup" className="text-primary-color font-bold hover:underline">
-                  Sign Up
-                </Link>
+    <section className="min-h-screen bg-[#FBFBFB] pb-20">
+      {/* Page Banner */}
+      <div className="relative h-[250px] w-full overflow-hidden sm:h-[300px] md:h-[350px]">
+        <motion.img
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          src={loginBanner}
+          alt="Login Banner"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/20"></div>
+        <Container className="relative h-full">
+          <div className="flex h-full flex-col justify-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-4"
+            >
+              <BreadCrump className="!text-white/80" />
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="font-dm-sans text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl"
+            >
+              Login
+            </motion.h1>
+          </div>
+        </Container>
+      </div>
+
+      <Container className="-mt-16 relative z-10 sm:-mt-24 md:-mt-32">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="mx-auto max-w-[600px]"
+        >
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-white px-8 py-12 shadow-[0_40px_120px_rgba(0,0,0,0.1)] ring-1 ring-gray-100 sm:px-16 md:py-16">
+            <motion.div variants={itemVariants} className="mb-10 text-center">
+              <h2 className="font-dm-sans text-2xl font-bold text-black sm:text-3xl">
+                Welcome Back
+              </h2>
+              <p className="mt-2 text-secondary-color">
+                Enter your credentials to access your account.
               </p>
-            </div>
-          </form>
-        </div>
+            </motion.div>
+
+            <form onSubmit={handleLogin} className="space-y-8">
+              {[
+                {
+                  id: "email",
+                  label: "Email Address",
+                  type: "email",
+                  icon: HiOutlineMail,
+                  placeholder: "john@example.com",
+                },
+                {
+                  id: "password",
+                  label: "Password",
+                  type: "password",
+                  icon: HiOutlineLockClosed,
+                  placeholder: "••••••••",
+                },
+              ].map((input) => (
+                <motion.div
+                  key={input.id}
+                  variants={itemVariants}
+                  className="group relative flex flex-col space-y-2"
+                >
+                  <label
+                    htmlFor={input.id}
+                    className="text-xs font-bold uppercase tracking-widest text-gray-400 transition-colors group-focus-within:text-black"
+                  >
+                    {input.label}
+                  </label>
+                  <div className="relative flex items-center">
+                    <input.icon className="absolute left-0 text-xl text-gray-300 transition-colors group-focus-within:text-black" />
+                    <input
+                      id={input.id}
+                      type={input.type}
+                      placeholder={input.placeholder}
+                      value={formData[input.id]}
+                      onChange={handleChange}
+                      className="w-full border-b-[1.5px] border-gray-100 py-3 pl-8 font-dm-sans text-lg outline-none transition-all focus:border-black placeholder:text-gray-200"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+
+              <motion.div
+                variants={itemVariants}
+                className="mt-14 flex flex-col items-center justify-between gap-8 sm:flex-row"
+              >
+                <CusButton
+                  type="submit"
+                  disabled={isLoading}
+                  className={`relative w-full overflow-hidden !rounded-2xl !px-14 !py-4 text-lg font-bold shadow-xl transition-all active:scale-95 sm:w-auto ${
+                    isLoading
+                      ? "cursor-not-allowed opacity-70"
+                      : "hover:shadow-2xl hover:-translate-y-1"
+                  }`}
+                >
+                  <div className="relative z-10 flex items-center justify-center gap-3">
+                    {isLoading ? (
+                      <>
+                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        <span>Logging in...</span>
+                      </>
+                    ) : (
+                      <span>Log In</span>
+                    )}
+                  </div>
+                </CusButton>
+
+                <p className="text-base text-secondary-color">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-bold text-black transition-all hover:underline"
+                  >
+                    Sign Up
+                  </Link>
+                </p>
+              </motion.div>
+            </form>
+
+            <motion.div
+              variants={itemVariants}
+              className="mt-12 border-t border-gray-100 pt-8 text-center"
+            >
+              <p className="text-[10px] uppercase tracking-widest text-gray-400">
+                Secure SSL Encrypted Access
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
       </Container>
     </section>
   );

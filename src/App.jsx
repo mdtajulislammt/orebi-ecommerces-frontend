@@ -1,25 +1,24 @@
 import {
-  createBrowserRouter,
-  RouterProvider,
   Route,
+  RouterProvider,
+  createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import React from "react";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "./RootLayout";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Products from "./pages/Products";
-import Journal from "./pages/Journal";
-import MyAccount from "./pages/MyAccount";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
 import Error from "./pages/Error";
+import Home from "./pages/Home";
+import Journal from "./pages/Journal";
+import Login from "./pages/Login";
+import MyAccount from "./pages/MyAccount";
+import Products from "./pages/Products";
+import Shop from "./pages/Shop";
+import SignUp from "./pages/SignUp";
 import Wishlist from "./pages/Wishlist";
 
 import OrderSuccess from "./pages/OrderSuccess";
@@ -28,13 +27,15 @@ import OrderSuccess from "./pages/OrderSuccess";
 import AdminProtectedRoute from "./components/auth/AdminProtectedRoute";
 import AdminLayout from "./components/layout/AdminLayout";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import ProductList from "./pages/Admin/Products/ProductList";
+import BrandList from "./pages/Admin/Brands/BrandList";
+import CategoryList from "./pages/Admin/Categories/CategoryList";
+import ContactList from "./pages/Admin/Contacts/ContactList";
+import OrderList from "./pages/Admin/Orders/OrderList";
+import AdminProfile from "./pages/Admin/Profile/AdminProfile";
 import CreateProduct from "./pages/Admin/Products/CreateProduct";
 import EditProduct from "./pages/Admin/Products/EditProduct";
+import ProductList from "./pages/Admin/Products/ProductList";
 import ViewProduct from "./pages/Admin/Products/ViewProduct";
-import CategoryList from "./pages/Admin/Categories/CategoryList";
-import BrandList from "./pages/Admin/Brands/BrandList";
-import OrderList from "./pages/Admin/Orders/OrderList";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -65,11 +66,13 @@ const router = createBrowserRouter(
           <Route path="categories" element={<CategoryList />} />
           <Route path="brands" element={<BrandList />} />
           <Route path="orders" element={<OrderList />} />
+          <Route path="contacts" element={<ContactList />} />
+          <Route path="profile" element={<AdminProfile />} />
         </Route>
       </Route>
       <Route path="*" element={<Error />}></Route>
-    </>
-  )
+    </>,
+  ),
 );
 
 const App = () => {
