@@ -19,7 +19,7 @@ const BestSaller = () => {
     },
   );
 
-  // Use API data if available, otherwise fallback to demo data
+  // Use 
   const products =
     productsData?.data?.length > 0
       ? [...productsData.data].sort(() => Math.random() - 0.5).slice(0, 4)
