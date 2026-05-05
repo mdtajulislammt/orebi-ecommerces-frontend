@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaFilter, FaSearch, FaTimes } from "react-icons/fa";
-import { MdAutoAwesome } from "react-icons/md";
 import { price as staticPriceData } from "../Demo Data/ProductCategoryData";
-import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
 import Flex from "../components/layout/Flex";
 import Pagination from "../components/layout/Pagination";
@@ -31,12 +29,18 @@ const Shop = () => {
   const buttonRef = useRef();
 
   const { data: productsData, isLoading: isProductsLoading } =
-    useGetProductsQuery({
-      page: currentPage,
-      limit: paginationItemShow,
-      search: search || undefined,
-      ...filters,
-    });
+    useGetProductsQuery(
+      {
+        page: currentPage,
+        limit: paginationItemShow,
+        search: search || undefined,
+        ...filters,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+        refetchOnReconnect: true,
+      },
+    );
 
   const { data: categoriesData } = useGetCategoriesQuery();
   const { data: brandsData } = useGetBrandsQuery();

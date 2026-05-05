@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import BreadCrump from "../components/layout/BreadCrump";
 import Container from "../components/layout/Container";
 import Heading from "../components/layout/Heading";
 import Paragraph from "../components/layout/Paragraph";
@@ -40,10 +39,10 @@ const Contact = () => {
     setStatus({ type: "", message: "" });
 
     try {
-      await submitContact(formData).unwrap();
+      const response = await submitContact(formData).unwrap();
       setStatus({
         type: "success",
-        message: "Message sent successfully! We will get back to you soon.",
+        message: response.message || "Message sent successfully! We will get back to you soon.",
       });
       setFormData({
         first_name: "",

@@ -20,14 +20,14 @@ const AboutHome = () => {
           >
             <div className="relative aspect-[1/0.8] overflow-hidden rounded-2xl">
               <img
-                src="/home_about.png"
-                alt="Orebi Philosophy"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                src="/orebi_tech.png"
+                alt="Orebi Technology"
+                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000"></div>
             </div>
             {/* Decorative element */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#F5F5F3] -z-10 rounded-full blur-3xl opacity-50"></div>
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-indigo-50 -z-10 rounded-full blur-3xl opacity-50"></div>
           </motion.div>
 
           {/* Text Side */}
@@ -39,17 +39,17 @@ const AboutHome = () => {
             className="w-full lg:w-1/2 space-y-8 sm:space-y-12"
           >
             <div className="space-y-4">
-              <span className="text-[10px] uppercase tracking-[6px] font-bold text-gray-400 block">
-                The Orebi Philosophy
+              <span className="text-[10px] uppercase tracking-[6px] font-bold text-indigo-600 block">
+                The Tech Vanguard
               </span>
               <Heading
-                text="Redefining the Essence of Modern Living"
+                text="Engineering the Future of Digital Lifestyle"
                 className="font-dm-sans text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] tracking-tighter text-primary-color"
               />
             </div>
 
             <Paragraph
-              text="We believe that minimalism isn't about having less—it's about making room for more of what matters. Our curation process is an architectural pursuit of form, function, and sustainable soul, designed for those who seek intention in every detail."
+              text="At Orebi, we don't just sell electronics; we curate the pinnacle of high-performance technology. From precision-engineered PC components to next-generation mobile devices, we provide the tools that empower your digital evolution."
               classname="text-secondary-color text-base md:text-lg leading-relaxed max-w-xl font-medium opacity-80"
             />
 
@@ -58,8 +58,8 @@ const AboutHome = () => {
                 to="/about"
                 className="inline-flex items-center gap-4 group"
               >
-                <span className="w-12 h-[1px] bg-black group-hover:w-20 transition-all duration-500"></span>
-                <span className="text-xs uppercase tracking-[4px] font-black group-hover:tracking-[6px] transition-all duration-500">
+                <span className="w-12 h-[1px] bg-indigo-600 group-hover:w-20 transition-all duration-500"></span>
+                <span className="text-xs uppercase tracking-[4px] font-black text-indigo-600 group-hover:tracking-[6px] transition-all duration-500">
                   Our Story
                 </span>
               </Link>
@@ -68,7 +68,7 @@ const AboutHome = () => {
             {/* Subtle Stats or Info */}
             <div className="grid grid-cols-2 gap-8 pt-8 sm:pt-12 border-t border-gray-100">
               <div>
-                <p className="text-2xl font-black tracking-tighter">
+                <p className="text-2xl font-black tracking-tighter text-gray-900">
                   Est. 2012
                 </p>
                 <p className="text-[9px] uppercase tracking-widest text-gray-400 mt-1 font-bold">
@@ -76,9 +76,11 @@ const AboutHome = () => {
                 </p>
               </div>
               <div>
-                <p className="text-2xl font-black tracking-tighter">Global</p>
+                <p className="text-2xl font-black tracking-tighter text-indigo-600">
+                  50k+
+                </p>
                 <p className="text-[9px] uppercase tracking-widest text-gray-400 mt-1 font-bold">
-                  Reach
+                  Digital Assets
                 </p>
               </div>
             </div>

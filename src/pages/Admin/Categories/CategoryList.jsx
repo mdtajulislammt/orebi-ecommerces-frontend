@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { MdEdit, MdDelete, MdAdd, MdClose, MdCheck } from 'react-icons/md';
-import { 
-  useGetCategoriesQuery, 
-  useCreateCategoryMutation, 
-  useUpdateCategoryMutation, 
-  useDeleteCategoryMutation 
-} from '../../../features/api/apiSlice';
-import { toast } from 'react-toastify';
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { MdAdd, MdCheck, MdClose, MdDelete, MdEdit } from "react-icons/md";
+import { toast } from "react-toastify";
+import {
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+  useUpdateCategoryMutation,
+} from "../../../features/api/apiSlice";
 
 const CategoryList = () => {
   const { data: categories, isLoading, isError } = useGetCategoriesQuery();
@@ -16,7 +18,7 @@ const CategoryList = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [formData, setFormData] = useState({ name: '' });
+  const [formData, setFormData] = useState({ name: "" });
 
   const handleOpenModal = (category = null) => {
     if (category) {
@@ -24,7 +26,7 @@ const CategoryList = () => {
       setFormData({ name: category.name });
     } else {
       setEditingCategory(null);
-      setFormData({ name: '' });
+      setFormData({ name: "" });
     }
     setIsModalOpen(true);
   };
@@ -34,41 +36,49 @@ const CategoryList = () => {
     try {
       if (editingCategory) {
         await updateCategory({ id: editingCategory.id, ...formData }).unwrap();
-        toast.success('Category updated successfully');
+        toast.success("Category updated successfully");
       } else {
         await createCategory(formData).unwrap();
-        toast.success('Category created successfully');
+        toast.success("Category created successfully");
       }
       setIsModalOpen(false);
     } catch (err) {
-      toast.error(err?.data?.message || 'Something went wrong');
+      toast.error(err?.data?.message || "Something went wrong");
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
+    if (window.confirm("Are you sure you want to delete this category?")) {
       try {
         await deleteCategory(id).unwrap();
-        toast.success('Category deleted successfully');
+        toast.success("Category deleted successfully");
       } catch (err) {
-        toast.error(err?.data?.message || 'Failed to delete category');
+        toast.error(err?.data?.message || "Failed to delete category");
       }
     }
   };
 
-  if (isLoading) return <div className="p-10 text-center">Loading categories...</div>;
-  if (isError) return <div className="p-10 text-center text-red-500">Error loading categories.</div>;
+  if (isLoading)
+    return <div className="p-10 text-center">Loading categories...</div>;
+  if (isError)
+    return (
+      <div className="p-10 text-center text-red-500">
+        Error loading categories.
+      </div>
+    );
 
   return (
     <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
         <div>
           <h2 className="text-2xl font-black text-gray-900">Categories</h2>
-          <p className="text-sm text-gray-500 mt-1">Manage your product classifications</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Manage your product classifications
+          </p>
         </div>
-        <button 
+        <button
           onClick={() => handleOpenModal()}
-          className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-800 transition-all shadow-lg active:scale-95"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-800 transition-all shadow-lg active:scale-95"
         >
           <MdAdd size={20} /> Add New Category
         </button>
@@ -76,27 +86,34 @@ const CategoryList = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-gray-400 text-xs uppercase tracking-widest border-b border-gray-100">
-              <th className="px-8 py-5 font-bold">Category Name</th>
-              <th className="px-8 py-5 font-bold">Slug</th>
-              <th className="px-8 py-5 font-bold">Products</th>
-              <th className="px-8 py-5 font-bold text-right">Actions</th>
+          <thead className="bg-indigo-600">
+            <tr className="text-white text-[11px] font-black uppercase tracking-[0.2em] border-b border-gray-100">
+              <th className="px-10 py-6">Category Identity</th>
+              <th className="px-10 py-6">Reference Slug</th>
+              <th className="px-10 py-6">Intelligence Count</th>
+              <th className="px-10 py-6 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {categories?.map((category) => (
-              <tr key={category.id} className="group hover:bg-gray-50 transition-all duration-300">
+              <tr
+                key={category.id}
+                className="group hover:bg-gray-50 transition-all duration-300"
+              >
                 <td className="px-8 py-5">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold text-lg">
                       {category.name.charAt(0)}
                     </div>
-                    <span className="font-bold text-gray-800 group-hover:text-black transition-colors">{category.name}</span>
+                    <span className="font-bold text-gray-800 group-hover:text-black transition-colors">
+                      {category.name}
+                    </span>
                   </div>
                 </td>
                 <td className="px-8 py-5">
-                  <span className="text-xs font-mono text-gray-400 bg-gray-100 px-2 py-1 rounded-md">{category.slug}</span>
+                  <span className="text-xs font-mono text-gray-400 bg-gray-100 px-2 py-1 rounded-md">
+                    {category.slug}
+                  </span>
                 </td>
                 <td className="px-8 py-5">
                   <span className="px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full border border-green-100">
@@ -105,14 +122,14 @@ const CategoryList = () => {
                 </td>
                 <td className="px-8 py-5 text-right">
                   <div className="flex justify-end gap-2 transition-all">
-                    <button 
+                    <button
                       onClick={() => handleOpenModal(category)}
                       className="p-2.5 text-indigo-600 bg-indigo-50/50 hover:bg-indigo-600 hover:text-white rounded-xl transition-all border border-indigo-100 shadow-sm"
                       title="Edit Category"
                     >
                       <MdEdit size={18} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDelete(category.id)}
                       className="p-2.5 text-rose-600 bg-rose-50/50 hover:bg-rose-600 hover:text-white rounded-xl transition-all border border-rose-100 shadow-sm"
                       title="Delete Category"
@@ -125,7 +142,10 @@ const CategoryList = () => {
             ))}
             {(!categories || categories.length === 0) && (
               <tr>
-                <td colSpan="4" className="px-8 py-20 text-center text-gray-400 font-medium">
+                <td
+                  colSpan="4"
+                  className="px-8 py-20 text-center text-gray-400 font-medium"
+                >
                   No categories found. Start by creating one!
                 </td>
               </tr>
@@ -135,51 +155,77 @@ const CategoryList = () => {
       </div>
 
       {/* Modern Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all">
-          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="text-xl font-black text-gray-900">
-                {editingCategory ? 'Edit Category' : 'Create New Category'}
-              </h3>
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-gray-200 rounded-full transition-all text-gray-500"
-              >
-                <MdClose size={24} />
-              </button>
-            </div>
-            <form onSubmit={handleSubmit} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Category Name</label>
-                <input 
-                  type="text" 
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Electronics, Fashion..."
-                  required
-                  autoFocus
-                  className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-black focus:outline-none transition-all bg-gray-50/50 focus:bg-white text-lg font-medium"
-                />
-              </div>
-              <div className="pt-4 flex gap-4">
-                <button 
-                  type="button"
+      {isModalOpen && createPortal(
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-gray-900/40 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-[3rem] w-full max-w-md overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.15)] border border-gray-100/50"
+            >
+              <div className="p-10 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+                <div>
+                  <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.25em] mb-1">
+                    Taxonomy Architecture
+                  </p>
+                  <h3 className="text-2xl font-black text-gray-900 tracking-tighter">
+                    {editingCategory ? "Modify Entity" : "Create Category"}
+                  </h3>
+                </div>
+                <button
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-6 py-4 rounded-2xl font-bold text-gray-500 hover:bg-gray-100 transition-all"
+                  className="w-12 h-12 flex items-center justify-center bg-white hover:bg-rose-50 text-gray-400 hover:text-rose-500 rounded-2xl transition-all shadow-sm border border-gray-100 active:scale-90"
                 >
-                  Cancel
-                </button>
-                <button 
-                  type="submit"
-                  className="flex-1 bg-black text-white px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition-all shadow-xl active:scale-95"
-                >
-                  <MdCheck size={20} /> {editingCategory ? 'Update' : 'Create'}
+                  <MdClose size={24} />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
+              <form onSubmit={handleSubmit} className="p-12 space-y-10">
+                <div className="space-y-4">
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] ml-1">
+                    Category Name
+                  </label>
+                  <div className="relative group">
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      placeholder="e.g. Electronics, Fashion..."
+                      required
+                      autoFocus
+                      className="w-full px-8 py-5 rounded-[1.5rem] border-none bg-gray-50 focus:bg-white ring-1 ring-gray-100 focus:ring-4 focus:ring-indigo-600/10 transition-all text-base font-black text-gray-900 placeholder:text-gray-300 shadow-inner"
+                    />
+                  </div>
+                </div>
+                <div className="pt-2 flex gap-5">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="flex-1 px-8 py-5 rounded-[1.5rem] font-black text-gray-400 hover:bg-gray-50 transition-all uppercase tracking-widest text-[10px]"
+                  >
+                    Discard
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 bg-indigo-600 text-white px-8 py-5 rounded-[1.5rem] font-black flex items-center justify-center gap-3 hover:bg-indigo-700 hover:shadow-2xl hover:shadow-indigo-200 transition-all active:scale-95 uppercase tracking-[0.2em] text-[10px]"
+                  >
+                    <MdCheck size={20} /> {editingCategory ? "Update" : "Establish"}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </AnimatePresence>
+        </div>,
+        document.body
       )}
     </div>
   );

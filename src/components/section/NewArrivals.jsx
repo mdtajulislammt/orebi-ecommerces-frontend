@@ -1,22 +1,36 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import { newarrivals } from "../../Demo Data/ProductCategoryData";
+import { useGetProductsQuery } from "../../features/api/apiSlice";
 import Container from "../layout/Container";
 import Heading from "../layout/Heading";
 import ProductCard from "../layout/ProductCard";
-import Slider from "react-slick";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { useGetProductsQuery } from "../../features/api/apiSlice";
-import { Link } from "react-router-dom";
-import { newarrivals } from "../../Demo Data/ProductCategoryData";
 
 const NewArrivals = () => {
-  const { data: productsData, isLoading, isError } = useGetProductsQuery();
-  
+  const {
+    data: productsData,
+    isLoading,
+    isError,
+  } = useGetProductsQuery(
+    {
+      limit: 20,
+      page: 1,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    },
+  );
+
   // Use API data if available, otherwise fallback to demo data
-  const products = productsData?.data?.length > 0 
-    ? productsData.data 
-    : (isError || (!isLoading && productsData?.data?.length === 0)) 
-      ? newarrivals 
-      : [];
+  const products =
+    productsData?.data?.length > 0
+      ? productsData.data
+      : isError || (!isLoading && productsData?.data?.length === 0)
+        ? newarrivals
+        : [];
 
   let sliderRef = useRef(null);
 
@@ -78,7 +92,10 @@ const NewArrivals = () => {
             text="New Arrivals"
             className="font-bold font-dm-sans text-[20px] sm:text-[24px] md:text-[28px] lg:text-[34px] xl:text-[38px] capitalize text-[#262626]"
           />
-          <Link to="/shop" className="text-[#6D6D6D] hover:text-[#262626] transition-colors duration-300 text-sm md:text-base font-medium border-b border-transparent hover:border-[#262626]">
+          <Link
+            to="/shop"
+            className="text-[#6D6D6D] hover:text-[#262626] transition-colors duration-300 text-sm md:text-base font-medium border-b border-transparent hover:border-[#262626]"
+          >
             View All
           </Link>
         </div>
@@ -90,16 +107,28 @@ const NewArrivals = () => {
             {...settings}
           >
             {products.map((item, index) => {
-              const imageSrc = item.thumbnail || (item.images && item.images[0]) || item.productImageSrc;
+              const imageSrc =
+                item.thumbnail ||
+                (item.images && item.images[0]) ||
+                item.productImageSrc;
               const productName = item.name || item.productName;
-              const productPrice = item.price 
-                ? (typeof item.price === 'string' && item.price.startsWith('$') ? item.price : `$${item.price}`) 
+              const productPrice = item.price
+                ? typeof item.price === "string" && item.price.startsWith("$")
+                  ? item.price
+                  : `$${item.price}`
                 : item.productPrice;
-              const productColor = (item.colors && item.colors[0]) || item.color || item.productColor;
+              const productColor =
+                (item.colors && item.colors[0]) ||
+                item.color ||
+                item.productColor;
 
               return (
                 <div key={item.id || item._id || index} className="px-2">
-                  <Link to={item.slug ? `/product/${item.slug}` : `/product/${index}`}>
+                  <Link
+                    to={
+                      item.slug ? `/product/${item.slug}` : `/product/${index}`
+                    }
+                  >
                     <ProductCard
                       className={"cursor-pointer"}
                       productImageLink={imageSrc}
@@ -113,11 +142,8 @@ const NewArrivals = () => {
                 </div>
               );
             })}
-
-
-
           </Slider>
-          
+
           <button
             className="absolute w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full left-[-15px] md:left-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
             onClick={previous}
@@ -137,5 +163,3 @@ const NewArrivals = () => {
 };
 
 export default NewArrivals;
-
-

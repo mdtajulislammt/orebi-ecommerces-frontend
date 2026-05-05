@@ -1,233 +1,255 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setCredentials } from '../auth/authSlice';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setCredentials } from "../auth/authSlice";
 
 // Create a generic API slice
 export const apiSlice = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001',
+    baseUrl: import.meta.env.VITE_BACKEND_URL || "http://localhost:5001",
     prepareHeaders: (headers, { getState }) => {
       // Get token from state if it exists
       const token = getState().auth?.token;
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set("authorization", `Bearer ${token}`);
       }
       return headers;
     },
   }),
-  tagTypes: ['User', 'Product', 'Order', 'Review', 'Brand', 'Category', 'Contact', 'Newsletter'],
+  tagTypes: [
+    "User",
+    "Product",
+    "Order",
+    "Review",
+    "Brand",
+    "Category",
+    "Contact",
+    "Newsletter",
+  ],
   endpoints: (builder) => ({
     // Auth Endpoints
     register: builder.mutation({
       query: (data) => ({
-        url: '/api/auth/register',
-        method: 'POST',
+        url: "/api/auth/register",
+        method: "POST",
         body: data,
       }),
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: '/api/auth/login',
-        method: 'POST',
+        url: "/api/auth/login",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     getMe: builder.query({
-      query: () => '/api/auth/me',
-      providesTags: ['User'],
+      query: () => "/api/auth/me",
+      providesTags: ["User"],
       async onQueryStarted(arg, { dispatch, getState, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           const currentToken = getState().auth?.token;
-          dispatch(setCredentials({ user: data.data || data, token: currentToken }));
+          dispatch(
+            setCredentials({ user: data.data || data, token: currentToken }),
+          );
         } catch (err) {
-          console.error('Failed to fetch user profile:', err);
+          console.error("Failed to fetch user profile:", err);
         }
       },
     }),
     updateUser: builder.mutation({
       query: (data) => ({
-        url: '/api/auth/update',
-        method: 'PATCH',
+        url: "/api/auth/update",
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
 
     // Products Endpoints
     getProducts: builder.query({
       query: (params) => ({
-        url: '/api/products/all',
+        url: "/api/products/all",
         params,
       }),
-      providesTags: ['Product'],
+      providesTags: ["Product"],
     }),
     getProduct: builder.query({
       query: (idOrSlug) => `/api/products/${idOrSlug}`,
-      providesTags: (result, error, idOrSlug) => [{ type: 'Product', id: idOrSlug }],
+      providesTags: (result, error, idOrSlug) => [
+        { type: "Product", id: idOrSlug },
+      ],
     }),
     createProduct: builder.mutation({
       query: (data) => ({
-        url: '/api/products',
-        method: 'POST',
+        url: "/api/products",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Product'],
+      invalidatesTags: ["Product"],
     }),
     updateProduct: builder.mutation({
       query: ({ id, data }) => ({
         url: `/api/products/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['Product'],
+      invalidatesTags: ["Product"],
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/api/products/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Product'],
+      invalidatesTags: ["Product"],
     }),
 
     // Reviews Endpoints
     addReview: builder.mutation({
       query: (data) => ({
-        url: '/api/reviews',
-        method: 'POST',
+        url: "/api/reviews",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Review', 'Product'],
+      invalidatesTags: ["Review", "Product"],
     }),
     getProductReviews: builder.query({
       query: (productId) => `/api/reviews/product/${productId}`,
-      providesTags: (result, error, productId) => [{ type: 'Review', id: productId }],
+      providesTags: (result, error, productId) => [
+        { type: "Review", id: productId },
+      ],
     }),
 
     // Brand Endpoints
     getBrands: builder.query({
-      query: () => '/api/brand/brands',
-      providesTags: ['Brand'],
+      query: () => "/api/brand/brands",
+      providesTags: ["Brand"],
     }),
     createBrand: builder.mutation({
       query: (data) => ({
-        url: '/api/brand/brands',
-        method: 'POST',
+        url: "/api/brand/brands",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Brand'],
+      invalidatesTags: ["Brand"],
     }),
     updateBrand: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/api/brand/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['Brand'],
+      invalidatesTags: ["Brand"],
     }),
     deleteBrand: builder.mutation({
       query: (id) => ({
         url: `/api/brand/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Brand'],
+      invalidatesTags: ["Brand"],
     }),
 
     // Categories Endpoints
     getCategories: builder.query({
-      query: () => '/api/categories',
-      providesTags: ['Category'],
+      query: () => "/api/categories",
+      providesTags: ["Category"],
     }),
     createCategory: builder.mutation({
       query: (data) => ({
-        url: '/api/categories',
-        method: 'POST',
+        url: "/api/categories",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Category'],
+      invalidatesTags: ["Category"],
     }),
     updateCategory: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/api/categories/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['Category'],
+      invalidatesTags: ["Category"],
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({
         url: `/api/categories/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Category'],
+      invalidatesTags: ["Category"],
     }),
 
     // Orders Endpoints
     buyProduct: builder.mutation({
       query: (data) => ({
-        url: '/api/orders/buy',
-        method: 'POST',
+        url: "/api/orders/buy",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Order', 'User', 'Product'],
+      invalidatesTags: ["Order", "User", "Product"],
     }),
     getAllOrders: builder.query({
       query: (params) => ({
-        url: '/api/orders/all-order',
+        url: "/api/orders/all-order",
         params,
       }),
-      providesTags: ['Order'],
+      providesTags: ["Order"],
+    }),
+    getOrder: builder.query({
+      query: (id) => `/api/orders/single/${id}`,
+      providesTags: (result, error, id) => [{ type: "Order", id }],
     }),
     getMyOrders: builder.query({
-      query: () => '/api/orders/my-orders',
-      providesTags: ['Order'],
+      query: () => "/api/orders/my-orders",
+      providesTags: ["Order"],
     }),
 
     // Contact Endpoints
     submitContact: builder.mutation({
       query: (data) => ({
-        url: '/api/admin/contact',
-        method: 'POST',
+        url: "/api/admin/contact",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Contact'],
+      invalidatesTags: ["Contact"],
     }),
     getContacts: builder.query({
       query: (params) => ({
-        url: '/api/admin/contact',
+        url: "/api/admin/contact/all",
         params,
       }),
-      providesTags: ['Contact'],
+      providesTags: ["Contact"],
     }),
     getContact: builder.query({
       query: (id) => `/api/admin/contact/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Contact', id }],
+      providesTags: (result, error, id) => [{ type: "Contact", id }],
     }),
     updateContact: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/api/admin/contact/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => ['Contact', { type: 'Contact', id }],
+      invalidatesTags: (result, error, { id }) => [
+        "Contact",
+        { type: "Contact", id },
+      ],
     }),
     deleteContact: builder.mutation({
       query: (id) => ({
         url: `/api/admin/contact/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Contact'],
+      invalidatesTags: ["Contact"],
     }),
 
     // Newsletter Endpoints
     subscribeNewsletter: builder.mutation({
       query: (data) => ({
-        url: '/api/newsletter/subscribe',
-        method: 'POST',
+        url: "/api/newsletter/subscribe",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Newsletter'],
+      invalidatesTags: ["Newsletter"],
     }),
   }),
 });
@@ -254,6 +276,7 @@ export const {
   useDeleteCategoryMutation,
   useBuyProductMutation,
   useGetAllOrdersQuery,
+  useGetOrderQuery,
   useGetMyOrdersQuery,
   useSubmitContactMutation,
   useGetContactsQuery,
