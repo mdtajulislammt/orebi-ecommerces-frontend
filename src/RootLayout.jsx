@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "./components/section/Footer";
 import Navbar from "./components/section/Navbar";
 
@@ -12,12 +13,21 @@ const ScrollToTop = () => {
 };
 
 const RootLayout = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo && userInfo.type === "ADMIN") {
+      navigate("/admin");
+    }
+  }, [userInfo, navigate]);
+
   return (
     <>
       <ScrollToTop />
       <Navbar />
       <Outlet />
-      <Footer/>
+      <Footer />
     </>
   );
 };

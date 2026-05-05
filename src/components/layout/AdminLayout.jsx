@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
+import { useGetMeQuery } from '../../features/api/apiSlice';
 import { 
   MdDashboard, 
   MdInventory, 
@@ -20,7 +21,10 @@ import {
 const AdminLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
+  const { data: userData } = useGetMeQuery();
+
+  const user = userData?.data || userInfo;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -46,7 +50,7 @@ const AdminLayout = () => {
     { name: 'Profile', path: '/admin/profile', icon: <MdPerson />, color: 'text-cyan-500' },
   ];
 
-  const adminName = user?.name || user?.data?.name || 'Admin User';
+  const adminName = user?.name || 'Admin User';
   const adminInitial = adminName.charAt(0).toUpperCase();
 
   return (
@@ -126,18 +130,19 @@ const AdminLayout = () => {
           </div>
           
           <div className="flex items-center gap-6">
-            <button className="relative p-3 bg-gray-50 text-gray-400 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-gray-100">
-               <MdNotificationsNone size={24} />
-               <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
-            </button>
+            
             
             <div className="flex items-center gap-4 pl-6 border-l border-gray-100 group cursor-pointer" onClick={() => navigate('/admin/profile')}>
               <div className="text-right">
                 <p className="text-sm font-black text-gray-900 mb-0.5">{adminName}</p>
                 <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded-md inline-block">Active Now</p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-xl shadow-indigo-100 ring-4 ring-indigo-50">
-                {adminInitial}
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-xl shadow-indigo-100 ring-4 ring-indigo-50 overflow-hidden">
+                {user?.avatar_url ? (
+                  <img src={user.avatar_url} alt={adminName} className="w-full h-full object-cover" />
+                ) : (
+                  adminInitial
+                )}
               </div>
             </div>
           </div>

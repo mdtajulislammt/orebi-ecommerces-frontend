@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiOutlineLockClosed,
   HiOutlineMail,
   HiOutlinePhone,
   HiOutlineUser,
 } from "react-icons/hi";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import signupBanner from "../assets/tech_banner_2.png";
@@ -15,6 +16,7 @@ import CusButton from "../components/layout/CusButton";
 import { useRegisterMutation } from "../features/api/apiSlice";
 
 const SignUp = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     name: "",
     phone_number: "",
@@ -24,6 +26,16 @@ const SignUp = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo) {
+      if (userInfo.type === "ADMIN") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [userInfo, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
