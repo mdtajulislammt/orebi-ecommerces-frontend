@@ -90,7 +90,7 @@ const Banner = () => {
             <div
               style={{
                 position: "absolute",
-                left: "8%",
+                left: "4%",
                 top: "50%",
                 transform: "translateY(-50%)",
               }}
@@ -130,7 +130,7 @@ const Banner = () => {
             <div
               style={{
                 position: "absolute",
-                left: "5%",
+                left: "2%",
                 top: "50%",
                 transform: "translateY(-50%)",
               }}
@@ -143,16 +143,16 @@ const Banner = () => {
               style={
                 i === dotActive
                   ? {
-                      width: "20px",
+                      width: "18px",
                       color: "#262626",
                       borderRight: "2px #262626 solid",
-                      padding: "5px 0",
+                      padding: "4px 0",
                       fontSize: "10px",
                     }
                   : {
-                      width: "20px",
+                      width: "18px",
                       borderRight: "2px white solid",
-                      padding: "5px 0",
+                      padding: "4px 0",
                       fontSize: "10px",
                       color: "transparent",
                     }
@@ -173,8 +173,8 @@ const Banner = () => {
           {bannerData.map((item, index) => (
             <div key={index} className="outline-none">
               <Container>
-                <div className="flex flex-col md:flex-row items-center justify-between py-5 sm:py-10 md:py-15 lg:py-20 gap-y-10 md:gap-y-0 px-14 sm:px-20 md:px-28">
-                  <div className="w-full md:w-[70%] order-2 md:order-1 px-4 md:px-0 text-center md:text-left">
+                <div className="flex flex-col md:flex-row items-center justify-between py-5 sm:py-10 md:py-15 lg:py-20 gap-y-10 md:gap-y-0 px-6 sm:px-10 md:px-28">
+                  <div className="w-full md:w-[60%] lg:w-[70%] order-2 md:order-1 px-4 md:px-0 text-center md:text-left">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-[#262626] mb-8 md:mb-10 leading-[1.05] animate-fadeIn">
                       {item.title}
                     </h1>
@@ -188,7 +188,7 @@ const Banner = () => {
                       {item.btnText}
                     </Link>
                   </div>
-                  <div className="w-full md:w-[45%] order-1 md:order-2 flex justify-center items-center">
+                  <div className="w-full md:w-[40%] lg:w-[45%] order-1 md:order-2 flex justify-center items-center">
                     <div className="w-[90%] sm:w-[80%] md:w-full max-w-[700px] animate-fadeIn">
                       <Image
                         className="w-full h-auto drop-shadow-3xl transition-transform duration-700 hover:scale-105 select-none"
