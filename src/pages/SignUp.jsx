@@ -23,6 +23,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
 
   const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
@@ -39,16 +40,28 @@ const SignUp = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    // Clear error when user starts typing
+    if (errors[e.target.id]) {
+      setErrors({ ...errors, [e.target.id]: "" });
+    }
   };
 
   const handleSignUp = async () => {
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.phone_number
-    ) {
-      toast.error("Please fill in all fields");
+    const newErrors = {};
+
+    if (!formData.name) newErrors.name = "Full Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.phone_number)
+      newErrors.phone_number = "Phone number is required";
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -197,9 +210,22 @@ const SignUp = () => {
                       placeholder={input.placeholder}
                       value={formData[input.id]}
                       onChange={handleChange}
-                      className="w-full border-b-[1.5px] border-gray-100 py-3 pl-8 font-dm-sans text-lg outline-none transition-all focus:border-black placeholder:text-gray-200"
+                      className={`w-full border-b-[1.5px] py-3 pl-8 font-dm-sans text-lg outline-none transition-all placeholder:text-gray-200 ${
+                        errors[input.id]
+                          ? "border-red-500 focus:border-red-500"
+                          : "border-gray-100 focus:border-black"
+                      }`}
                     />
                   </div>
+                  {errors[input.id] && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-xs font-medium text-red-500"
+                    >
+                      {errors[input.id]}
+                    </motion.p>
+                  )}
                 </motion.div>
               ))}
             </div>
