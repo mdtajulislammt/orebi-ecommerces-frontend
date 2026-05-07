@@ -9,7 +9,7 @@ const Additionalinfo = () => {
   return (
     <section className="border-b border-[#F0F0F0] py-4 sm:py-6 md:py-8 bg-white">
       <Container>
-        <Flex className={"justify-between items-center"}>
+        <Flex className={"justify-between items-center flex-wrap gap-y-4 md:gap-y-0"}>
           <Flex className={"items-center gap-x-2 sm:gap-x-3 md:gap-x-4 group cursor-default"}>
             <RiShieldCheckLine className="text-lg sm:text-xl md:text-2xl text-[#262626] transition-transform duration-300 group-hover:scale-110" />
             <p className="font-dm-sans text-[12px] sm:text-[14px] md:text-[16px] text-[#6d6d6d] font-medium">

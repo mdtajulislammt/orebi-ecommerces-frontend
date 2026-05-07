@@ -51,7 +51,7 @@ const BestSaller = () => {
             View All
           </Link>
         </div>
-        <Flex className={"justify-between gap-y-8 flex-wrap"}>
+        <Flex className={"flex-wrap gap-y-8 justify-center sm:justify-between"}>
           {products.map((item, index) => {
             const imageSrc =
               item.thumbnail ||

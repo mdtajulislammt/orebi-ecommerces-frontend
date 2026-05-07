@@ -145,13 +145,13 @@ const NewArrivals = () => {
           </Slider>
 
           <button
-            className="absolute w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full left-[-15px] md:left-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
+            className="absolute w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full left-[-15px] md:left-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
             onClick={previous}
           >
             <FaChevronLeft className="text-white text-lg md:text-xl" />
           </button>
           <button
-            className="absolute w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full right-[-15px] md:right-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
+            className="absolute w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full right-[-15px] md:right-[-25px] bg-[#979797] hover:bg-[#262626] transition-all duration-300 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/newarrivals:opacity-100"
             onClick={next}
           >
             <FaChevronRight className="text-white text-lg md:text-xl" />

@@ -1,9 +1,22 @@
 import React, { useMemo } from 'react';
 import { useGetAllOrdersQuery, useGetProductsQuery } from '../../features/api/apiSlice';
+/* 
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+*/
+const AreaChart = () => null;
+const Area = () => null;
+const XAxis = () => null;
+const YAxis = () => null;
+const CartesianGrid = () => null;
+const Tooltip = () => null;
+const ResponsiveContainer = ({ children }) => <div>{children}</div>;
+const PieChart = () => null;
+const Pie = () => null;
+const Cell = () => null;
+const Legend = () => null;
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdTrendingUp, MdShoppingCart, MdInventory, MdPeople, MdArrowForward, MdLayers } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
