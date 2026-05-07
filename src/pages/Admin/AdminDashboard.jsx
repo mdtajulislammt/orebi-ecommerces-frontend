@@ -1,22 +1,9 @@
 import React, { useMemo } from 'react';
 import { useGetAllOrdersQuery, useGetProductsQuery } from '../../features/api/apiSlice';
-/* 
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-*/
-const AreaChart = () => null;
-const Area = () => null;
-const XAxis = () => null;
-const YAxis = () => null;
-const CartesianGrid = () => null;
-const Tooltip = () => null;
-const ResponsiveContainer = ({ children }) => <div>{children}</div>;
-const PieChart = () => null;
-const Pie = () => null;
-const Cell = () => null;
-const Legend = () => null;
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdTrendingUp, MdShoppingCart, MdInventory, MdPeople, MdArrowForward, MdLayers } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -32,41 +19,50 @@ const AdminDashboard = () => {
     const uniqueCustomers = new Set();
     const salesByDate = {};
 
+    // Generate last 7 days keys and labels
     const today = new Date();
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
+      const key = d.toISOString().split('T')[0];
       const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      salesByDate[label] = 0;
+      salesByDate[key] = { label, sales: 0 };
     }
 
-    if (ordersData?.data) {
-      ordersData.data.forEach((order) => {
-        const dateStr = order.created_at || order.createdAt;
-        if (!dateStr) return;
-        const date = new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        
-        if (order.status?.toLowerCase() !== 'cancelled') {
-          const amount = Number(order.total_amount);
-          if (!isNaN(amount)) {
-            totalSales += amount;
-            salesByDate[date] = (salesByDate[date] || 0) + amount;
-          }
+    const orders = ordersData?.data || (Array.isArray(ordersData) ? ordersData : []);
+    
+    orders.forEach((order) => {
+      const dateStr = order.created_at || order.createdAt;
+      if (!dateStr) return;
+      
+      const orderDate = new Date(dateStr);
+      const orderKey = orderDate.toISOString().split('T')[0];
+      
+      if (order.status?.toLowerCase() !== 'cancelled') {
+        const amount = Number(order.total_amount);
+        if (!isNaN(amount) && salesByDate[orderKey]) {
+          totalSales += amount;
+          salesByDate[orderKey].sales += amount;
         }
-        if (['pending', 'processing'].includes(order.status?.toLowerCase())) activeOrders += 1;
-        const customerId = order.user?._id || order.user?.email || order.user?.id;
-        if (customerId) uniqueCustomers.add(customerId);
-      });
-    }
+      }
+      
+      if (['pending', 'processing'].includes(order.status?.toLowerCase())) activeOrders += 1;
+      const customerId = order.user?._id || order.user?.email || order.user?.id;
+      if (customerId) uniqueCustomers.add(customerId);
+    });
 
-    const totalProducts = productsData?.meta?.total || productsData?.meta?.total_items || productsData?.data?.length || 0;
+    const products = productsData?.data || (Array.isArray(productsData) ? productsData : []);
+    const totalProducts = productsData?.meta?.total || productsData?.meta?.total_items || products.length || 0;
     const totalCustomers = uniqueCustomers.size;
-    const totalOrders = ordersData?.meta?.total || ordersData?.meta?.total_items || ordersData?.data?.length || 0;
+    const totalOrders = ordersData?.meta?.total || ordersData?.meta?.total_items || orders.length || 0;
 
+    // Format and sort chart data
     const formattedSalesData = Object.keys(salesByDate)
-      .map(date => ({ name: date, sales: salesByDate[date] }))
-      .sort((a, b) => new Date(a.name) - new Date(b.name))
-      .slice(-7);
+      .sort()
+      .map(key => ({ 
+        name: salesByDate[key].label, 
+        sales: salesByDate[key].sales 
+      }));
 
     const formattedPieData = [
       { name: 'Total Orders', value: totalOrders, color: '#6366f1' },
