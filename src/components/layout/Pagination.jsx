@@ -31,7 +31,7 @@ function Items({ currentItems }) {
               productImageLink={item.thumbnail || item.productImageSrc}
               tag={item.discount_price > 0 ? `${Math.round(((Number(item.price) - Number(item.discount_price)) / Number(item.price)) * 100)}% OFF` : null}
               productName={item.name || item.productName}
-              productPrice={`$${item.discount_price > 0 ? item.discount_price : item.price}`}
+              productPrice={`৳${item.discount_price > 0 ? item.discount_price : item.price}`}
               productColor={item.colors?.[0] || item.productColor}
               id={item.id}
             />

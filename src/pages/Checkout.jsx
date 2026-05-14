@@ -48,7 +48,7 @@ const Checkout = () => {
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
     const price = typeof item.productPrice === 'string' 
-      ? parseFloat(item.productPrice.replace("$", "")) 
+      ? parseFloat(item.productPrice.replace("৳", "").replace("$", "")) 
       : item.productPrice;
     return total + price * item.quantity;
   }, 0) : 0;
@@ -252,7 +252,7 @@ const Checkout = () => {
                       </div>
                     </div>
                     <p className="font-bold text-sm">
-                      ${(parseFloat(typeof item.productPrice === 'string' ? item.productPrice.replace("$", "") : item.productPrice) * item.quantity).toFixed(2)}
+                      ৳{(parseFloat(typeof item.productPrice === 'string' ? item.productPrice.replace("৳", "").replace("$", "") : item.productPrice) * item.quantity).toFixed(2)}
                     </p>
                   </Flex>
                 ))}
@@ -261,7 +261,7 @@ const Checkout = () => {
               <div className="space-y-4 border-t pt-6">
                 <Flex className="justify-between items-center text-gray-500">
                   <span className="font-medium">Subtotal</span>
-                  <span className="font-bold">${totalAmount.toFixed(2)}</span>
+                  <span className="font-bold">৳{totalAmount.toFixed(2)}</span>
                 </Flex>
                 <Flex className="justify-between items-center text-gray-500">
                   <span className="font-medium">Shipping</span>
@@ -270,7 +270,7 @@ const Checkout = () => {
                 <div className="h-[1px] bg-gray-100 w-full my-2"></div>
                 <Flex className="justify-between items-center text-primary-color">
                   <span className="font-black text-lg uppercase">Total</span>
-                  <span className="font-black text-2xl">${totalAmount.toFixed(2)}</span>
+                  <span className="font-black text-2xl">৳{totalAmount.toFixed(2)}</span>
                 </Flex>
               </div>
               {/* Payment Methods Selection */}

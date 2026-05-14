@@ -230,11 +230,11 @@ const Products = () => {
               <div className="bg-white p-7 rounded-[2rem] shadow-xl shadow-gray-200/30 border border-gray-100/50 space-y-8">
                 <div className="flex items-center gap-4">
                   <span className="text-3xl font-black text-black tracking-tight">
-                    ${product.discount_price > 0 ? product.discount_price : product.price}
+                    ৳{product.discount_price > 0 ? product.discount_price : product.price}
                   </span>
                   {product.discount_price > 0 && (
                     <span className="text-lg text-gray-300 line-through font-bold">
-                      ${product.price}
+                      ৳{product.price}
                     </span>
                   )}
                 </div>

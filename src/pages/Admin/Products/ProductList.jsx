@@ -77,7 +77,7 @@ const ProductList = () => {
                   
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="font-bold">${product.price}</span>
+                      <span className="font-bold">৳{product.price}</span>
                       <span className="text-xs text-yellow-600">★ {product.avg_rating} ({product.total_reviews})</span>
                     </div>
                   </td>

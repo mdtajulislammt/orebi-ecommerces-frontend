@@ -163,7 +163,7 @@ const EditProduct = () => {
           <div className="flex flex-wrap gap-4 justify-center md:justify-start">
              <div className="flex flex-col">
                 <span className="text-xs text-blue-600/60 font-bold">Price</span>
-                <span className="font-black text-lg text-blue-900">${productData?.data?.price}</span>
+                <span className="font-black text-lg text-blue-900">৳{productData?.data?.price}</span>
              </div>
              <div className="h-8 w-[1px] bg-blue-200"></div>
              <div className="flex flex-col">

@@ -362,7 +362,7 @@ const MyAccount = () => {
                                 </td>
                                 <td className="px-8 py-6 text-right">
                                   <span className="text-base font-black text-primary-color">
-                                    ${Number(order.total_amount).toFixed(2)}
+                                    ৳{Number(order.total_amount).toFixed(2)}
                                   </span>
                                 </td>
                               </tr>
@@ -409,7 +409,7 @@ const MyAccount = () => {
                                 </p>
                               </div>
                               <p className="text-lg font-black text-primary-color">
-                                ${Number(order.total_amount).toFixed(2)}
+                                ৳{Number(order.total_amount).toFixed(2)}
                               </p>
                             </div>
                           </div>

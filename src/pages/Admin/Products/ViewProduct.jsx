@@ -139,9 +139,9 @@ const ViewProduct = () => {
               <div>
                 <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Price</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <p className="text-3xl font-black text-black">${product.price}</p>
+                  <p className="text-3xl font-black text-black">৳{product.price}</p>
                   {product.discount_price && (
-                    <p className="text-lg text-gray-400 line-through">${parseFloat(product.price) + parseFloat(product.discount_price)}</p>
+                    <p className="text-lg text-gray-400 line-through">৳{parseFloat(product.price) + parseFloat(product.discount_price)}</p>
                   )}
                 </div>
               </div>

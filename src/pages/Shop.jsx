@@ -79,7 +79,7 @@ const Shop = () => {
   };
 
   const handlePriceSelect = (item) => {
-    const priceStr = item.name.replace(/\$/g, "");
+    const priceStr = item.name.replace(/\৳/g, "").replace(/\$/g, "");
     if (priceStr.includes("-")) {
       const parts = priceStr.split("-").map((p) => p.trim());
       setFilters((prev) => ({
@@ -128,7 +128,7 @@ const Shop = () => {
       return brandsData?.data?.find((b) => b.id === value)?.name || "Brand";
     if (key === "color") return value;
     if (key === "price")
-      return `$${filters.min_price}${filters.max_price ? ` - $${filters.max_price}` : "+"}`;
+      return `৳${filters.min_price}${filters.max_price ? ` - ৳${filters.max_price}` : "+"}`;
     return value;
   };
 

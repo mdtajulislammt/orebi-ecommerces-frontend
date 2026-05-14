@@ -8,8 +8,11 @@ import {
   HiOutlineSparkles,
   HiOutlineTruck,
 } from "react-icons/hi2";
+import jonyImg from "../assets/team/jony.jpeg";
+import nayeemImg from "../assets/team/nyeem.jpg";
+import razaImg from "../assets/team/raza.jpg";
+import shantoImg from "../assets/team/santo.jpeg";
 import Container from "../components/layout/Container";
-import Flex from "../components/layout/Flex";
 import Heading from "../components/layout/Heading";
 import Paragraph from "../components/layout/Paragraph";
 
@@ -44,10 +47,10 @@ const staggerContainer = {
 
 const cardHover = {
   initial: { y: 0, scale: 1 },
-  hover: { 
-    y: -15, 
+  hover: {
+    y: -15,
     scale: 1.02,
-    transition: { duration: 0.4, ease: "easeOut" }
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 };
 
@@ -87,7 +90,7 @@ const features = [
     icon: <HiOutlineTruck className="text-2xl" />,
     title: "Free Shipping",
     description:
-      "Complimentary shipping on all orders over $50, delivered right to your doorstep.",
+      "Complimentary shipping on all orders over ৳50, delivered right to your doorstep.",
   },
   {
     icon: <HiOutlineShieldCheck className="text-2xl" />,
@@ -115,25 +118,25 @@ const team = [
     name: "Md. Rakibul Hasan Raza",
     id: "232-0119-028",
     role: "Web Developer (Team Leader)",
-    image: "/src/assets/team/raza.jpg",
+    image: razaImg,
   },
   {
     name: "Md. Rahaduzzaman Jony",
     id: "233-0048-028",
     role: "Front-end Developer",
-    image: "/src/assets/team/jony.jpeg",
+    image: jonyImg,
   },
   {
     name: "Md. Alamgir Hossain Shanto",
     id: "233-0049-028",
     role: "Front-end Developer",
-    image: "/src/assets/team/santo.jpeg",
+    image: shantoImg,
   },
   {
     name: "Md. Nazmul Hasan Nayeem",
     id: "233-0065-028",
     role: "Front-end Developer",
-    image: "/src/assets/team/nyeem.jpg",
+    image: nayeemImg,
   },
 ];
 
@@ -178,19 +181,20 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
               >
-                <div className="flex items-center justify-center gap-2 text-white/50 text-[10px] uppercase tracking-[6px] mb-6">
+                <div className="flex items-center justify-center gap-2 text-white/50 text-sm uppercase tracking-[6px] mb-6">
                   <span>Home</span>
                   <span className="w-1 h-1 bg-white/30 rounded-full"></span>
                   <span className="text-white/80">About Us</span>
                 </div>
-                <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-black tracking-[-0.05em] uppercase leading-none mb-4">
-                  About <span className="text-white/20 italic font-light">Orebi</span>
+                <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-black tracking-[-0.05em] uppercase leading-none mb-4">
+                  About{" "}
+                  <span className="text-white/20 italic font-light">Orebi</span>
                 </h1>
                 <div className="h-[2px] w-20 bg-white/30 mx-auto mt-6 mb-8"></div>
-                <p className="text-white/50 text-[10px] md:text-xs max-w-lg mx-auto leading-relaxed font-dm-sans uppercase tracking-[5px] font-bold">
+                <p className="text-white/50 text-sm md:text-base max-w-lg mx-auto leading-relaxed font-dm-sans uppercase tracking-[5px] font-bold">
                   Engineering the Future of Digital Lifestyle.
                 </p>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1, duration: 1 }}
@@ -208,25 +212,31 @@ const About = () => {
         {/* ── Modern Mission Section (Split Layout) ── */}
         <section className="py-16 lg:py-24">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-start">
-            <motion.div 
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
               className="lg:w-1/2 sticky top-32"
             >
-              <span className="text-primary-color text-[10px] font-black uppercase tracking-[8px] mb-8 block">
+              <span className="text-primary-color text-sm font-black uppercase tracking-[8px] mb-8 block">
                 The Tech Vanguard
               </span>
               <h2 className="font-dm-sans text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black leading-[0.95] tracking-tighter text-primary-color mb-8">
-                Internationally recognized for <span className="text-secondary-color font-light italic">minimalism</span> and innovation.
+                Internationally recognized for{" "}
+                <span className="text-secondary-color font-light italic">
+                  minimalism
+                </span>{" "}
+                and innovation.
               </h2>
               <div className="flex items-center gap-6 group cursor-pointer">
                 <div className="w-16 h-[1px] bg-black group-hover:w-24 transition-all duration-700"></div>
-                <span className="text-[10px] font-black uppercase tracking-[4px]">Scroll to Explore</span>
+                <span className="text-sm font-black uppercase tracking-[4px]">
+                  Scroll to Explore
+                </span>
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -237,21 +247,21 @@ const About = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
                 <Paragraph
                   text="At Orebi, we operate at the delicate intersection of technical heritage and digital progress. Developed as a comprehensive research project by Computer Science students, our curation process is rigorous, selecting only high-performance IT components that honor the foundations of engineering while fearlessly embracing the future."
-                  classname="text-primary-color text-base md:text-lg lg:text-xl leading-relaxed font-bold tracking-tight mb-6"
+                  classname="text-primary-color text-xl md:text-2xl lg:text-3xl leading-relaxed font-bold tracking-tight mb-6"
                 />
                 <Paragraph
                   text="We are a community of developers dedicated to the lasting power of intentional, functional design. Our mission is to bridge the gap between high-end computing and everyday accessibility."
-                  classname="text-secondary-color text-sm md:text-base leading-relaxed opacity-70 font-medium"
+                  classname="text-secondary-color text-lg md:text-xl leading-relaxed opacity-70 font-medium"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {corePillars.slice(0, 2).map((pillar, i) => (
                   <div key={i} className="space-y-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[5px] text-primary-color">
+                    <h3 className="text-sm font-black uppercase tracking-[5px] text-primary-color">
                       {pillar.title}
                     </h3>
-                    <p className="text-xs text-secondary-color leading-relaxed opacity-60">
+                    <p className="text-base text-secondary-color leading-relaxed opacity-60">
                       {pillar.description.slice(0, 120)}...
                     </p>
                   </div>
@@ -265,7 +275,7 @@ const About = () => {
         <section className="py-16 lg:py-24 border-t border-gray-100">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
             <div>
-              <span className="text-secondary-color text-[10px] font-black uppercase tracking-[6px] mb-4 block opacity-40">
+              <span className="text-secondary-color text-sm font-black uppercase tracking-[6px] mb-4 block opacity-40">
                 Core Development Team
               </span>
               <Heading
@@ -273,12 +283,12 @@ const About = () => {
                 className="font-dm-sans text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-primary-color leading-none"
               />
             </div>
-            <p className="text-xs uppercase tracking-[4px] font-bold text-secondary-color opacity-30 hidden md:block">
+            <p className="text-base uppercase tracking-[4px] font-bold text-secondary-color opacity-30 hidden md:block">
               University of South Asia / CS Project
             </p>
           </div>
 
-          <motion.div 
+          <motion.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -299,32 +309,35 @@ const About = () => {
                     alt={member.name}
                     className="w-full h-full object-cover grayscale brightness-110 contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
                   />
-                  
+
                   {/* ID Tag */}
                   <div className="absolute top-6 left-6 px-3 py-1 bg-black/10 backdrop-blur-md border border-white/10 rounded-full z-20">
-                    <p className="text-white text-[8px] font-black tracking-[2px]">{member.id}</p>
+                    <p className="text-white text-xs font-black tracking-[2px]">
+                      {member.id}
+                    </p>
                   </div>
 
                   {/* Hover Info */}
                   <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 translate-y-10 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                    <span className="text-white/40 text-[8px] uppercase tracking-[4px] font-black mb-2">
+                    <span className="text-white/40 text-xs uppercase tracking-[4px] font-black mb-2">
                       Personnel Archive
                     </span>
-                    <h4 className="text-white text-2xl font-black tracking-tighter leading-none mb-6">
-                      {member.name.split(' ').slice(-1)}
+                    <h4 className="text-white text-3xl font-black tracking-tighter leading-none mb-6">
+                      {member.name.split(" ").slice(-1)}
                     </h4>
                     <div className="h-[1px] w-full bg-white/10 mb-6"></div>
-                    <p className="text-white/60 text-[10px] font-medium leading-relaxed italic">
-                      Specialized in {member.role.split(' ')[0]} architectural systems for e-commerce.
+                    <p className="text-white/60 text-sm font-medium leading-relaxed italic">
+                      Specialized in {member.role.split(" ")[0]} architectural
+                      systems for e-commerce.
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 px-2">
-                  <h4 className="text-xs font-black uppercase tracking-[3px] text-primary-color mb-1 transition-all duration-500 group-hover:translate-x-2">
+                  <h4 className="text-base font-black uppercase tracking-[3px] text-primary-color mb-1 transition-all duration-500 group-hover:translate-x-2">
                     {member.name}
                   </h4>
-                  <p className="text-[9px] font-bold text-secondary-color opacity-40 uppercase tracking-[2px]">
+                  <p className="text-sm font-bold text-secondary-color opacity-40 uppercase tracking-[2px]">
                     {member.role}
                   </p>
                 </div>
@@ -349,11 +362,13 @@ const About = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-20 gap-8">
                 <Heading
                   text="The Engineering Metric"
-                  className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter"
+                  className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter"
                 />
                 <div className="flex items-center gap-4">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-[10px] font-black uppercase tracking-[4px] text-white/40">Real-time Performance Monitoring</span>
+                  <span className="text-sm font-black uppercase tracking-[4px] text-white/40">
+                    Real-time Performance Monitoring
+                  </span>
                 </div>
               </div>
 
@@ -365,10 +380,10 @@ const About = () => {
                     variants={scaleIn}
                     className="px-6 group"
                   >
-                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter mb-4 transition-all duration-700 group-hover:translate-x-2">
+                    <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter mb-4 transition-all duration-700 group-hover:translate-x-2">
                       {stat.value}
                     </h3>
-                    <p className="text-[9px] font-black uppercase tracking-[4px] text-white/30 group-hover:text-white/60 transition-colors">
+                    <p className="text-sm font-black uppercase tracking-[4px] text-white/30 group-hover:text-white/60 transition-colors">
                       {stat.label}
                     </p>
                   </motion.div>
@@ -392,19 +407,21 @@ const About = () => {
                 className="group"
               >
                 <div className="flex items-center gap-6 mb-10">
-                  <span className="text-2xl font-light text-secondary-color opacity-20">0{index + 1}</span>
+                  <span className="text-3xl font-light text-secondary-color opacity-20">
+                    0{index + 1}
+                  </span>
                   <div className="h-[1px] flex-1 bg-black/5 group-hover:bg-black transition-all duration-700"></div>
                 </div>
-                <h3 className="text-[10px] font-black uppercase tracking-[6px] text-primary-color mb-6">
+                <h3 className="text-sm font-black uppercase tracking-[6px] text-primary-color mb-6">
                   {pillar.title}
                 </h3>
                 <Heading
                   text={pillar.tagline}
-                  className="text-xl md:text-2xl font-black tracking-tight mb-6 leading-none"
+                  className="text-2xl md:text-3xl font-black tracking-tight mb-6 leading-none"
                 />
                 <Paragraph
                   text={pillar.description}
-                  classname="text-secondary-color text-sm leading-relaxed opacity-60 font-medium"
+                  classname="text-secondary-color text-lg leading-relaxed opacity-60 font-medium"
                 />
               </motion.div>
             ))}
@@ -419,17 +436,17 @@ const About = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8 px-2">
             <div>
-              <p className="text-secondary-color uppercase tracking-[4px] text-[10px] font-black mb-3">
+              <p className="text-secondary-color uppercase tracking-[4px] text-sm font-black mb-3">
                 The Orebi Ecosystem
               </p>
               <Heading
                 text="Engineering Value"
-                className="font-dm-sans font-black text-2xl md:text-3xl lg:text-4xl text-primary-color tracking-tighter leading-[0.9]"
+                className="font-dm-sans font-black text-3xl md:text-4xl lg:text-5xl text-primary-color tracking-tighter leading-[0.9]"
               />
             </div>
             <Paragraph
               text="Our commitment to excellence is woven into every logistical thread."
-              classname="text-secondary-color max-w-[240px] text-right hidden md:block italic text-base font-medium opacity-60"
+              classname="text-secondary-color max-w-[280px] text-right hidden md:block italic text-lg font-medium opacity-60"
             />
           </div>
 
@@ -445,10 +462,10 @@ const About = () => {
                 <div className="w-14 h-14 rounded-xl bg-[#F5F5F3] flex items-center justify-center mb-6 text-primary-color group-hover:bg-black group-hover:text-white transition-all duration-700 scale-110">
                   {feature.icon}
                 </div>
-                <h4 className="font-dm-sans font-black text-lg mb-3 tracking-tight">
+                <h4 className="font-dm-sans font-black text-xl mb-3 tracking-tight">
                   {feature.title}
                 </h4>
-                <p className="font-dm-sans text-secondary-color text-xs md:text-sm leading-relaxed font-medium">
+                <p className="font-dm-sans text-secondary-color text-base md:text-lg leading-relaxed font-medium">
                   {feature.description}
                 </p>
               </motion.div>

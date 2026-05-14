@@ -10,7 +10,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$16.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -18,7 +18,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth HeadPhones",
-    productPrice: "$17.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -26,7 +26,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottles",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -34,7 +34,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -42,7 +42,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -50,7 +50,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -58,7 +58,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -66,7 +66,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -74,7 +74,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -82,7 +82,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -90,7 +90,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -98,7 +98,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -106,7 +106,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -114,7 +114,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -122,7 +122,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -130,7 +130,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -138,7 +138,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -146,7 +146,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -154,7 +154,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -162,7 +162,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -170,7 +170,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbud",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -178,7 +178,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -186,7 +186,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -194,7 +194,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -202,7 +202,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -210,7 +210,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphone",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -218,7 +218,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -226,7 +226,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -234,7 +234,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -242,7 +242,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -250,7 +250,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -258,7 +258,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -266,7 +266,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -274,7 +274,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -282,7 +282,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -290,7 +290,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -298,7 +298,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -306,7 +306,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -314,7 +314,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -322,7 +322,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -330,7 +330,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -338,7 +338,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -346,7 +346,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -354,7 +354,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -362,7 +362,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -370,7 +370,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -378,7 +378,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -386,7 +386,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -394,7 +394,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -402,7 +402,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -410,7 +410,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -418,7 +418,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -426,7 +426,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -434,7 +434,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -442,7 +442,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -450,7 +450,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -458,7 +458,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -466,7 +466,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -474,7 +474,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -482,7 +482,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -490,7 +490,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -498,7 +498,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -506,7 +506,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -514,7 +514,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -522,7 +522,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -530,7 +530,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -538,7 +538,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -546,7 +546,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -554,7 +554,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -562,7 +562,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -570,7 +570,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -578,7 +578,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -586,7 +586,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -594,7 +594,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -602,7 +602,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -610,7 +610,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -618,7 +618,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -626,7 +626,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -634,7 +634,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -642,7 +642,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -650,7 +650,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -658,7 +658,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -666,7 +666,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -674,7 +674,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -682,7 +682,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -690,7 +690,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -698,7 +698,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -706,7 +706,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
   {
@@ -714,7 +714,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -722,7 +722,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
@@ -730,7 +730,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -738,7 +738,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
@@ -746,7 +746,7 @@ let productInfo = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -754,7 +754,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
@@ -762,7 +762,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -770,7 +770,7 @@ let productInfo = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
 ];
@@ -779,55 +779,55 @@ let newarrivals = [
   {
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     badgeText: "new",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "blue",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "red",
   },
 ];
@@ -837,28 +837,28 @@ let bestsaller = [
     
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
   {
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
 ];
@@ -869,7 +869,7 @@ let specialoffer = [
     badgeText: "new",
     productImageSrc: productImageOne,
     productName: "Wireless Earbuds",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -877,14 +877,14 @@ let specialoffer = [
     badgeText: "10%",
     productImageSrc: productImageTwo,
     productName: "Bluetooth Headphones",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "green",
   },
   {
     
     productImageSrc: productImageThree,
     productName: "Water Bottle",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "purple",
   },
   {
@@ -892,7 +892,7 @@ let specialoffer = [
     badgeText: "10%",
     productImageSrc: productImageFour,
     productName: "USB Cable",
-    productPrice: "$15.00",
+    productPrice: "৳15.00",
     productColor: "white",
   },
 ];
@@ -1034,22 +1034,22 @@ let brand = [
 
 let price = [
   {
-    name: "$0.00 - $9.99",
+    name: "৳0.00 - ৳9.99",
   },
   {
-    name: "$10.00 - $19.99",
+    name: "৳10.00 - ৳19.99",
   },
   {
-    name: "$20.00 - $29.99",
+    name: "৳20.00 - ৳29.99",
   },
   {
-    name: "$30.00 - $39.99",
+    name: "৳30.00 - ৳39.99",
   },
   {
-    name: "$40.00 - $49.99",
+    name: "৳40.00 - ৳49.99",
   },
   {
-    name: "$50.00+",
+    name: "৳50.00+",
   },
 ];
 

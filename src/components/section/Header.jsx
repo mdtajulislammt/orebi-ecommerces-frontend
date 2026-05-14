@@ -64,7 +64,7 @@ const Header = () => {
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
     const price = typeof item.productPrice === 'string' 
-      ? parseFloat(item.productPrice.replace("$", "")) 
+      ? parseFloat(item.productPrice.replace("৳", "").replace("$", "")) 
       : item.productPrice;
     return total + price * item.quantity;
   }, 0) : 0;
@@ -245,7 +245,7 @@ const Header = () => {
             <div className="p-6 bg-gray-50 space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-500 text-sm font-medium">Subtotal</span>
-                <span className="text-lg font-bold text-[#262626]">${totalAmount.toFixed(2)}</span>
+                <span className="text-lg font-bold text-[#262626]">৳{totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex gap-x-3">
                 <Link to="/cart" onClick={() => setAddToCartShow(false)} className="flex-1 py-3 border border-[#262626] text-[#262626] text-center text-sm font-bold rounded-xl hover:bg-gray-100 transition-all">
@@ -419,7 +419,7 @@ const Header = () => {
                           </div>
                           <div>
                             <h4 className="text-sm font-bold text-[#262626] line-clamp-1">{product.name}</h4>
-                            <p className="text-xs text-gray-500 mt-1">${product.price}</p>
+                            <p className="text-xs text-gray-500 mt-1">৳{product.price}</p>
                           </div>
                         </Link>
                       ))}
@@ -491,7 +491,7 @@ const Header = () => {
                           </div>
                           <div>
                             <h4 className="text-sm font-bold text-[#262626] line-clamp-1">{product.name}</h4>
-                            <p className="text-xs text-gray-500 mt-1">${product.price}</p>
+                            <p className="text-xs text-gray-500 mt-1">৳{product.price}</p>
                           </div>
                         </Link>
                       ))}

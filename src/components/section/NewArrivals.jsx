@@ -113,9 +113,9 @@ const NewArrivals = () => {
                 item.productImageSrc;
               const productName = item.name || item.productName;
               const productPrice = item.price
-                ? typeof item.price === "string" && item.price.startsWith("$")
+                ? typeof item.price === "string" && (item.price.startsWith("৳") || item.price.startsWith("$"))
                   ? item.price
-                  : `$${item.price}`
+                  : `৳${item.price}`
                 : item.productPrice;
               const productColor =
                 (item.colors && item.colors[0]) ||

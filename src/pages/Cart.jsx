@@ -19,7 +19,7 @@ const Cart = () => {
   const cart = useSelector((state) => state.orebi?.cart || []);
 
   const totalAmount = Array.isArray(cart) ? cart.reduce((total, item) => {
-    const price = parseFloat(item.productPrice.replace("$", ""));
+    const price = parseFloat(item.productPrice.replace("৳", "").replace("$", ""));
     return total + price * item.quantity;
   }, 0) : 0;
 
@@ -99,7 +99,7 @@ const Cart = () => {
                 <div className="sm:w-[14%] md:w-[15%]">
                   <Flex className="items-center justify-between">
                     <Paragraph
-                      text={`$${(parseFloat(item.productPrice.replace("$", "")) * item.quantity).toFixed(2)}`}
+                      text={`৳${(parseFloat(item.productPrice.replace("৳", "").replace("$", "")) * item.quantity).toFixed(2)}`}
                       classname={"sm:text-sm md:text-base font-bold"}
                     />
                     <RxCross2
@@ -142,7 +142,7 @@ const Cart = () => {
                         Subtotal
                       </td>
                       <td className="w-2/4 border-[2px] border-[#f0f0f0] py-4 px-5">
-                        ${totalAmount.toFixed(2)}
+                        ৳{totalAmount.toFixed(2)}
                       </td>
                     </tr>
                     <tr>
@@ -158,7 +158,7 @@ const Cart = () => {
                         Total
                       </td>
                       <td className="w-2/4 border-[2px] border-[#f0f0f0] py-4 px-5 text-xl font-bold">
-                        ${totalAmount.toFixed(2)}
+                        ৳{totalAmount.toFixed(2)}
                       </td>
                     </tr>
                   </tbody>
