@@ -42,7 +42,9 @@ const Contact = () => {
       const response = await submitContact(formData).unwrap();
       setStatus({
         type: "success",
-        message: response.message || "Message sent successfully! We will get back to you soon.",
+        message:
+          response.message ||
+          "Message sent successfully! We will get back to you soon.",
       });
       setFormData({
         first_name: "",
@@ -52,11 +54,14 @@ const Contact = () => {
         message: "",
       });
     } catch (err) {
+      const errorMsg = err.data?.message;
       setStatus({
         type: "error",
         message:
-          err.data?.message ||
-          "Failed to send message. Please try again later.",
+          typeof errorMsg === "string"
+            ? errorMsg
+            : errorMsg?.message ||
+              "Failed to send message. Please try again later.",
       });
     }
   };

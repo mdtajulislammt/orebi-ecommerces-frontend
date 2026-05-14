@@ -175,7 +175,7 @@ const Banner = () => {
               <Container>
                 <div className="flex flex-col md:flex-row items-center justify-between py-5 sm:py-10 md:py-15 lg:py-20 gap-y-10 md:gap-y-0 px-6 sm:px-10 md:px-28">
                   <div className="w-full md:w-[60%] lg:w-[70%] order-2 md:order-1 px-4 md:px-0 text-center md:text-left">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-[#262626] mb-8 md:mb-10 leading-[1.05] animate-fadeIn">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#262626] mb-8 md:mb-10 leading-[1.05] animate-fadeIn">
                       {item.title}
                     </h1>
                     <p className="text-sm sm:text-base md:text-lg text-[#6D6D6D] mb-12 md:mb-16 max-w-[580px] mx-auto md:mx-0 leading-relaxed animate-fadeIn">

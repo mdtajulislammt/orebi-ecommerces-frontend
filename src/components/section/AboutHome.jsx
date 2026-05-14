@@ -43,14 +43,14 @@ const AboutHome = () => {
                 The Tech Vanguard
               </span>
               <Heading
-                text="Engineering the Future of Digital Lifestyle"
-                className="font-dm-sans text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] tracking-tighter text-primary-color"
+                text="Engineering the Future of Digital Commerce"
+                className="font-dm-sans text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] tracking-tighter text-primary-color"
               />
             </div>
 
             <Paragraph
-              text="At Orebi, we don't just sell electronics; we curate the pinnacle of high-performance technology. From precision-engineered PC components to next-generation mobile devices, we provide the tools that empower your digital evolution."
-              classname="text-secondary-color text-base md:text-lg leading-relaxed max-w-xl font-medium opacity-80"
+              text="At Orebi, we don't just facilitate transactions; we curate a high-performance ecosystem for the IT industry. Developed as a specialized research project at the University of South Asia, our platform provides precision-engineered solutions—from enterprise-grade PC components to next-generation hardware. We provide the technical tools that empower your digital evolution."
+              classname="text-secondary-color text-sm md:text-base leading-relaxed max-w-xl font-medium opacity-80"
             />
 
             <div className="pt-4">
@@ -65,23 +65,21 @@ const AboutHome = () => {
               </Link>
             </div>
 
-            {/* Subtle Stats or Info */}
-            <div className="grid grid-cols-2 gap-8 pt-8 sm:pt-12 border-t border-gray-100">
-              <div>
-                <p className="text-2xl font-black tracking-tighter text-gray-900">
-                  Est. 2012
-                </p>
-                <p className="text-[9px] uppercase tracking-widest text-gray-400 mt-1 font-bold">
-                  Inception
-                </p>
-              </div>
-              <div>
-                <p className="text-2xl font-black tracking-tighter text-indigo-600">
-                  50k+
-                </p>
-                <p className="text-[9px] uppercase tracking-widest text-gray-400 mt-1 font-bold">
-                  Digital Assets
-                </p>
+            <div className="space-y-6 pt-8 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
+                <div>
+                  <p className="text-xl font-black tracking-tighter text-gray-900">
+                    Est. 2026
+                  </p>
+                  <p className="text-[9px] uppercase tracking-[4px] text-indigo-600 mt-1 font-bold">
+                    The Inception
+                  </p>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[11px] text-secondary-color leading-relaxed font-medium opacity-70">
+                    Orebi was engineered by a specialized team of Computer Science students as a final-year project under the supervision of <span className="text-gray-900 font-bold">Sidratul Afrida</span>. Our goal was to create a faster, more secure, and technically accurate e-commerce environment for the IT market.
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>

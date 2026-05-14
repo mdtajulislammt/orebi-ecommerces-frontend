@@ -58,8 +58,12 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <div className="w-72 bg-white text-gray-600 flex flex-col shrink-0 border-r border-gray-100 shadow-xl shadow-gray-200/50 relative z-20">
         <div className="p-8 text-2xl font-black text-gray-900 flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-             O
+          <div className="w-8 h-8 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 overflow-hidden">
+            {user?.avatar_url ? (
+              <img src={user.avatar_url} alt={adminName} className="w-full h-full object-cover" />
+            ) : (
+              adminInitial
+            )}
           </div>
           <span className="tracking-tighter">OREBI <span className="text-indigo-600">PRO</span></span>
         </div>
@@ -124,9 +128,9 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white/80 backdrop-blur-md h-20 flex items-center justify-between px-10 shrink-0 border-b border-gray-100 relative z-10">
-          <div className="flex items-center gap-4 bg-gray-50 px-6 py-3 rounded-2xl border border-gray-100 max-w-md w-full">
-            <MdSearch size={22} className="text-gray-400" />
-            <input type="text" placeholder="Global search..." className="bg-transparent border-none outline-none text-sm font-medium w-full" />
+          <div className="flex ">
+            {/* <MdSearch size={22} className="text-gray-400" />
+            <input type="text" placeholder="Global search..." className="bg-transparent border-none outline-none text-sm font-medium w-full" /> */}
           </div>
           
           <div className="flex items-center gap-6">
