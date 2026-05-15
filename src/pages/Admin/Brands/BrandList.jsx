@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { MdAdd, MdCheck, MdClose, MdDelete, MdEdit } from "react-icons/md";
+import { MdAdd, MdCheck, MdClose, MdDelete, MdEdit, MdInventory } from "react-icons/md";
 import { toast } from "react-toastify";
 import {
   useCreateBrandMutation,

@@ -114,12 +114,12 @@ const OrderDetailsModal = ({ orderId, isOpen, onClose }) => {
                             {item.product?.name}
                           </p>
                           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-                            Qty: {item.quantity} × ${item.unit_price}
+                            Qty: {item.quantity} × ৳{item.unit_price}
                           </p>
                         </div>
                       </div>
                       <p className="text-sm font-black text-gray-900 tracking-tighter">
-                        ${(item.quantity * item.unit_price).toLocaleString()}
+                        ৳{(item.quantity * item.unit_price).toLocaleString()}
                       </p>
                     </div>
                   ))}
@@ -132,7 +132,7 @@ const OrderDetailsModal = ({ orderId, isOpen, onClose }) => {
                     Total Amount
                   </p>
                   <p className="text-2xl font-black text-gray-900 tracking-tighter">
-                    ${Number(order.total_amount).toLocaleString()}
+                    ৳{Number(order.total_amount).toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -260,7 +260,7 @@ const OrderList = () => {
         {[
           {
             label: "Total Revenue",
-            value: `$${totalRevenue.toLocaleString()}`,
+            value: `৳${totalRevenue.toLocaleString()}`,
             icon: MdOutlinePayments,
             color: "indigo",
           },
@@ -364,7 +364,7 @@ const OrderList = () => {
                     </td>
                     <td className="px-8 py-6 text-center">
                       <span className="text-base font-black text-gray-900 tracking-tighter">
-                        ${Number(order.total_amount).toLocaleString()}
+                        ৳{Number(order.total_amount).toLocaleString()}
                       </span>
                     </td>
                     <td className="px-8 py-6 text-center">

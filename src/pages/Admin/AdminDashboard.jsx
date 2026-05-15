@@ -73,7 +73,7 @@ const AdminDashboard = () => {
 
     return {
       stats: [
-        { title: 'Total Revenue', value: `$${totalSales.toLocaleString()}`, icon: <MdTrendingUp />, bg: 'bg-gradient-to-br from-indigo-500 to-indigo-700', shadow: 'shadow-indigo-100' },
+        { title: 'Total Revenue', value: `৳${totalSales.toLocaleString()}`, icon: <MdTrendingUp />, bg: 'bg-gradient-to-br from-indigo-500 to-indigo-700', shadow: 'shadow-indigo-100' },
         { title: 'Active Orders', value: activeOrders.toString(), icon: <MdShoppingCart />, bg: 'bg-gradient-to-br from-rose-400 to-rose-600', shadow: 'shadow-rose-100' },
         { title: 'Total Products', value: totalProducts.toString(), icon: <MdInventory />, bg: 'bg-gradient-to-br from-emerald-400 to-emerald-600', shadow: 'shadow-emerald-100' },
         { title: 'Total Customers', value: totalCustomers.toString(), icon: <MdPeople />, bg: 'bg-gradient-to-br from-amber-400 to-amber-600', shadow: 'shadow-amber-100' },
@@ -269,7 +269,7 @@ const AdminDashboard = () => {
                        </div>
                     </td>
                     <td className="px-6 py-5 text-center font-black text-gray-900 text-[14px]">
-                       ${p.discount_price || p.price}
+                       ৳{p.discount_price || p.price}
                     </td>
                     <td className="px-6 py-5 text-right">
                        <button onClick={() => navigate(`/admin/products/view/${p.id}`)} className="p-3 text-gray-400 hover:text-indigo-600 transition-all">
